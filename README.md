@@ -1,6 +1,10 @@
 # Programming-project
 COP3503 Programming Project
 
+- "Every group member should write about 300-400 lines of code"
+- We can do whatever we want (as long as it's a big project), his example was a JPEG Decompresser
+- Video Game? :)
+	- http://www.sfml-dev.org/
 
 # Mlestone #1
 - 7:25am Mon. October 10th -- Due (2%)
