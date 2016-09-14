@@ -9,7 +9,7 @@ COP3503 Programming Project
 # Mlestone #1
 - 7:25am Mon. October 10th -- Due (2%)
 - Form your team naturally based on the common intrests... wtf.
-- 7 people (Ann, Daniel, Kevin, Morgan ... )
+- 7 people (Ann, Daniel, Jessica, Kevin, Kiara, Leah, Morgan)
 - Grouping via CANVAS
 
 # Milestone #2
