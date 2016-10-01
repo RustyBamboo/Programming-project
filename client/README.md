@@ -7,7 +7,14 @@
 sudo apt-get install libsfml-dev
 ```
 
-###If you have Mac OSX, open up terminal and install homebrew
+###If you have Mac OSX
+Make sure XCode is installed.
+Open up terminal and install commandline developer tools:
+```
+xcode-select --install
+```
+
+Now install homebrew
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
@@ -16,6 +23,14 @@ After that's done:
 ```
 brew update
 brew install sfml
+```
+Install CMake:
+```
+brew install cmake
+```
+Install git:
+```
+brew install git
 ```
 ###If you have Windows
 RIP. Visual Studio is a pain. Probably do-able. Look at the tutorials on SFML. And then install CMake and stuff.

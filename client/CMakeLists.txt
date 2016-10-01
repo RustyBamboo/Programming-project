@@ -1,6 +1,9 @@
 include_directories(${CMAKEDEMO_SOURCE_DIR}/client)
 link_directories(${CMAKEDEMO_BINARY_DIR}/client)
 
+set(CMAKE_C_COMPILER /usr/bin/gcc)
+set(CMAKE_CXX_COMPILER /usr/bin/g++)
+
 set(EXECUTABLE_NAME "game")
 add_executable(${EXECUTABLE_NAME} main.cpp screens/screenmainmenu.cpp screens/screengame.cpp)
 
