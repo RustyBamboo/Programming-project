@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/myproject.dir/main.cpp.o CMakeFiles/myproject.dir/screens/screenmainmenu.cpp.o  -o myproject -rdynamic -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -lsfml-audio 

@@ -1,0 +1,3 @@
+/home/daniel/UF/fall2016/cop3503/Programming-project/client/build/CMakeFiles/edit_cache.dir
+/home/daniel/UF/fall2016/cop3503/Programming-project/client/build/CMakeFiles/rebuild_cache.dir
+/home/daniel/UF/fall2016/cop3503/Programming-project/client/build/CMakeFiles/game.dir
