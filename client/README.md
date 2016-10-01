@@ -33,10 +33,10 @@ Clone the git respository. In terminal:
 ```
 git clone https://github.com/RustyBamboo/Programming-project.git
 ```
-Linking/Building/Running (assuming in the build directory):
+Linking/Building/Running (assuming in the COP3503 directory):
 ```
 cd build
 cmake ../Programming-project
 make
-./game
+./client/game
 ```

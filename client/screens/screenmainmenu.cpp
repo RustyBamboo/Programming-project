@@ -31,7 +31,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
     int menu = 0;
 
   
-    if (!Font.loadFromFile("verdanab.ttf"))
+    if (!Font.loadFromFile("resources/verdanab.ttf"))
     {
         std::cerr << "Error loading verdanab.ttf" << std::endl;
         return (-1);
