@@ -2,10 +2,6 @@
 #define SCREEN_GAME_H
 
 
-#include "cscreen.h"
-
-#include <SFML/Graphics.hpp>
-
 class ScreenGame : public CScreen
 {
 private:

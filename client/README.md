@@ -22,15 +22,21 @@ RIP. Visual Studio is a pain. Probably do-able. Look at the tutorials on SFML. A
 Or just get Ubuntu.
 
 ##After installing SFML (this is for Ubuntu and Mac OSX)
+Create a project directory. In terminal:
+```
+mkdir COP3503
+cd COP3503
+mkdir build
+```
 
-Clown the git respository. In terminal:
+Clone the git respository. In terminal:
 ```
 git clone https://github.com/RustyBamboo/Programming-project.git
-cd Programming-project/client/build
 ```
 Linking/Building/Running (assuming in the build directory):
 ```
-cmake ..
+cd build
+cmake ../Programming-project
 make
 ./game
 ```
