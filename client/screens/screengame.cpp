@@ -8,8 +8,8 @@
 ScreenGame::ScreenGame() {
     //Remove this rect stuff
  std::cout<<"Game was made!"<<std::endl;
- rect.setSize({50,50});
- rect.setPosition({100,50});
+ rect.setSize(sf::Vector2f(50,50));
+ rect.setPosition(100,50);
  rect.setFillColor(sf::Color::Red);
 }
 
