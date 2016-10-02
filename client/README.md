@@ -53,5 +53,6 @@ Linking/Building/Running (assuming in the COP3503 directory):
 cd build
 cmake ../Programming-project
 make
-./client/game
+cd client
+./game
 ```

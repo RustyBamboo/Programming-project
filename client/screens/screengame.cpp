@@ -1,16 +1,9 @@
-#include <iostream>
-#include "cscreen.h"
-
-#include <SFML/Graphics.hpp>
-
 #include "screengame.h"
 
 ScreenGame::ScreenGame() {
     //Remove this rect stuff
  std::cout<<"Game was made!"<<std::endl;
- rect.setSize(sf::Vector2f(50,50));
- rect.setPosition(100,50);
- rect.setFillColor(sf::Color::Red);
+    ent.reset(new Player());
 }
 
 int ScreenGame::run(sf::RenderWindow &window) {
@@ -34,7 +27,7 @@ int ScreenGame::run(sf::RenderWindow &window) {
         }
 
         window.clear(sf::Color(0, 0, 0, 0));
-        window.draw(rect);
+        ent->draw(window);
         window.display();
     }
 
