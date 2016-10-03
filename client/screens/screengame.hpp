@@ -1,17 +1,19 @@
+/*
+	Class to manage the actual game. 
+*/
 
+#ifndef SCREEN_GAME_HPP
+#define SCREEN_GAME_HPP
 
-#ifndef SCREEN_GAME_H
-#define SCREEN_GAME_H
-
-#include "cscreen.h"
+#include "cscreen.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-#include "screengame.h"
+#include "screengame.hpp"
 
-#include "../entities/entity.h"
-#include "../entities/player.h"
+#include "../entities/entity.hpp"
+#include "../entities/player.hpp"
 #include "../entities/bullet.hpp"
 #include "../entities/mob.hpp"
 

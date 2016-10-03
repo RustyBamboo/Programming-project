@@ -1,5 +1,6 @@
 #include "worldmap.hpp"
 
+//Testing.purposes
 WorldMap::WorldMap() {
 	entities.push_back(std::unique_ptr<Entity>(new Player()));
 	for(int i = 0 ; i < 10; ++i) {

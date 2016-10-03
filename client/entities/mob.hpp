@@ -2,7 +2,7 @@
 #ifndef MOB_HPP
 #define MOB_HPP
 
-#include "entity.h"
+#include "entity.hpp"
 #include "polygon.hpp"
 class Mob : public Entity {
 public:

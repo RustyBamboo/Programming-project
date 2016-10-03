@@ -1,8 +1,9 @@
 #ifndef BULLET_HPP
 #define BULLET_HPP
 
-#include "entity.h" 
+#include "entity.hpp" 
 #include "ray.hpp"
+
 
 class Bullet : public Entity {
 

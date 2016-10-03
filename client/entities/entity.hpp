@@ -1,9 +1,12 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 #include "object.hpp"
-#include "../include.h"
+#include "../include.hpp"
+
+//Most basic form of an entity. Contains an object (such as a Polygon or a Ray)
 class Entity {
 protected:
+	
 	Object *obj;
 	virtual void move() = 0;
 

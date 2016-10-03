@@ -1,5 +1,5 @@
-#ifndef CSCREEN_H
-#define CSCREEN_H
+#ifndef CSCREEN_HPP
+#define CSCREEN_HPP
 
 #include <SFML/Graphics.hpp>
 

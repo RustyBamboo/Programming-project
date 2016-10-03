@@ -1,10 +1,10 @@
 #include <iostream>
-#include "cscreen.h"
+#include "cscreen.hpp"
 
 #include <SFML/Graphics.hpp>
 
 
-#include "screenmainmenu.h"
+#include "screenmainmenu.hpp"
 
 ScreenMainMenu::ScreenMainMenu()
 {
@@ -13,9 +13,12 @@ ScreenMainMenu::ScreenMainMenu()
     playing = false;
 }
 
-//Bad example of coding lol. But it works.
-//This is the mainmenu, graphically the alpha value is increased to give a "loading in" effect.
-//This is also the pause menu
+/*
+
+    This is the mainmenu, graphically the alpha value is increased to give a "loading in" effect. Appears to be buggy. So will remove.
+    This is also the pause menu
+    
+*/
 int ScreenMainMenu::run(sf::RenderWindow &window)
 {
 	window.setView(window.getDefaultView());

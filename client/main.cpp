@@ -1,5 +1,12 @@
+/*
+
+  Main function. Loads up the different screens and manages them. 
+  This is also where sf::RenderWindow is defined.
+
+*/
+
 #include "include.hpp"
-#include "screens/screens.h"
+#include "screens/screens.hpp"
 
 int main() {
   srand(time(NULL)); //Pick a seed

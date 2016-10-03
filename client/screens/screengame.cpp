@@ -1,4 +1,4 @@
-#include "screengame.h"
+#include "screengame.hpp"
 
 ScreenGame::ScreenGame() {
     //Remove this rect stuff
@@ -13,16 +13,14 @@ int ScreenGame::run(sf::RenderWindow &window) {
     bool running = true;
 
     while (running) {
-        // Verifying events
         while (window.pollEvent(Event)) {
-            // Window closed
             if (Event.type == sf::Event::Closed) {
                 return (-1);
             }
             if (Event.type == sf::Event::KeyPressed) {
                 switch (Event.key.code) {
                 case sf::Keyboard::Escape:
-                    return (0);
+                    return (0); //Goes to Pause Menu
                 }
             }
         }

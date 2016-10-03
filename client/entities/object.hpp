@@ -3,7 +3,8 @@
 
 #include "../include.hpp"
 
-class Object { //Abstract class that allows different types of shapes (and custom images)
+//Abstract class that allows different types of shapes (and custom images)
+class Object {
 public:
 	virtual void draw(sf::RenderWindow &window) = 0;
 	virtual void setPosition(const sf::Vector2f &pos) = 0;

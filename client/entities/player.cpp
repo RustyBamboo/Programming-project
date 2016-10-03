@@ -1,4 +1,4 @@
-#include "player.h"
+#include "player.hpp"
 
 Player::Player(){
 	obj = new Polygon(30, 3);
