@@ -1,7 +1,15 @@
 #include "entity.h"
+ 
+Entity::Entity() {
 
-Entity::Entity(int radius, int edgesize) : Shape (radius, edgesize) {}
-Entity::Entity(int radius, int edgesize, sf::Vector2f pos) : Shape(radius, edgesize, pos) {
-	this->pos = pos;
-	this->vel = sf::Vector2f(0,0);
+}
+
+void Entity::tick() {
+	move();
+	pos+=vel;
+	obj->setPosition(pos);
+}
+
+void Entity::draw(sf::RenderWindow &window) {
+	obj->draw(window);
 }

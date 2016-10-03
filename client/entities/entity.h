@@ -1,19 +1,21 @@
 #ifndef ENTITY_H
 #define ENTITY_H
-#include "shape.h"
+#include "object.hpp"
 #include "../include.h"
-class Entity : public Shape {
-private:
-	int radius;
-public:
-	Entity(){}
-	Entity(int radius, int edgesize);
-	Entity(int radius, int edgesize, sf::Vector2f pos);
-
-	sf::Vector2f pos;
-	sf::Vector2f vel;
-
+class Entity {
+protected:
+	Object *obj;
 	virtual void move() = 0;
+
+public:
+	Entity();
+
+	void tick(); //We need tick functions to be synced (get diff in time)
+	void draw(sf::RenderWindow &window);
+
+	sf::Vector2f pos, vel;
+
+
 };
 
 

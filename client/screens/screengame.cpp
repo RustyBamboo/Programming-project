@@ -3,7 +3,8 @@
 ScreenGame::ScreenGame() {
     //Remove this rect stuff
  std::cout<<"Game was made!"<<std::endl;
-    ent.reset(new Player());
+    ray.reset(new Bullet(sf::Vector2f(50,100), sf::Vector2f(0, 0.01)));
+    mob.reset(new Mob(50, 7, sf::Vector2f(50,50), sf::Vector2f(0.01, 0.01)));
 }
 
 int ScreenGame::run(sf::RenderWindow &window) {
@@ -27,7 +28,15 @@ int ScreenGame::run(sf::RenderWindow &window) {
         }
 
         window.clear(sf::Color(0, 0, 0, 0));
-        ent->draw(window);
+
+        ray->tick();
+        ray->draw(window);
+
+        mob->tick();
+        mob->draw(window);
+
+        worldMap.tick();
+        worldMap.draw(window);
         window.display();
     }
 

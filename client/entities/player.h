@@ -3,11 +3,11 @@
 
 #include "entity.h"
 #include "../include.hpp"
-
+#include "polygon.hpp"
 class Player : public Entity{
 public:
 	Player();
-	void move();
+	virtual void move();
 };
 
 #endif
