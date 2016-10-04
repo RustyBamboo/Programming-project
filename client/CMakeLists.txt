@@ -1,6 +1,3 @@
-include_directories(${CMAKEDEMO_SOURCE_DIR}/client)
-link_directories(${CMAKEDEMO_BINARY_DIR}/client)
-
 set(CMAKE_C_COMPILER /usr/bin/gcc)
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
@@ -13,7 +10,7 @@ if(SFML_FOUND)
   target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
 endif()
 
-# we don't want to copy if we're building in the source dir
+# copies sfml textures
 if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 
     # list of files for which we add a copy rule

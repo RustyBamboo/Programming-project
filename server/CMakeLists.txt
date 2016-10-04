@@ -1,6 +1,3 @@
-include_directories(${CMAKEDEMO_SOURCE_DIR}/server)
-link_directories(${CMAKEDEMO_BINARY_DIR}/server)
-
 set(CMAKE_C_COMPILER /usr/bin/gcc)
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
