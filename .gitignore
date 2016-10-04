@@ -1,0 +1,13 @@
+#Exectuables
+server/server
+client/game
+
+
+#Cmake stuff
+Makefile
+CMakeFiles/
+client/CMakeFiles
+*CMakeCache.txt
+*cmake_install.cmake
+build/
+
