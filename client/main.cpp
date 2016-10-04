@@ -7,8 +7,19 @@
 
 #include "include.hpp"
 #include "screens/screens.hpp"
+#include <SFML/Network.hpp>
 
+
+const unsigned short PORT = 5001;
+const std::string IPADDRESS("192.168.37.168");
 int main() {
+  sf::TcpSocket socket;
+  if(socket.connect(IPADDRESS, PORT) == sf::Socket::Done) {
+    std::cout<<"connected"<<std::endl;
+  }
+  else {
+    std::cout<<"rip"<<std::endl;
+  }
   srand(time(NULL)); //Pick a seed
   std::vector<CScreen *> screens;
   int screen = 0;
