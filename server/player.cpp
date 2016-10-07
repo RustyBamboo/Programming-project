@@ -2,6 +2,6 @@
 
 
 Player::Player() : Entity() {
-    std::cout<<"Generated player"<<std::endl;
+    std::cout << "Generated player" << std::endl;
 }
 

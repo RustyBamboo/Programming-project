@@ -1,5 +1,5 @@
 /*
-	Class to manage the actual game. 
+    Class to manage the actual game.
 */
 
 #ifndef SCREEN_GAME_HPP
@@ -8,6 +8,7 @@
 #include "cscreen.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 #include <memory>
 
 #include "screengame.hpp"
@@ -22,11 +23,17 @@
 class ScreenGame : public CScreen
 {
 private:
-	std::unique_ptr<Entity> ray;
-	std::unique_ptr<Entity> mob;
+    sf::Thread *thread;
+    sf::UdpSocket udpSocket;
 
-	WorldMap worldMap;
+    std::unique_ptr<Entity> ray;
+    std::unique_ptr<Entity> mob;
 
+    WorldMap worldMap;
+
+    void getUDP();
+
+    void removeSpaces(std::string &str);
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);

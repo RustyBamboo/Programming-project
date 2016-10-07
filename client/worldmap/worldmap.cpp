@@ -2,18 +2,32 @@
 
 //Testing.purposes
 WorldMap::WorldMap() {
-	entities.push_back(std::unique_ptr<Entity>(new Player()));
-	for(int i = 0 ; i < 10; ++i) {
-		entities.push_back(std::unique_ptr<Entity>(new Mob(35, i, sf::Vector2f(i*70,0), sf::Vector2f(0,0))));
-	}
+	entities[0] = std::unique_ptr<Entity>(new Player());
 }
 void WorldMap::tick() {
-	for (int i =0 ;i < entities.size(); i++) {
-		entities[i]->tick();
+	for (auto const &entity : entities) {
+		entity.second->tick();
 	}
 }
 void WorldMap::draw(sf::RenderWindow &window) {
-	for (int i =0 ;i < entities.size(); i++) {
-		entities[i]->draw(window);
+	for (auto const &entity : entities) {
+		entity.second->draw(window);
+	}
+}
+
+bool WorldMap::idExists(int id) {
+	if ( entities.find(id) == entities.end() ) {
+		return false;
+	}
+	return true;
+}
+
+void WorldMap::processEntity(int id, int x, int y) {
+	if (!idExists(id)) {
+		entities[id] = std::unique_ptr<Entity>(new Mob(sf::Vector2f(x, y), sf::Vector2f(0, 0)));
+		std::cout<<"generated entity "<<entities.size()<<std::endl;
+	}
+	else {
+		entities[id]->tick();
 	}
 }

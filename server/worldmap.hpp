@@ -7,7 +7,7 @@
 
 class WorldMap {
 private:
-	std::map<std::string, Entity> entities;
+    std::map<std::string, Entity> entities;
     std::vector<sf::IpAddress> ipAddresses;
 public:
     WorldMap();

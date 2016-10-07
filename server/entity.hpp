@@ -3,9 +3,11 @@
 #include <iostream>
 class Entity {
 public:
-    float x, y;
+    int id;
+    int x, y;
     Entity();
     Entity(std::string user);
+
 };
 
 #endif

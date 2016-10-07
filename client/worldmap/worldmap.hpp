@@ -12,17 +12,22 @@
 #include "../entities/bullet.hpp"
 #include "../entities/mob.hpp"
 #include <memory>
+#include <map>
 
 //Testing.
 class WorldMap {
 
 private:
-	std::vector<std::unique_ptr<Entity> > entities;
+	std::map<int, std::unique_ptr<Entity> > entities;
 
 public:
 	WorldMap();
 	void tick();
 	void draw(sf::RenderWindow &window);
+
+    bool idExists(int id);
+
+    void processEntity(int id, int x, int y);
 
 };
 

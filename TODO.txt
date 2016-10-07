@@ -4,6 +4,7 @@ Orginization:
 	- How to give everyone a task?
 	- Make sure everyone can get game compiled
 	- Make sure everyone is on git
+	- Source documentation/comments
 
 Game:
 	Implementations:

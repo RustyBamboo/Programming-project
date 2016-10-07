@@ -47,31 +47,31 @@ private:
         udpSocket.bind(UDPPORT);
         sf::Clock clock;
         sf::Time elapsed = clock.getElapsedTime();
-        while(running) {
+        while (running) {
             elapsed = clock.getElapsedTime();
-            if(elapsed.asSeconds() >= 1) {
+            if (elapsed.asSeconds() >= 1) {
                 worldMap.update(udpSocket);
                 elapsed = clock.restart();
             }
 
-        }  
+        }
     }
 
 public:
     Server() : running(true) {
         threadCP = new sf::Thread(&Server::connectPlayers, this);
         threadCP->launch();
-       
+
 
         threadUpdate = new sf::Thread(&Server::update, this);
         threadUpdate->launch();
 
- if (threadCP)
+        if (threadCP)
         {
             threadCP->wait();
             delete threadCP;
         }
-        if(threadUpdate) {
+        if (threadUpdate) {
             threadUpdate->wait();
             delete threadUpdate;
         }
