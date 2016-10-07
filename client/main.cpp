@@ -20,22 +20,19 @@ int main() {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  sf::Uint32 x = rand()%100;
-  std::string s = "hello";
-  double d = 5.89;
+  std::string s;
+  std::cout<<"enter username: ";
+  std::cin>>s;
 // Group the variables to send into a packet
   sf::Packet packet;
-  packet << x << s << d;
-  std::cout << "Works?" << std::endl;
-  sf::TcpSocket socket;
+  packet <<s;
 
+  sf::TcpSocket socket;
   if (socket.connect(IPADDRESS, PORT) == sf::Socket::Done) {
-    std::cout << "connected" << std::endl;
     socket.send(packet);
-    
     sf::Packet b;
     socket.receive(b);
-    sf::Uint32 msg;
+    std::string msg;
     if(b >> msg)
       std::cout<<msg<<std::endl;
   }
