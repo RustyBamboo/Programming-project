@@ -10,14 +10,28 @@
 #include <SFML/Network.hpp>
 
 
+void updateGame() {
+  sf::UdpSocket socket;
+  socket.bind(55002);
+  while(true) {
+    char buffer[1024];
+    std::size_t received = 0;
+    sf::IpAddress sender;
+    unsigned short port;
+    socket.receive(buffer, sizeof(buffer), received, sender, port);
+    std::cout << sender.toString() << " said: " << buffer << std::endl;
+  }
+}
+
 const unsigned short PORT = 5001;
 const std::string IPADDRESS("192.168.1.149");
 int main() {
   srand(time(NULL)); //Pick a seed
 
 
-
-
+sf::Thread *threadCP;
+threadCP = new sf::Thread(&updateGame);
+        threadCP->launch();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   std::string s;
@@ -39,6 +53,13 @@ int main() {
   else {
     std::cout << "rip" << std::endl;
   }
+
+
+ if (threadCP)
+        {
+            threadCP->wait();
+            delete threadCP;
+        }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
