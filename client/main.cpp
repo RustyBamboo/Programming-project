@@ -12,38 +12,9 @@
 
 
 
-const unsigned short PORT = 5001;
-const std::string IPADDRESS("192.168.1.149");
+
 int main() {
   srand(time(NULL)); //Pick a seed
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  std::string s;
-  std::cout << "enter username: ";
-  std::cin >> s;
-// Group the variables to send into a packet
-  sf::Packet packet;
-  packet << s;
-
-  sf::TcpSocket socket;
-  if (socket.connect(IPADDRESS, PORT) == sf::Socket::Done) {
-    socket.send(packet);
-    sf::Packet b;
-    socket.receive(b);
-    std::string msg;
-    if (b >> msg)
-      std::cout << msg << std::endl;
-  }
-  else {
-    std::cout << "rip" << std::endl;
-  }
-
-
-  
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 

@@ -1,6 +1,6 @@
 /*
 
-	This will be the main Map class that processes all the entities and updates everything.
+    This will be the main Map class that processes all the entities and updates everything.
 
 */
 
@@ -18,12 +18,13 @@
 class WorldMap {
 
 private:
-	std::map<int, std::unique_ptr<Entity> > entities;
+    std::map<int, std::unique_ptr<Entity> > entities;
 
 public:
-	WorldMap();
-	void tick();
-	void draw(sf::RenderWindow &window);
+    WorldMap();
+    void addPlayer(int id);
+    void tick();
+    void draw(sf::RenderWindow &window);
 
     bool idExists(int id);
 

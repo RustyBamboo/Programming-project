@@ -3,8 +3,8 @@
 #include <iostream>
 class Entity {
 public:
-    int id;
     int x, y;
+    std::string name;
     Entity();
     Entity(std::string user);
 

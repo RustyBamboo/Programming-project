@@ -7,12 +7,12 @@
 
 class WorldMap {
 private:
-    std::map<std::string, Entity> entities;
+    std::map<int, Entity> entities;
     std::vector<sf::IpAddress> ipAddresses;
 public:
     WorldMap();
-    void genEntity(std::string name);
-    void genEntity(std::string name, sf::IpAddress address);
+    void genEntity(int id);
+    void genEntity(int id, std::string name, sf::IpAddress address);
     void update(sf::UdpSocket &udpSocket);
 
 };

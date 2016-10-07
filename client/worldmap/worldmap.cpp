@@ -2,7 +2,9 @@
 
 //Testing.purposes
 WorldMap::WorldMap() {
-	entities[0] = std::unique_ptr<Entity>(new Player());
+}
+void WorldMap::addPlayer(int id) {
+	entities[id] = std::unique_ptr<Entity>(new Player());
 }
 void WorldMap::tick() {
 	for (auto const &entity : entities) {
@@ -25,7 +27,7 @@ bool WorldMap::idExists(int id) {
 void WorldMap::processEntity(int id, int x, int y) {
 	if (!idExists(id)) {
 		entities[id] = std::unique_ptr<Entity>(new Mob(sf::Vector2f(x, y), sf::Vector2f(0, 0)));
-		std::cout<<"generated entity "<<entities.size()<<std::endl;
+		std::cout << "generated entity at " << x << " " << y << " " << entities.size() << std::endl;
 	}
 	else {
 		entities[id]->tick();

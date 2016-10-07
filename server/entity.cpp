@@ -1,12 +1,9 @@
 #include "entity.hpp"
 
-Entity::Entity() {
-    std::cout << "Generated Default Entity" << std::endl;
-    x = rand()%500;
-    y = rand()%500;
-    id = rand()%100;
+Entity::Entity(){
+    std::cout<<"hmm"<<std::endl;
 }
 
-Entity::Entity(std::string user) {
+Entity::Entity(std::string user) : name(user) {
     std::cout << "Generated entity" << user << std::endl;
 }

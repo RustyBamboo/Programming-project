@@ -13,6 +13,7 @@ ScreenGame::ScreenGame() {
 void ScreenGame::removeSpaces(std::string &str) {
     str.erase(remove_if(str.begin(), str.end(), isspace), str.end());
 }
+
 void ScreenGame::getUDP() {
     while (true) {
         char buffer[36];
@@ -34,6 +35,31 @@ void ScreenGame::getUDP() {
 }
 
 int ScreenGame::run(sf::RenderWindow &window) {
+
+
+    std::string s;
+    std::cout << "enter username: ";
+    std::cin >> s;
+    sf::Packet packet;
+    packet << s;
+
+    sf::TcpSocket socket;
+    if (socket.connect(IPADDRESS, PORT) == sf::Socket::Done) {
+        socket.send(packet);
+        sf::Packet b;
+        socket.receive(b);
+        int msg;
+        if (b >> msg) {
+            std::cout << "id is: " << msg << std::endl;
+            worldMap.addPlayer(msg);
+        }
+    }
+    else {
+        return (-1);
+    }
+
+
+
     float dt;
     sf::Event Event;
     bool running = true;

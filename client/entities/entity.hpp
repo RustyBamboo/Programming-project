@@ -6,17 +6,17 @@
 //Most basic form of an entity. Contains an object (such as a Polygon or a Ray)
 class Entity {
 protected:
-	
-	Object *obj;
-	virtual void move() = 0;
+
+    Object *obj;
+    virtual void move() = 0;
 
 public:
-	Entity();
+    Entity();
 
-	void tick(); //We need tick functions to be synced (get diff in time)
-	void draw(sf::RenderWindow &window);
+    void tick(); //We need tick functions to be synced (get diff in time)
+    void draw(sf::RenderWindow &window);
 
-	sf::Vector2f pos, vel;
+    sf::Vector2f pos, vel;
 
 
 };

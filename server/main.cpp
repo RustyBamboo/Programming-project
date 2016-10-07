@@ -34,17 +34,18 @@ private:
             if (packet >> s)
             {
                 std::cout << s << " connected: " << socket.getRemoteAddress() << std::endl;
-                worldMap.genEntity(s, socket.getRemoteAddress());
+                int id = rand() % 10000;
+
+                worldMap.genEntity(id, s, socket.getRemoteAddress());
 
                 sf::Packet sPacket;
-                sPacket << std::string("Welcome " + s);
+                sPacket << id;
                 socket.send(sPacket);
             }
         }
     }
 
     void update() {
-        udpSocket.bind(UDPPORT);
         sf::Clock clock;
         sf::Time elapsed = clock.getElapsedTime();
         while (running) {
@@ -57,8 +58,21 @@ private:
         }
     }
 
+    void receive() {
+        while (running) {
+            char buffer[36];
+            std::size_t received = 0;
+            sf::IpAddress sender;
+            unsigned short port;
+            udpSocket.receive(buffer, sizeof(buffer), received, sender, port);
+            std::cout<<"I got " << buffer<<std::endl;
+        }
+    }
+
 public:
     Server() : running(true) {
+        udpSocket.bind(UDPPORT);
+
         threadCP = new sf::Thread(&Server::connectPlayers, this);
         threadCP->launch();
 
@@ -66,6 +80,7 @@ public:
         threadUpdate = new sf::Thread(&Server::update, this);
         threadUpdate->launch();
 
+        receive();
         if (threadCP)
         {
             threadCP->wait();

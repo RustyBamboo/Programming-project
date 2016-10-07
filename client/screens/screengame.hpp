@@ -23,11 +23,10 @@
 class ScreenGame : public CScreen
 {
 private:
+    const unsigned short PORT = 5001;
+    const std::string IPADDRESS= "192.168.1.149";
     sf::Thread *thread;
     sf::UdpSocket udpSocket;
-
-    std::unique_ptr<Entity> ray;
-    std::unique_ptr<Entity> mob;
 
     WorldMap worldMap;
 

@@ -1,7 +1,7 @@
 #include "player.hpp"
 
 
-Player::Player() : Entity() {
+Player::Player(std::string name) : Entity(name) {
     std::cout << "Generated player" << std::endl;
 }
 

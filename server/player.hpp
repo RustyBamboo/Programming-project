@@ -7,7 +7,7 @@
 
 class Player : public Entity {
 public:
-    Player();
+    Player(std::string name);
 
 };
 
