@@ -1,9 +1,9 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 
-const unsigned short PORT = 5001;
 class Server {
 private:
+	const unsigned short PORT = 5001;
 	bool running;
 	sf::TcpSocket socket;
 	sf::Thread* threadCP;
@@ -14,6 +14,20 @@ private:
 		while (running) {
 			listener.accept(socket);
 			std::cout << "New client connected: " << socket.getRemoteAddress() << std::endl;
+			sf::Packet packet;
+			socket.receive(packet);
+
+			sf::Uint32 x;
+			std::string s;
+			double d;
+			if (packet >> x >> s >> d)
+			{
+				std::cout << x << " " << s << " " << d << std::endl;
+			}
+			
+			sf::Packet sPacket;
+			sPacket << x + 1000;
+			socket.send(sPacket);
 		}
 	}
 
