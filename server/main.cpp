@@ -2,14 +2,35 @@
 #include <iostream>
 
 const unsigned short PORT = 5001;
-int main() {
+class Server {
+private:
+	bool running;
 	sf::TcpSocket socket;
+	sf::Thread* threadCP;
+	void connectPlayers() {
+		sf::TcpListener listener;
+		listener.listen(PORT);
 
-	sf::TcpListener listener;
-	listener.listen(PORT);
-	listener.accept(socket);
-	std::cout<<"New client connected: "<<socket.getRemoteAddress()<<std::endl;
+		while (running) {
+			listener.accept(socket);
+			std::cout << "New client connected: " << socket.getRemoteAddress() << std::endl;
+		}
+	}
 
+public:
+	Server() : running(true) {
+		threadCP = new sf::Thread(&Server::connectPlayers, this);
+		threadCP->launch();
+		if (threadCP)
+		{
+			threadCP->wait();
+			delete threadCP;
+		}
+	}
+
+};
+int main() {
+	Server server;
 	return 0;
 
 }
