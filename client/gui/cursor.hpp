@@ -11,12 +11,15 @@ namespace gui {
         int blinkrate;
         sf::Clock clock;
         bool isOn;
+        bool show;
     public:
         Cursor(sf::Vector2f size);
         void setPosition(sf::Vector2f pos);
         void setPosition(float x);
         void shiftPosition(float x);
         void draw(sf::RenderWindow &window);
+        void showCursor();
+        void hideCursor();
     };
 }
 

@@ -1,5 +1,10 @@
 #Using GUI
 
+- Click textbox and begin type
+- Click button to submit the form
+
+- (TODO) When textbox is selected, and enter is hit, submit the form.
+
 ##Declare a TextBox
 ```
 #include "gui/textbox.hpp" //the path
@@ -31,7 +36,7 @@ myform.setButton(mybutton); //There can only be one button in a form
 ...
 while (window.pollEvent(event)) {
 ...
-if(form.update(event)) { //If button was clicked...
+if(myform.update(event)) { //If button was clicked...
     std::vector<std::string> allTheFields = myform.process(); //0 = mytextbox, 1 = mytextbox2
 }
 ...

@@ -1,10 +1,10 @@
 #include "textbox.hpp"
 
 namespace gui {
-TextBox::TextBox(sf::Vector2f pos, sf::Vector2f size, int max) : cursor(sf::Vector2f(5,size.y-10)) {
-    box.setPosition(pos);
-    box.setSize(size);
-    cursor.setPosition(sf::Vector2f(pos.x, pos.y+5));
+TextBox::TextBox(sf::Vector2f pos, sf::Vector2f size, int max) : cursor(sf::Vector2f(5, size.y - 10)) {
+    shape.setPosition(pos);
+    shape.setSize(size);
+    cursor.setPosition(sf::Vector2f(pos.x, pos.y + 5));
     text.setPosition(pos);
     text.setColor(sf::Color::Black);
     if (!font.loadFromFile("resources/verdanab.ttf"))
@@ -14,35 +14,58 @@ TextBox::TextBox(sf::Vector2f pos, sf::Vector2f size, int max) : cursor(sf::Vect
     text.setFont(font);
     maxlength = max;
 
+    selected = false;
+}
+bool TextBox::checkPoint(int x, int y) {
+    if (x > shape.getPosition().x && x <= shape.getPosition().x + shape.getSize().x
+            && y > shape.getPosition().y && y <= shape.getPosition().y + shape.getSize().y)
+        return true;
+    return false;
 }
 void TextBox::addText(sf::String &s) {
     sf::String string = text.getString();
     text.setString(string + s);
-    cursor.setPosition(text.getLocalBounds().width + box.getPosition().x);
+    cursor.setPosition(text.getLocalBounds().width + shape.getPosition().x);
 }
 void TextBox::removeLast() {
-    text.setString(text.getString().substring(0, text.getString().getSize()-1));
-    cursor.setPosition(text.getLocalBounds().width + box.getPosition().x);
+    text.setString(text.getString().substring(0, text.getString().getSize() - 1));
+    cursor.setPosition(text.getLocalBounds().width + shape.getPosition().x);
 }
 void TextBox::draw(sf::RenderWindow &window) {
-    window.draw(box);
+    window.draw(shape);
     cursor.draw(window);
     window.draw(text);
 }
 void TextBox::update(sf::Event &event) {
-
-    if (event.type == sf::Event::TextEntered)
+    if (event.type == sf::Event::MouseButtonPressed)
     {
-        if (event.text.unicode < 128) {
+        if (event.mouseButton.button == sf::Mouse::Left)
+        {
+            if (checkPoint(event.mouseButton.x, event.mouseButton.y)) {
+                selected = true;
+                cursor.showCursor();
+            }
+            else {
+                selected = false;
+                cursor.hideCursor();
+            }
+
+        }
+    }
+    if (event.type == sf::Event::TextEntered) {
+        if (selected && event.text.unicode < 128) {
             if (event.text.unicode == 8) {
                 removeLast();
             }
-            else if (text.getString().getSize() < maxlength){
+            else if (text.getString().getSize() < maxlength) {
                 sf::String test = event.text.unicode;
                 addText(test);
             }
+
         }
     }
+
+
 }
 
 void TextBox::clear() {
