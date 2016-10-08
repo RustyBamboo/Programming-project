@@ -8,32 +8,30 @@
 
 ScreenMainMenu::ScreenMainMenu()
 {
-    alpha_max = 3 * 255;
-    alpha_div = 3;
+
     playing = false;
 }
 
 /*
 
-    This is the mainmenu, graphically the alpha value is increased to give a "loading in" effect. Appears to be buggy. So will remove.
+    This is the mainmenu,
     This is also the pause menu
-    
+
 */
 int ScreenMainMenu::run(sf::RenderWindow &window)
 {
-	window.setView(window.getDefaultView());
+    window.setView(window.getDefaultView());
     sf::Event Event;
     bool Running = true;
     sf::Texture Texture;
     sf::Sprite Sprite;
-    int alpha = 0;
     sf::Font Font;
     sf::Text Menu1;
     sf::Text Menu2;
     sf::Text Menu3;
     int menu = 0;
 
-  
+
     if (!Font.loadFromFile("resources/verdanab.ttf"))
     {
         std::cerr << "Error loading verdanab.ttf" << std::endl;
@@ -54,10 +52,6 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
     Menu3.setString("Continue");
     Menu3.setPosition(280.f, 160.f);
 
-    if (playing)
-    {
-        alpha = alpha_max;
-    }
 
     while (Running)
     {
@@ -81,7 +75,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
                     if (menu == 0)
                     {
                         //Let's get play !
-                        
+
                         playing = true;
                         return (1);
                     }
@@ -96,10 +90,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
                 }
             }
         }
-        if (alpha<alpha_max)
-        {
-            alpha++;
-        }
+
         if (menu == 0)
         {
             Menu1.setColor(sf::Color(255, 0, 0, 255));
@@ -114,18 +105,17 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
         }
 
         window.clear();
-        if (alpha == alpha_max)
+
+        if (playing)
         {
-            if (playing)
-            {
-                window.draw(Menu3);
-            }
-            else
-            {
-                window.draw(Menu1);
-            }
-            window.draw(Menu2);
+            window.draw(Menu3);
         }
+        else
+        {
+            window.draw(Menu1);
+        }
+        window.draw(Menu2);
+
         window.display();
     }
 

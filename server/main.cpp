@@ -6,7 +6,7 @@
 //The IDs of players may as well be their usernames
 class Server {
 private:
-    const unsigned short PORT = 5001;
+    const unsigned short TCPPORT = 5001;
     const unsigned short UDPPORT = 5002;
     bool running;
     sf::TcpSocket socket;
@@ -20,9 +20,9 @@ private:
         sf::TcpListener listener;
 
         //This got around some error of failing to bind to the port. (I assume from improper closing)
-        if (listener.listen(PORT) == sf::TcpListener::Error) {
+        if (listener.listen(TCPPORT) == sf::TcpListener::Error) {
             listener.close();
-            listener.listen(PORT);
+            listener.listen(TCPPORT);
         }
 
         while (running) {
@@ -53,7 +53,7 @@ private:
         sf::Time elapsed = clock.getElapsedTime();
         while (running) {
             elapsed = clock.getElapsedTime();
-            if (elapsed.asSeconds() >= 1) {
+            if (elapsed.asMilliseconds() >= 100) {
                 worldMap.update(udpSocket);
                 elapsed = clock.restart();
             }
@@ -90,8 +90,9 @@ public:
         threadUpdate->launch();
 
         receive();
-        if (threadCP)
-        {
+
+
+        if (threadCP) {
             threadCP->wait();
             delete threadCP;
         }

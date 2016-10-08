@@ -8,7 +8,7 @@ Orginization:
 
 Game:
 	Implementations:
-		- Collision (look into RayCasting, implement into object.hpp)
+		- Collision (look into RayCasting)
 		- Some kind of chunk system (have seperate rooms, load a certain area around player, etc)
 		- Implement shooting, make bullets disappear if they don't hit anything for long time, etc
 		- Add random external forces
