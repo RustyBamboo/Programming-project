@@ -11,13 +11,17 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../gui/textbox.hpp"
+#include "../gui/button.hpp"
+#include "../gui/form.hpp"
 
 class ScreenMainMenu : public CScreen
 {
 private:
-    int alpha_max;
-    int alpha_div;
     bool playing;
+    gui::TextBox inputTest;
+    gui::Form form;
+    gui::Button button;
 public:
     ScreenMainMenu();
     virtual int run(sf::RenderWindow &window);

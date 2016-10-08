@@ -3,7 +3,7 @@ set(CMAKE_CXX_COMPILER /usr/bin/g++)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 set(EXECUTABLE_NAME "game")
-add_executable(${EXECUTABLE_NAME} main.cpp screens/screenmainmenu.cpp screens/screengame.cpp entities/object.cpp entities/polygon.cpp entities/ray.cpp entities/entity.cpp entities/player.cpp entities/bullet.cpp entities/mob.cpp worldmap/worldmap.cpp)
+add_executable(${EXECUTABLE_NAME} main.cpp screens/screenmainmenu.cpp screens/screengame.cpp entities/object.cpp entities/polygon.cpp entities/ray.cpp entities/entity.cpp entities/player.cpp entities/bullet.cpp entities/mob.cpp worldmap/worldmap.cpp gui/textbox.cpp gui/cursor.cpp gui/button.cpp gui/form.cpp)
 
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR})

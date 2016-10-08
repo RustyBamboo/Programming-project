@@ -6,9 +6,10 @@
 
 #include "screenmainmenu.hpp"
 
-ScreenMainMenu::ScreenMainMenu()
+ScreenMainMenu::ScreenMainMenu() : inputTest(sf::Vector2f(50,50), sf::Vector2f(300, 50), 12), button(sf::Vector2f(50, 125), sf::Vector2f(200, 50), "Submit")
 {
-
+    form.addTextBox(inputTest);
+    form.setButton(button);
     playing = false;
 }
 
@@ -57,6 +58,9 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
     {
         while (window.pollEvent(Event))
         {
+            if(form.update(Event)) {
+                std::cout<<form.process()[0]<<std::endl;
+            }
             if (Event.type == sf::Event::Closed)
             {
                 return (-1);
@@ -105,7 +109,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
         }
 
         window.clear();
-
+        form.draw(window);
         if (playing)
         {
             window.draw(Menu3);
