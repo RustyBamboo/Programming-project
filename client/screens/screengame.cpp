@@ -1,9 +1,6 @@
 #include "screengame.hpp"
 
 ScreenGame::ScreenGame() {
-    //Remove this rect stuff
-    std::cout << "Game was made!" << std::endl;
-
     thread = new sf::Thread(&ScreenGame::getUDP, this);
 
     udpSocket.bind(UDPPORT);
@@ -14,6 +11,7 @@ void ScreenGame::removeSpaces(std::string &str) {
     str.erase(remove_if(str.begin(), str.end(), isspace), str.end());
 }
 
+//Process incoming UDP and then either moves an entity or creates a new one
 void ScreenGame::getUDP() {
     while (true) {
         char buffer[36];
@@ -37,23 +35,24 @@ void ScreenGame::getUDP() {
 
 
 int ScreenGame::run(sf::RenderWindow &window) {
-
-
     std::string s;
     std::cout << "enter username: ";
     std::cin >> s;
     sf::Packet packet;
     packet << s;
 
+    //Establish a connection with the server
     sf::TcpSocket socket;
     if (socket.connect(IPADDRESS, TCPPORT) == sf::Socket::Done) {
         socket.send(packet);
         sf::Packet b;
-        socket.receive(b);
+        socket.receive(b); //Get the ID from the server
         int msg;
         if (b >> msg) {
             std::cout << "id is: " << msg << std::endl;
             worldMap.addPlayer(msg);
+            thread->launch();
+            std::cout << "launched" << std::endl;
         }
     }
     else {
@@ -67,8 +66,7 @@ int ScreenGame::run(sf::RenderWindow &window) {
     bool running = true;
 
 
-    thread->launch();
-    std::cout << "launched?" << std::endl;
+
 
     while (running) {
         while (window.pollEvent(Event)) {
