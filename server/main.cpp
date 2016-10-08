@@ -45,6 +45,9 @@ private:
         }
     }
 
+    void removeSpaces(std::string &str) {
+    str.erase(remove_if(str.begin(), str.end(), isspace), str.end());
+}
     void update() {
         sf::Clock clock;
         sf::Time elapsed = clock.getElapsedTime();
@@ -65,7 +68,13 @@ private:
             sf::IpAddress sender;
             unsigned short port;
             udpSocket.receive(buffer, sizeof(buffer), received, sender, port);
-            std::cout<<"I got " << buffer<<std::endl;
+            std::string id(buffer, 0, 6);
+            std::string xpos(buffer, 6, 9);
+            std::string ypos(buffer, 15, 9);
+            removeSpaces(id);
+            removeSpaces(xpos);
+            removeSpaces(ypos);
+            worldMap.update(stoi(id), stoi(xpos), stoi(ypos));
         }
     }
 

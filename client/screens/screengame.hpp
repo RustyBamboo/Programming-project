@@ -25,6 +25,7 @@ class ScreenGame : public CScreen
 private:
     const unsigned short PORT = 5001;
     const std::string IPADDRESS= "192.168.1.149";
+
     sf::Thread *thread;
     sf::UdpSocket udpSocket;
 
@@ -33,6 +34,7 @@ private:
     void getUDP();
 
     void removeSpaces(std::string &str);
+
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);

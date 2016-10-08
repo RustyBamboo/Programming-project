@@ -34,6 +34,8 @@ void ScreenGame::getUDP() {
     }
 }
 
+
+
 int ScreenGame::run(sf::RenderWindow &window) {
 
 
@@ -84,6 +86,7 @@ int ScreenGame::run(sf::RenderWindow &window) {
         window.clear(sf::Color(0, 0, 0, 0));
 
         worldMap.tick();
+        worldMap.sendInfo(udpSocket);
         worldMap.draw(window);
 
         window.display();

@@ -6,6 +6,7 @@
 
 #ifndef WORLD_MAP_HPP
 #define WORLD_MAP_HPP
+#include <SFML/Network.hpp>
 #include "../include.hpp"
 #include "../entities/entity.hpp"
 #include "../entities/player.hpp"
@@ -18,6 +19,7 @@
 class WorldMap {
 
 private:
+    int playerID;
     std::map<int, std::unique_ptr<Entity> > entities;
 
 public:
@@ -29,6 +31,8 @@ public:
     bool idExists(int id);
 
     void processEntity(int id, int x, int y);
+
+    void sendInfo(sf::UdpSocket &udpSocket);
 
 };
 

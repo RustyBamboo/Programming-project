@@ -14,7 +14,7 @@ public:
     void genEntity(int id);
     void genEntity(int id, std::string name, sf::IpAddress address);
     void update(sf::UdpSocket &udpSocket);
-
+    void update(int id, int x, int y);
 };
 
 #endif

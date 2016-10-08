@@ -4,6 +4,7 @@
 WorldMap::WorldMap() {
 }
 void WorldMap::addPlayer(int id) {
+	playerID = id;
 	entities[id] = std::unique_ptr<Entity>(new Player());
 }
 void WorldMap::tick() {
@@ -32,4 +33,19 @@ void WorldMap::processEntity(int id, int x, int y) {
 	else {
 		entities[id]->tick();
 	}
+}
+
+void WorldMap::sendInfo(sf::UdpSocket &udpSocket) {
+    std::string id(6, ' ');
+    std::string xpos(9, ' ');
+    std::string ypos(9, ' ');
+    id.replace(0, 3, std::to_string(playerID));
+    std::string X(std::to_string((int)entities[playerID]->pos.x));
+    std::string Y(std::to_string((int)entities[playerID]->pos.y));
+    xpos.replace(0, X.size(), X);
+    ypos.replace(0, Y.size(), Y);
+
+    std::string result;
+    result = id + xpos + ypos;
+    udpSocket.send(result.c_str(), result.size() + 1, "192.168.1.149", 5002);
 }

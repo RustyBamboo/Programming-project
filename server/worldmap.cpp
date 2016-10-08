@@ -35,3 +35,8 @@ void WorldMap::update(sf::UdpSocket &udpSocket) {
         }
     }
 }
+
+void WorldMap::update(int id, int x, int y) {
+    entities[id].x = x;
+    entities[id].y = y;
+}
