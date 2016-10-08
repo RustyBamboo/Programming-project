@@ -31,7 +31,8 @@ void WorldMap::processEntity(int id, int x, int y) {
 		std::cout << "generated entity at " << x << " " << y << " " << entities.size() << std::endl;
 	}
 	else {
-		entities[id]->tick();
+		entities[id]->pos.x = x;
+		entities[id]->pos.y = y;
 	}
 }
 
