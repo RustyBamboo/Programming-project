@@ -30,7 +30,7 @@ void WorldMap::update(sf::UdpSocket &udpSocket) {
 
             result = name + id + xpos + ypos;
             std::cout<<result<<std::endl;
-            udpSocket.send(result.c_str(), result.size() + 1, a, 55002);
+            udpSocket.send(result.c_str(), result.size() + 1, a, 5003);
 
         }
     }

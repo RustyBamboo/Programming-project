@@ -17,7 +17,7 @@ int main() {
   srand(time(NULL)); //Pick a seed
 
 
-
+  std::cout<<sf::IpAddress::getPublicAddress();
 
 
 

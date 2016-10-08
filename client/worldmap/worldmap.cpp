@@ -48,5 +48,5 @@ void WorldMap::sendInfo(sf::UdpSocket &udpSocket) {
 
     std::string result;
     result = id + xpos + ypos;
-    udpSocket.send(result.c_str(), result.size() + 1, "192.168.1.149", 5002);
+    udpSocket.send(result.c_str(), result.size() + 1, "24.250.152.209", 5002);
 }

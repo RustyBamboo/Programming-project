@@ -6,7 +6,7 @@ ScreenGame::ScreenGame() {
 
     thread = new sf::Thread(&ScreenGame::getUDP, this);
 
-    udpSocket.bind(55002);
+    udpSocket.bind(5003);
 
 }
 

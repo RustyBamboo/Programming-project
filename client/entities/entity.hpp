@@ -18,6 +18,8 @@ public:
 
     sf::Vector2f pos, vel;
 
+    
+
 
 };
 
