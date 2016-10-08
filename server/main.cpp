@@ -83,13 +83,13 @@ public:
         udpSocket.bind(UDPPORT);
 
         threadCP = new sf::Thread(&Server::connectPlayers, this);
-        threadCP->launch();
+        threadCP->launch(); //Let players join and connect to the server
 
 
         threadUpdate = new sf::Thread(&Server::update, this);
-        threadUpdate->launch();
+        threadUpdate->launch(); //Sends out all positions to clients
 
-        receive();
+        receive(); //Let server read incoming UDP packets, and update entities positions
 
 
         if (threadCP) {
