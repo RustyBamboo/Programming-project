@@ -23,8 +23,10 @@
 class ScreenGame : public CScreen
 {
 private:
-    const unsigned short TCPPORT = 5001;
-    const std::string IPADDRESS= "24.250.152.209";
+    const unsigned short TCPPORT = 5001; //Client's port for TCP
+    const unsigned short UDPPORT = 5003; //Client's port for UDP
+    const unsigned short UDPSENDTOPORT = 5002; //Which port server is for UDP
+    const std::string IPADDRESS= "24.250.152.209"; //Server IPAddress
 
     sf::Thread *thread;
     sf::UdpSocket udpSocket;

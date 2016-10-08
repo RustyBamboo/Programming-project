@@ -7,6 +7,7 @@
 
 class WorldMap {
 private:
+    const unsigned short UDPSENDTOPORD = 5003; //Udp port open for client
     std::map<int, Entity> entities;
     std::vector<sf::IpAddress> ipAddresses;
 public:

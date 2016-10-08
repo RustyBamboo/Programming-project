@@ -32,7 +32,7 @@ public:
 
     void processEntity(int id, int x, int y);
 
-    void sendInfo(sf::UdpSocket &udpSocket);
+    void sendInfo(sf::UdpSocket &udpSocket, sf::IpAddress address, unsigned short port);
 
 };
 

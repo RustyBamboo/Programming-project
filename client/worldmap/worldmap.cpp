@@ -36,7 +36,7 @@ void WorldMap::processEntity(int id, int x, int y) {
 	}
 }
 
-void WorldMap::sendInfo(sf::UdpSocket &udpSocket) {
+void WorldMap::sendInfo(sf::UdpSocket &udpSocket, sf::IpAddress address, unsigned short port ) {
     std::string id(6, ' ');
     std::string xpos(9, ' ');
     std::string ypos(9, ' ');
@@ -48,5 +48,5 @@ void WorldMap::sendInfo(sf::UdpSocket &udpSocket) {
 
     std::string result;
     result = id + xpos + ypos;
-    udpSocket.send(result.c_str(), result.size() + 1, "24.250.152.209", 5002);
+    udpSocket.send(result.c_str(), result.size() + 1, address, port);
 }

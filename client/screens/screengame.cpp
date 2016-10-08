@@ -6,7 +6,7 @@ ScreenGame::ScreenGame() {
 
     thread = new sf::Thread(&ScreenGame::getUDP, this);
 
-    udpSocket.bind(5003);
+    udpSocket.bind(UDPPORT);
 
 }
 
@@ -57,7 +57,7 @@ int ScreenGame::run(sf::RenderWindow &window) {
         }
     }
     else {
-        return (-1);
+        return (-1); //Server ain't up. So close client.
     }
 
 
@@ -86,7 +86,7 @@ int ScreenGame::run(sf::RenderWindow &window) {
         window.clear(sf::Color(0, 0, 0, 0));
 
         worldMap.tick();
-        worldMap.sendInfo(udpSocket);
+        worldMap.sendInfo(udpSocket, IPADDRESS, UDPSENDTOPORT);
         worldMap.draw(window);
 
         window.display();

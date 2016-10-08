@@ -6,8 +6,8 @@
 //The IDs of players may as well be their usernames
 class Server {
 private:
-    const unsigned short TCPPORT = 5001;
-    const unsigned short UDPPORT = 5002;
+    const unsigned short TCPPORT = 5001; //Server is looking for TCP in this port
+    const unsigned short UDPPORT = 5002; //Server is looking for UDP in this port
     bool running;
     sf::TcpSocket socket;
     sf::UdpSocket udpSocket;
