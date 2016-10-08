@@ -23,7 +23,7 @@
 class ScreenGame : public CScreen
 {
 private:
-    const unsigned short PORT = 5001;
+    const unsigned short TCPPORT = 5001;
     const std::string IPADDRESS= "24.250.152.209";
 
     sf::Thread *thread;

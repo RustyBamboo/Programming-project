@@ -46,7 +46,7 @@ int ScreenGame::run(sf::RenderWindow &window) {
     packet << s;
 
     sf::TcpSocket socket;
-    if (socket.connect(IPADDRESS, PORT) == sf::Socket::Done) {
+    if (socket.connect(IPADDRESS, TCPPORT) == sf::Socket::Done) {
         socket.send(packet);
         sf::Packet b;
         socket.receive(b);
