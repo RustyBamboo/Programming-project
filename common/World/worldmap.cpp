@@ -1,0 +1,50 @@
+#include "worldmap.hpp"
+
+WorldMap::WorldMap()
+{
+
+}
+void WorldMap::addEntity(ID_TYPE id,Entity* e)
+{
+	last_id = id;
+	entities.insert(std::pair<ID_TYPE,std::unique_ptr<Entity> >(id,std::unique_ptr<Entity>(e)) );
+} 
+Entity* WorldMap::getEntity(ID_TYPE id)
+{
+	auto search = entities.find(id);
+	if(search != entities.end()) {
+		return search->second.get();
+	}
+	else {
+		std::cout << "Not found\n";
+	}
+}
+void WorldMap::removeEntity(ID_TYPE id)
+{
+	auto search = entities.find(id);
+	if(search != entities.end()) {
+		entities.erase(search);
+	}
+	else {
+		std::cout << "Not found\n";
+	}	
+}
+WorldMap::ID_TYPE WorldMap::newEntity(Entity* e)
+{
+	last_id++;
+	entities.insert(std::pair<ID_TYPE,std::unique_ptr<Entity> >(last_id,std::unique_ptr<Entity>(e)) );
+}    
+void WorldMap::draw(sf::RenderWindow &window)
+{
+	for (auto const &entity : entities)
+	{
+		entity.second->draw(window);
+	}
+}
+void WorldMap::tick()
+{
+	for (auto const &entity : entities)
+	{
+		entity.second->tick();
+	}
+}

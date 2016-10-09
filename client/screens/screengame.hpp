@@ -11,30 +11,21 @@
 #include <SFML/Network.hpp>
 #include <memory>
 
-#include "screengame.hpp"
-
-#include "../entities/entity.hpp"
-#include "../entities/player.hpp"
-#include "../entities/bullet.hpp"
-#include "../entities/mob.hpp"
-
-#include "../worldmap/worldmap.hpp"
+#include "../../common/include.hpp"
 
 class ScreenGame : public CScreen
 {
 private:
-    const unsigned short TCPPORT = 5001;
-    const std::string IPADDRESS= "24.250.152.209";
+    unsigned short TCP_PORT = 5001;
+    unsigned short UDP_PORT = 5003;
+    std::string IP_ADDRESS= "24.250.152.209";
 
-    sf::Thread *thread;
     sf::UdpSocket udpSocket;
-
+		uint32_t last_packet;
     WorldMap worldMap;
 
-    void getUDP();
-
-    void removeSpaces(std::string &str);
-
+		void doTick();
+		void doHandshake();
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);

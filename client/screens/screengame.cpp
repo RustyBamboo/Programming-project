@@ -1,100 +1,84 @@
 #include "screengame.hpp"
 
-ScreenGame::ScreenGame() {
-    //Remove this rect stuff
-    std::cout << "Game was made!" << std::endl;
-
-    thread = new sf::Thread(&ScreenGame::getUDP, this);
-
-    udpSocket.bind(5003);
-
+ScreenGame::ScreenGame()
+{
+	
+}
+void ScreenGame::doTick()
+{
+	sf::Packet packet;
+	TickPacket tp;
+	packet >> tp;
+	if (tp.tick_number != last_packet + 1)
+	{
+		std::cout << "Wrong packet num" << std::endl;
+		return;
+	}
+	for (uint i = 0; i < tp.num_updates; i++)
+	{
+		UpdatePacket update;
+		packet >> update;
+		switch (update.type)
+		{
+			case 1:
+				{
+					worldMap.removeEntity(update.id);
+				}
+				break;
+			case 2:
+				{
+					Entity* e = worldMap.getEntity(update.id);
+					*e << packet;
+				}
+				break;
+			case 3:
+				{
+					Polygon* p = (Polygon*) worldMap.getEntity(update.id);
+					*p << packet;
+				}
+				break;
+			case 4:
+				{
+					Polygon *p = new Polygon();
+					*p << packet;
+					worldMap.addEntity(update.id,p);
+				}
+				break;
+		}
+			//Do update depending on type
+	}
+}
+void ScreenGame::doHandshake()
+{
+	sf::TcpSocket tcp_socket;
+	if (tcp_socket.connect(IP_ADDRESS, TCP_PORT) == sf::Socket::Done) {
+		HandshakeRequest req;
+		sf::Packet req_packet;
+		req_packet << req;
+		tcp_socket.send(req_packet);
+		sf::Packet res_packet;
+		tcp_socket.receive(res_packet);
+		HandshakeResponse res;
+		res_packet >> res;
+	}	
 }
 
-void ScreenGame::removeSpaces(std::string &str) {
-    str.erase(remove_if(str.begin(), str.end(), isspace), str.end());
-}
 
-void ScreenGame::getUDP() {
-    while (true) {
-        char buffer[36];
-        std::size_t received = 0;
-        sf::IpAddress sender;
-        unsigned short port;
-        udpSocket.receive(buffer, sizeof(buffer), received, sender, port);
-        std::string name(buffer, 0, 12);
-        std::string id(buffer, 12, 6);
-        std::string xpos(buffer, 18, 9);
-        std::string ypos(buffer, 27, 9);
-        removeSpaces(name);
-        removeSpaces(id);
-        removeSpaces(xpos);
-        removeSpaces(ypos);
-        std::cout << "Name: " << name << " id " << id << " x: " << xpos << " y: " << ypos << std::endl;
-        worldMap.processEntity(stoi(id), stoi(xpos), stoi(ypos));
-    }
-}
-
-
-
-int ScreenGame::run(sf::RenderWindow &window) {
-
-
-    std::string s;
-    std::cout << "enter username: ";
-    std::cin >> s;
-    sf::Packet packet;
-    packet << s;
-
-    sf::TcpSocket socket;
-    if (socket.connect(IPADDRESS, TCPPORT) == sf::Socket::Done) {
-        socket.send(packet);
-        sf::Packet b;
-        socket.receive(b);
-        int msg;
-        if (b >> msg) {
-            std::cout << "id is: " << msg << std::endl;
-            worldMap.addPlayer(msg);
-        }
-    }
-    else {
-        return (-1);
-    }
-
-
-
-    float dt;
-    sf::Event Event;
-    bool running = true;
-
-
-    thread->launch();
-    std::cout << "launched?" << std::endl;
-
-    while (running) {
-        while (window.pollEvent(Event)) {
-            if (Event.type == sf::Event::Closed) {
-                return (-1);
-            }
-            if (Event.type == sf::Event::KeyPressed) {
-                switch (Event.key.code) {
-                case sf::Keyboard::Escape:
-                    return (0); //Goes to Pause Menu
-                }
-            }
-        }
-
-        window.clear(sf::Color(0, 0, 0, 0));
-
-        worldMap.tick();
-        worldMap.sendInfo(udpSocket);
-        worldMap.draw(window);
-
-        window.display();
-    }
-    if (thread)
-    {
-        thread->wait();
-        delete thread;
-    }
-    return -1;
+int ScreenGame::run(sf::RenderWindow &window) 
+{
+	doHandshake();
+	sf::Event Event;
+	udpSocket.bind(UDP_PORT);
+	while (window.pollEvent(Event)) {
+		if (Event.type == sf::Event::Closed) {
+			return (-1);
+		}
+		else if (Event.type == sf::Event::KeyPressed) {
+			switch (Event.key.code) {
+				case sf::Keyboard::Escape:
+					return (0); //Goes to Pause Menu
+			}
+		}
+		else doTick();
+	}
 }
