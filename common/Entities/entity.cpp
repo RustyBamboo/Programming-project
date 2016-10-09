@@ -14,6 +14,23 @@ Entity::Entity()
 void Entity::tick() {
     position += velocity;
 }
+void Entity::setPosition(sf::Vector2f p)
+{
+	position = p;
+}
+sf::Vector2f Entity::getPosition()
+{
+	return position;
+}
+void Entity::setVelocity(sf::Vector2f v)
+{
+	velocity = velocity;
+}
+sf::Vector2f Entity::getVelocity()
+{
+	return velocity;
+}
+
 Entity& Entity::operator << (sf::Packet& packet)
 {
 		packet >> position;

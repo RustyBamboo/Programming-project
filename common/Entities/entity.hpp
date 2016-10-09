@@ -21,7 +21,11 @@ public:
 		Entity& operator << (sf::Packet& packet);
 
 		Entity& operator >> (sf::Packet& packet);
-
+		
+		void setPosition(sf::Vector2f p);
+		sf::Vector2f getPosition();
+		void setVelocity(sf::Vector2f v);
+		sf::Vector2f getVelocity();
 private:
 		sf::Vector2f position;
 		sf::Vector2f velocity;

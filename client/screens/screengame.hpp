@@ -18,14 +18,15 @@ class ScreenGame : public CScreen
 private:
     unsigned short TCP_PORT = 5001;
     unsigned short UDP_PORT = 5003;
-    std::string IP_ADDRESS= "24.250.152.209";
+    sf::IpAddress SERVER_IP;
 
     sf::UdpSocket udpSocket;
 		uint32_t last_packet;
     WorldMap worldMap;
-
+		WorldMap::ID_TYPE player_id;
 		void doTick();
 		void doHandshake();
+		void handleUserInput();
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);
