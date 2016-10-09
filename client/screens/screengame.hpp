@@ -17,10 +17,8 @@ class ScreenGame : public CScreen
 {
 private:
     unsigned short TCP_PORT = 5001;
-    unsigned short UDP_PORT = 5003;
     sf::IpAddress SERVER_IP;
-
-    sf::UdpSocket udpSocket;
+		sf::TcpSocket serverConnection;
 		uint32_t last_packet;
     WorldMap worldMap;
 		WorldMap::ID_TYPE player_id;

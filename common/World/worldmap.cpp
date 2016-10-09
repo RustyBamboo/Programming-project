@@ -2,7 +2,7 @@
 
 WorldMap::WorldMap()
 {
-
+	last_id = 0;
 }
 void WorldMap::addEntity(ID_TYPE id,Entity* e)
 {
@@ -33,6 +33,7 @@ WorldMap::ID_TYPE WorldMap::newEntity(Entity* e)
 {
 	last_id++;
 	entities.insert(std::pair<ID_TYPE,std::unique_ptr<Entity> >(last_id,std::unique_ptr<Entity>(e)) );
+	return last_id;
 }    
 void WorldMap::draw(sf::RenderWindow &window)
 {

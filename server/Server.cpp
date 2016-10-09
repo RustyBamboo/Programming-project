@@ -9,8 +9,9 @@ void Server::run()
 			newPlayersListener.close();
 			newPlayersListener.listen(TCP_PORT);
 	}
-	tickSocket.bind(UDP_PORT);
-	tickSocket.setBlocking(false);
+	tickPacket.tick_number = 0;
+	tickPacket.num_updates = 0;
+	tick_number = 0;
 	sf::Thread newPlayersThread(&Server::connectPlayers,this);
 	newPlayersThread.launch();
 	while (true) tick();
@@ -22,48 +23,53 @@ void Server::tick()
 		sf::Lock lock(tick_mutex);
 		tickPacket.tick_number = tick_number;
 		tickPacket.num_updates = 0;
-		updates_packet = sf::Packet();
+		updates_packet.clear();
 	}
 	sf::Clock clock;
 	clock.restart();
 	while (clock.getElapsedTime().asMilliseconds() < TICK_TIME_MILLIS)
 	{
-		sf::Packet update_packet;
-		sf::IpAddress remoteAddress;
-		unsigned short remotePort;
-		sf::Socket::Status status = tickSocket.receive(update_packet,remoteAddress,remotePort);
-		if (status == sf::Socket::Status::Done)
+		for(std::map< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
 		{
+			(*player).first->setBlocking(false);
 			UpdatePacket update;
-			update_packet >> update;
-			switch (update.type)
+			sf::Packet packet;
+			sf::Socket::Status status = (*player).first->receive(packet);
+			if (status == sf::Socket::Status::Done)
 			{
-				case UpdatePacket::UPDATE_ENTITY:
-					{
-						Entity* e = worldMap.getEntity(update.id);
-						*e << update_packet;
+				packet >> update;
+				printf("Received Update TYPE=%u ID=%u\n",update.type,update.id);
+				switch (update.type)
+				{
+					case UpdatePacket::UPDATE_ENTITY:
 						{
-							sf::Lock lock(tick_mutex);
-							updates_packet << update;
-							*e >> updates_packet;
-							tickPacket.num_updates++;
+							Entity* e = worldMap.getEntity(update.id);
+							*e << packet;
+							{
+								sf::Lock lock(tick_mutex);
+								updates_packet << update;
+								*e >> updates_packet;
+								tickPacket.num_updates++;
+							}
 						}
-					}
-					break;
-			}	
-		} else sf::sleep(sf::milliseconds(10));
+						break;
+				}	
+			}			
+		}
+		sf::sleep(sf::milliseconds(10));
 	}
 	
 	//Ready to send tick
 	sf::Lock lock(tick_mutex);
 	sf::Packet header_packet;
 	header_packet << tickPacket;
-	printf("Sending Updates. Players=%i Updates=%i\n",players.size(),tickPacket.num_updates);
-	std::for_each(players.begin(),players.end(),[&] (std::pair<sf::IpAddress,WorldMap::ID_TYPE> player) {
-		const sf::IpAddress remoteAddress = player.first;
-		tickSocket.send(header_packet,remoteAddress,UDP_PORT);
-		tickSocket.send(updates_packet,remoteAddress,UDP_PORT);
-	});
+	printf("Sending Tick #%u Updates=%i Players=%i SIZE=%u\n",tickPacket.tick_number,tickPacket.num_updates,players.size(),updates_packet.getDataSize ());
+	for(std::map< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
+	{
+		(*player).first->setBlocking(true);
+		(*player).first->send(header_packet);
+		(*player).first->send(updates_packet);	
+	}
 	worldMap.tick();
 	tick_number++;
 }
@@ -74,22 +80,19 @@ void Server::connectPlayers()
 			HandshakeRequest req;
 			HandshakeResponse res;
 			sf::Packet req_packet,res_packet;
-			sf::TcpSocket client;
-			
-			
-			newPlayersListener.accept(client);
-			client.receive(req_packet);
+			std::unique_ptr<sf::TcpSocket> client(new sf::TcpSocket);
+
+			newPlayersListener.accept(*client);
+			client->receive(req_packet);
 			req_packet >> req;
 			//Create new player entity
-			Entity* character = (Entity*) new Polygon();
-			auto id = worldMap.newEntity(character);
+			Polygon* character = new Polygon();
+			auto id = worldMap.newEntity((Entity*) character);
 			
 			//Send player response with their character id
 			res.id = id;
 			res_packet << res;
-			client.send(res_packet);
-			
-			players.insert(std::pair<sf::IpAddress,WorldMap::ID_TYPE>(client.getRemoteAddress(),id)); //Add ip to players list
+			client->send(res_packet);
 			{
 				sf::Lock lock(tick_mutex);
 				UpdatePacket update;
@@ -99,6 +102,7 @@ void Server::connectPlayers()
 				*character >> updates_packet;
 				tickPacket.num_updates++;
 			}
-			std::cout << "Added IP: " << client.getRemoteAddress() << std::endl;
+			std::cout << "Added IP: " << client->getRemoteAddress() << std::endl;
+			players.insert(std::pair< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>(std::move(client),id) );
 	}
 }

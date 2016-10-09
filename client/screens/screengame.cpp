@@ -3,62 +3,61 @@
 ScreenGame::ScreenGame() :
 	SERVER_IP(sf::IpAddress::LocalHost)
 {
-	
+		std::cout << "Game Running" << std::endl;
+		doHandshake();
 }
 void ScreenGame::doTick()
 {
-	std::cout << "Do Tick" << std::endl;
-	sf::IpAddress remoteAddress;
-	unsigned short remotePort;
 	sf::Packet packet;
+	packet.clear();
 	TickPacket tp;
-	udpSocket.receive(packet,remoteAddress,remotePort);
-	if (remoteAddress != SERVER_IP)
-	{
-		std::cout << "Received from not server, ignoring" << std::endl;
-		return;
-	}
+	serverConnection.receive(packet);
 	packet >> tp;
 	//~ if (tp.tick_number != last_packet + 1)
 	//~ {
 		//~ std::cout << "Wrong packet num" << std::endl;
 		//~ return;
 	//~ }
+	printf("Tick #%u updates=%u\n",tp.tick_number,tp.num_updates);
 	for (uint i = 0; i < tp.num_updates; i++)
 	{
 		UpdatePacket update;
 		sf::Packet packet;
-		do {
-			packet.clear();
-			udpSocket.receive(packet,remoteAddress,remotePort);
-		} while (remoteAddress != SERVER_IP);
+		packet.clear();
+		serverConnection.receive(packet);
 		packet >> update;
 		switch (update.type)
 		{
 			case UpdatePacket::REMOVE_ENTITY:
 				{
+					printf("Update REMOVE_ENTITY #%u ID=%u\n",i,update.id);
 					worldMap.removeEntity(update.id);
 				}
 				break;
 			case UpdatePacket::UPDATE_ENTITY:
 				{
+					printf("Update UPDATE_ENTITY #%u ID=%u\n",i,update.id);
 					Entity* e = worldMap.getEntity(update.id);
 					*e << packet;
 				}
 				break;
 			case UpdatePacket::UPDATE_POLYGON:
 				{
+					printf("Update UPDATE_POLYGON #%u ID=%u\n",i,update.id);
 					Polygon* p = (Polygon*) worldMap.getEntity(update.id);
 					*p << packet;
 				}
 				break;
 			case UpdatePacket::NEW_POLYGON:
 				{
+					printf("Update NEW_POLYGON #%u ID=%u\n",i,update.id);
 					Polygon *p = new Polygon();
 					*p << packet;
 					worldMap.addEntity(update.id,p);
 				}
 				break;
+			default:
+				printf("Update UNKOWN #%u ID=%i\n",i,update.id);
 		}
 			//Do update depending on type
 	}
@@ -66,14 +65,13 @@ void ScreenGame::doTick()
 }
 void ScreenGame::doHandshake()
 {
-	sf::TcpSocket tcp_socket;
-	if (tcp_socket.connect(SERVER_IP, TCP_PORT) == sf::Socket::Done) {
+	if (serverConnection.connect(SERVER_IP, TCP_PORT) == sf::Socket::Done) {
 		HandshakeRequest req;
 		sf::Packet req_packet;
 		req_packet << req;
-		tcp_socket.send(req_packet);
+		serverConnection.send(req_packet);
 		sf::Packet res_packet;
-		tcp_socket.receive(res_packet);
+		serverConnection.receive(res_packet);
 		HandshakeResponse res;
 		res_packet >> res;
 	}	
@@ -101,20 +99,20 @@ void ScreenGame::handleUserInput()
 	
 	if (velocity != me->getVelocity())
 	{
+		printf("Seting Velocity ID=%u ",player_id);
 		sf::Packet packet;
 		UpdatePacket update;
 		update.id = player_id;
 		update.type = UpdatePacket::UPDATE_ENTITY;
 		packet << update;
 		*me >> packet;
+		serverConnection.send(packet);
 	}
 }
 int ScreenGame::run(sf::RenderWindow &window) 
 {
-	std::cout << "Game Running" << std::endl;
-	doHandshake();
+
 	sf::Event Event;
-	udpSocket.bind(UDP_PORT);
 	while (window.pollEvent(Event)) {
 		if (Event.type == sf::Event::Closed) {
 			return (-1);
