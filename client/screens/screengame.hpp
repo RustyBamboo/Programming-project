@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <memory>
+#include <stdexcept>
 
 #include "../../common/include.hpp"
 

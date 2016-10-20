@@ -3,6 +3,8 @@
 #include "../Entities/entity.hpp"
 #include <SFML/Network.hpp>
 #include <iostream>
+#include <memory>
+
 class WorldMap {
 public:
 		typedef uint32_t ID_TYPE;
