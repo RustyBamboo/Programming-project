@@ -1,10 +1,12 @@
 #pragma once
 #include "../common/include.hpp"
+#include <stdexcept>
+
 class Server 
 {
 private:
     const unsigned short TCP_PORT = 5001;
-    const int TICK_TIME_MILLIS = 100;
+    const int TICK_TIME_MILLIS = 20;
 		sf::TcpListener newPlayersListener;
 		TickPacket tickPacket;
 		sf::Packet updates_packet;

@@ -5,11 +5,7 @@ Server::Server()
 }
 void Server::run()
 {
-	if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error)
-  {
-			newPlayersListener.close();
-			newPlayersListener.listen(TCP_PORT);
-	}
+	if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error) throw std::runtime_error("dfdfs");
   newPlayersListener.setBlocking(false);
 	tickPacket.tick_number = 0;
 	tickPacket.num_updates = 0;
