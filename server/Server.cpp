@@ -24,8 +24,6 @@ void Server::run()
 }
 void Server::tick()
 {
-	std::cout << "Server Tick" << std::endl;
-
 	sf::Clock clock;
 	clock.restart();
 	while (clock.getElapsedTime().asMilliseconds() < TICK_TIME_MILLIS)
@@ -39,7 +37,7 @@ void Server::tick()
       {
         UpdatePacket update;
 				packet >> update;
-				printf("Received Update TYPE=%u ID=%u\n From",update.type,update.id);
+				printf("\tReceived Update TYPE=%u ID=%u From\n",update.type,update.id);
 				switch (update.type)
 				{
 					case UpdatePacket::UPDATE_ENTITY:
@@ -49,6 +47,7 @@ void Server::tick()
               updates_packet << update;
               *e >> updates_packet;
               tickPacket.num_updates++;
+              //~ printf("\tUPDATE ENTITY ID=%u VELOCITY X=%f Y=%f\n",update.id,e->getVelocity().x,e->getVelocity().y);
 						}
 						break;
 				}
@@ -72,7 +71,6 @@ void Server::tick()
 	printf("Sending Tick #%u Updates=%i Players=%u HEADER_SIZE=%u UPDATES_SIZE=%u\n",tickPacket.tick_number,tickPacket.num_updates,players.size(),header_packet.getDataSize(),updates_packet.getDataSize ());
 	for(std::map< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
 	{
-    printf("ONLY ONCE\n");
 		(*player).first->setBlocking(true);
 		(*player).first->send(header_packet);
 		if(tickPacket.num_updates > 0) (*player).first->send(updates_packet);	
@@ -93,7 +91,7 @@ void Server::connectPlayer()
     printf("Recieving Handshake Request Size = %u\n",req_packet.getDataSize ());
     req_packet >> req;
     //Create new player entity
-    Polygon* character = new Polygon();
+    Polygon* character = new Polygon(sf::Vector2f(0,0), sf::Vector2f(0,0),50, 3);
     auto id = worldMap.newEntity((Entity*) character);
     //Send player response with their character id
     res.id = id;

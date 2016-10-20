@@ -24,7 +24,7 @@ sf::Vector2f Entity::getPosition()
 }
 void Entity::setVelocity(sf::Vector2f v)
 {
-	velocity = velocity;
+	velocity = v;
 }
 sf::Vector2f Entity::getVelocity()
 {
@@ -43,10 +43,17 @@ Entity& Entity::operator >> (sf::Packet& packet)
 }	
 sf::Packet& operator <<(sf::Packet& packet, const sf::Vector2f& v)
 {
-	return packet << v.x << v.y;
+  //~ float x = v.x;
+  //~ float y = v.y;
+   //~ printf("Sending x=%f y=%f\n",x,y);
+  packet << v.x << v.y;
 }
 
 sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& v)
 {
-    return packet >> v.x >> v.y;
+  //~ float x = 0;
+  //~ float y = 0;
+  packet >> v.x >> v.y;
+  //~ printf("Loaded x=%f y=%f\n",x,y);
+  //~ v = sf::Vector2f(x,y);
 }

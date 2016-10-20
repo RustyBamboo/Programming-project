@@ -87,29 +87,30 @@ void ScreenGame::handleUserInput()
 	Entity* me = worldMap.getEntity(player_id);
 	sf::Vector2f velocity = me->getVelocity();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		velocity.x = -1;
+		velocity.x = -5.0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		velocity.x = 1;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		velocity.x = 5.0;
 	}
+  else velocity.x = 0;
+  
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		velocity.y = 1;
+		velocity.y = -5.0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		velocity.y = -1;
-	} else {
-		velocity.x = 0;
-		velocity.y = 0;
-	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		velocity.y = 5.0;
+	} else velocity.y = 0;
 	
-	if (velocity != me->getVelocity())
+	if (fabs(velocity.x - me->getVelocity().x) > .01 || fabs(velocity.y - me->getVelocity().y) > .01 )
 	{
-		printf("Seting Velocity ID=%u ",player_id);
+		//~ printf("Changing Velocity ID=%u WAS=(X=%f Y=%f) NOW=(X=%f Y=%f)\n",player_id,me->getVelocity().x,me->getVelocity().y,velocity.x,velocity.y);
 		sf::Packet packet;
 		UpdatePacket update;
 		update.id = player_id;
 		update.type = UpdatePacket::UPDATE_ENTITY;
 		packet << update;
+    me->setVelocity(velocity);
+    //~ printf("Me (X=%f Y=%f)\n",me->getVelocity().x,me->getVelocity().y);
 		*me >> packet;
 		serverConnection.send(packet);
 	}
@@ -135,7 +136,7 @@ int ScreenGame::run(sf::RenderWindow &window)
       }
     }
     window.clear(sf::Color(0,0,0,0));
-    //handleUserInput();
+    handleUserInput();
     doTick();
     worldMap.draw(window);
     window.display();
