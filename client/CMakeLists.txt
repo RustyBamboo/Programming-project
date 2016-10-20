@@ -1,19 +1,16 @@
-include_directories(${CMAKEDEMO_SOURCE_DIR}/client)
-link_directories(${CMAKEDEMO_BINARY_DIR}/client)
-
 set(CMAKE_C_COMPILER /usr/bin/gcc)
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 set(EXECUTABLE_NAME "game")
-add_executable(${EXECUTABLE_NAME} main.cpp screens/screenmainmenu.cpp screens/screengame.cpp entities/object.cpp entities/polygon.cpp entities/ray.cpp entities/entity.cpp entities/player.cpp entities/bullet.cpp entities/mob.cpp worldmap/worldmap.cpp)
+add_executable(${EXECUTABLE_NAME} main.cpp screens/screenmainmenu.cpp screens/screengame.cpp ${COMMON_CPP})
 
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR})
   target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
 endif()
 
-# we don't want to copy if we're building in the source dir
+# copies sfml textures
 if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 
     # list of files for which we add a copy rule
