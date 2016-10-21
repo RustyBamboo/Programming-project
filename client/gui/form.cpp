@@ -12,13 +12,20 @@ bool Form::update(sf::Event &event) {
         box->update(event);
     }
     button->update(event);
-    if(button->clicked) return true;
+    if (button->clicked) return true;
+    if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::Return)
+        {
+            return true;
+        }
+    }
     return false;
 }
-void Form::addTextBox(gui::TextBox &textbox) {
+void Form::addTextBox(gui::TextBox & textbox) {
     textboxes.push_back(&textbox);
 }
-void Form::setButton(gui::Button &b) {
+void Form::setButton(gui::Button & b) {
     button = &b;
 }
 std::vector<std::string> Form::process() {

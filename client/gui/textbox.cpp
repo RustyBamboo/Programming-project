@@ -4,6 +4,7 @@ namespace gui {
 TextBox::TextBox(sf::Vector2f pos, sf::Vector2f size, int max) : cursor(sf::Vector2f(5, size.y - 10)) {
     shape.setPosition(pos);
     shape.setSize(size);
+    shape.setOutlineThickness(1.5);
     cursor.setPosition(sf::Vector2f(pos.x, pos.y + 5));
     text.setPosition(pos);
     text.setColor(sf::Color::Black);
@@ -47,10 +48,12 @@ void TextBox::update(sf::Event &event) {
             if (checkPoint(event.mouseButton.x, event.mouseButton.y)) {
                 selected = true;
                 cursor.showCursor();
+                shape.setOutlineColor(sf::Color::Cyan);
             }
             else {
                 selected = false;
                 cursor.hideCursor();
+                shape.setOutlineColor(sf::Color::White);
             }
 
         }
@@ -71,6 +74,9 @@ void TextBox::update(sf::Event &event) {
 
 }
 
+void TextBox::setText(std::string &str) {
+    text.setString(str);
+}
 void TextBox::clear() {
     text.setString("");
 }
