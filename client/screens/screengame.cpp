@@ -1,6 +1,6 @@
 #include "screengame.hpp"
 #include <string>
-ScreenGame::ScreenGame()
+ScreenGame::ScreenGame() : player_id (-1)
 {
 }
 void ScreenGame::doTick()
@@ -76,12 +76,17 @@ void ScreenGame::doHandshake()
     printf("Recieving Handshake Response Size = %u\n", res_packet.getDataSize ());
     HandshakeResponse res;
     res_packet >> res;
+    player_id = res.id;
   } else {
     throw std::runtime_error("Could not connect to Server");
   }
 }
 void ScreenGame::handleUserInput()
 {
+  if (player_id == -1) {
+    std::cout << "Player ID not set" << std::endl;
+    return;
+  }
   Entity* me = worldMap.getEntity(player_id);
   sf::Vector2f velocity = me->getVelocity();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -115,9 +120,9 @@ void ScreenGame::handleUserInput()
 }
 int ScreenGame::run(sf::RenderWindow &window)
 {
-  std::cout<<"Running"<< " " << SERVER_IP << std::endl;
+  std::cout << "Running" << " " << SERVER_IP << std::endl;
   doHandshake();
-  std::cout<<"finished handshake"<<std::endl;
+  std::cout << "finished handshake" << std::endl;
   sf::Event Event;
   while (window.isOpen())
   {
@@ -150,5 +155,5 @@ void ScreenGame::setName(const std::string &_name) {
   playerName = _name;
 }
 
-sf::IpAddress ScreenGame::SERVER_IP = sf::IpAddress("128.0.0.1");
+sf::IpAddress ScreenGame::SERVER_IP = sf::IpAddress("127.0.0.1");
 std::string ScreenGame::playerName =  "";

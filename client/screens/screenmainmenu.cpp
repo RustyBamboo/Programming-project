@@ -65,7 +65,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
 
                 ScreenGame::setServerIP(sf::IpAddress(allTheFields[0]));
                 ScreenGame::setName(allTheFields[1]);
-                std::cout<<allTheFields[0]<<" "<<allTheFields[1]<<std::endl;
+                std::cout<<"Inputted: " << allTheFields[0]<<" "<<allTheFields[1]<<std::endl;
 
             }
             if (Event.type == sf::Event::KeyPressed)
