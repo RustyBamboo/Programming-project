@@ -28,7 +28,10 @@ void TextBox::addText(sf::String &s) {
     cursor.setPosition(text.getLocalBounds().width + shape.getPosition().x);
 }
 void TextBox::removeLast() {
-    text.setString(text.getString().substring(0, text.getString().getSize() - 1));
+    if (text.getString().getSize() == 0) return;
+    sf::String old = text.getString();
+    old.erase(old.getSize ()-1,1);
+    text.setString(old);
     cursor.setPosition(text.getLocalBounds().width + shape.getPosition().x);
 }
 void TextBox::draw(sf::RenderWindow &window) {

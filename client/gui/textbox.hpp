@@ -12,7 +12,7 @@ private:
     bool isSelected;
     sf::Text text;
     sf::Font font;
-    int maxlength;
+    unsigned int maxlength;
 
     bool selected;
 
