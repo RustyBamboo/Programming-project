@@ -1,14 +1,13 @@
-#include <iostream>
-#include "cscreen.hpp"
-
-#include <SFML/Graphics.hpp>
-
-
 #include "screenmainmenu.hpp"
 
-ScreenMainMenu::ScreenMainMenu()
-{
 
+ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(10, 10), sf::Vector2f(300, 50), 25),
+    textBoxName(sf::Vector2f(10, 70), sf::Vector2f(300, 50), 12),
+    buttonSubmit(sf::Vector2f(10, 140), sf::Vector2f(200, 50), "Submit")
+{
+    form.addTextBox(textBoxAddr);
+    form.addTextBox(textBoxName);
+    form.setButton(buttonSubmit);
     playing = false;
 }
 
@@ -60,6 +59,14 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
             if (Event.type == sf::Event::Closed)
             {
                 return (-1);
+            }
+            if (form.update(Event)) { //If button was clicked...
+                std::vector<std::string> allTheFields = form.process();
+
+                ScreenGame::setServerIP(sf::IpAddress(allTheFields[0]));
+                ScreenGame::setName(allTheFields[1]);
+                std::cout<<allTheFields[0]<<" "<<allTheFields[1]<<std::endl;
+
             }
             if (Event.type == sf::Event::KeyPressed)
             {
@@ -115,7 +122,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
             window.draw(Menu1);
         }
         window.draw(Menu2);
-
+        form.draw(window);
         window.display();
     }
 

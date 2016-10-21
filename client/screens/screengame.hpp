@@ -18,17 +18,20 @@ class ScreenGame : public CScreen
 {
 private:
     unsigned short TCP_PORT = 5001;
-    sf::IpAddress SERVER_IP;
-		sf::TcpSocket serverConnection;
-		uint32_t last_packet;
+    static sf::IpAddress SERVER_IP;
+    static std::string playerName;
+    sf::TcpSocket serverConnection;
+    uint32_t last_packet;
     WorldMap worldMap;
-		WorldMap::ID_TYPE player_id;
-		void doTick();
-		void doHandshake();
-		void handleUserInput();
+    WorldMap::ID_TYPE player_id;
+    void doTick();
+    void doHandshake();
+    void handleUserInput();
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);
+    static void setServerIP (const sf::IpAddress &address);
+    static void setName (const std::string &_name);
 };
 
 #endif
