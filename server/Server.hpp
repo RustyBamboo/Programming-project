@@ -17,5 +17,6 @@ private:
     void tick();
 public:
     Server();
+    ~Server();
     void run();
 };

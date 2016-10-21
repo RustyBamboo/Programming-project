@@ -91,6 +91,8 @@ void ScreenGame::doHandshake()
 		HandshakeResponse res;
 		res_packet >> res;
     player_id = res.id;
+
+    //Expect tick with all other entities
 	} else {
     throw std::runtime_error("Could not connect to Server");
   }
@@ -101,8 +103,13 @@ void ScreenGame::handleUserInput()
     std::cout << "Player ID not set" << std::endl;
     return;
   }
-  Entity* me = worldMap.getEntity(player_id);
-  sf::Vector2f velocity = me->getVelocity();
+  if (worldMap.getEntity(player_id) == NULL) {
+    std::cout << "I don't exsist yet" << std::endl;
+    return;
+  }
+  // ~Polygon* me_ptr = (Polygon*) worldMap.getEntity(player_id); //Create a copy of me
+  Entity* me_ptr = worldMap.getEntity(player_id); //Create a copy of me
+  sf::Vector2f velocity = me_ptr->getVelocity();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
     velocity.x = -5.0;
   }
@@ -118,17 +125,18 @@ void ScreenGame::handleUserInput()
     velocity.y = 5.0;
   } else velocity.y = 0;
 
-  if (fabs(velocity.x - me->getVelocity().x) > .01 || fabs(velocity.y - me->getVelocity().y) > .01 )
+  //If velocity changed, send out update
+  if (fabs(velocity.x - me_ptr->getVelocity().x) > .01 || fabs(velocity.y - me_ptr->getVelocity().y) > .01 )
   {
-    //~ printf("Changing Velocity ID=%u WAS=(X=%f Y=%f) NOW=(X=%f Y=%f)\n",player_id,me->getVelocity().x,me->getVelocity().y,velocity.x,velocity.y);
+    printf("Changing Velocity ID=%u WAS=(X=%f Y=%f) NOW=(X=%f Y=%f)\n",player_id,me_ptr->getVelocity().x,me_ptr->getVelocity().y,velocity.x,velocity.y);
     sf::Packet packet;
     UpdatePacket update;
     update.id = player_id;
     update.type = UpdatePacket::UPDATE_ENTITY;
     packet << update;
-    me->setVelocity(velocity);
-    //~ printf("Me (X=%f Y=%f)\n",me->getVelocity().x,me->getVelocity().y);
-    *me >> packet;
+    me_ptr->setVelocity(velocity);
+    printf("Me (X=%f Y=%f)\n",me_ptr->getVelocity().x,me_ptr->getVelocity().y);
+    *me_ptr >> packet;
     serverConnection.send(packet);
   }
 }

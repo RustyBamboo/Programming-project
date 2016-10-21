@@ -19,6 +19,11 @@ ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(10, 10), sf::Vector2
 */
 int ScreenMainMenu::run(sf::RenderWindow &window)
 {
+    std::vector<std::string> allTheFields;
+    allTheFields.push_back("127.0.0.1");
+    allTheFields.push_back("player1");
+    textBoxAddr.setText(allTheFields.at(0));
+    textBoxName.setText(allTheFields.at(1));
     window.setView(window.getDefaultView());
     sf::Event event;
     bool running = true;
@@ -32,7 +37,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
                 return (-1);
             }
             if (form.update(event)) { //If button was clicked...
-                std::vector<std::string> allTheFields = form.process();
+                allTheFields = form.process();
 
                 if (allTheFields[0].size() > 0 && allTheFields[1].size() > 0 && allTheFields[1].size() <= 12) {
                     ScreenGame::setServerIP(sf::IpAddress(allTheFields[0]));

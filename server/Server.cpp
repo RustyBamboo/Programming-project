@@ -5,7 +5,10 @@ Server::Server()
 }
 void Server::run()
 {
-	if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error) throw std::runtime_error("Server cannot bind to socket");
+	if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error)
+  {
+    if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error) throw std::runtime_error("Server cannot bind to socket");
+  }
   newPlayersListener.setBlocking(false);
 	tickPacket.tick_number = 0;
 	tickPacket.num_updates = 0;
@@ -48,6 +51,16 @@ void Server::tick()
               //~ printf("\tUPDATE ENTITY ID=%u VELOCITY X=%f Y=%f\n",update.id,e->getVelocity().x,e->getVelocity().y);
 						}
 						break;
+          case UpdatePacket::UPDATE_POLYGON:
+            {
+              Polygon* p = (Polygon*) worldMap.getEntity(update.id);
+              *p << updates_packet;
+              updates_packet << update;
+              *p >> updates_packet;
+              tickPacket.num_updates++;
+              printf("\tUPDATE Polygon ID=%u VELOCITY X=%f Y=%f\n",update.id,p->getVelocity().x,p->getVelocity().y);
+            }
+            break;
 				}
         packet.clear();
         status = (*player).first->receive(packet);
@@ -102,14 +115,25 @@ void Server::connectPlayer()
     printf("Sending Handshake Response Size = %lu\n",res_packet.getDataSize ());
 #endif
     client->send(res_packet);
+
+    //Tell other players about new player
     UpdatePacket update;
     update.type = UpdatePacket::NEW_POLYGON;
     update.id = id;
     updates_packet << update;
     *character >> updates_packet;
     tickPacket.num_updates++;
+
 #ifdef DO_DEBUG
     std::cout << "Added IP: " << client->getRemoteAddress() << std::endl;
 #endif
     players.insert(std::pair< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>(std::move(client),id) );
+}
+Server::~Server()
+{
+  newPlayersListener.close();
+  for(std::map< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
+	{
+		(*player).first->disconnect();
+	}
 }

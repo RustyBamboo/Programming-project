@@ -9,22 +9,8 @@ public:
 	Polygon();
 	virtual void draw(sf::RenderWindow &window);
 	
-	Polygon& operator << (sf::Packet& packet)
-	{
-			sf::Uint32 points;
-			float radius;
-			*(Entity*) this << packet;
-			packet >> radius;
-			packet >> points;
-      shape.setRadius(radius);
-      shape.setPointCount(points);
-	}
+	Polygon& operator << (sf::Packet& packet);
 
-	Polygon& operator >>(sf::Packet& packet)
-	{
-			*(Entity*) this >> packet;
-			packet << shape.getRadius();
-			packet << (sf::Uint32) shape.getPointCount();
-	}	
+	Polygon& operator >>(sf::Packet& packet);
 
 };
