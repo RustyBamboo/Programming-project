@@ -1,5 +1,5 @@
 #include "entity.hpp"
-
+#include "../include.hpp"
 Entity::Entity(sf::Vector2f &pos, sf::Vector2f &vel, EntityType t) :
 		position(pos),
 		velocity(vel),

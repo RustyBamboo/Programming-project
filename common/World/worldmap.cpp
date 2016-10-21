@@ -37,7 +37,9 @@ WorldMap::ID_TYPE WorldMap::newEntity(Entity* e)
 }    
 void WorldMap::draw(sf::RenderWindow &window)
 {
-  printf("World Map Drawing %u entities\n",entities.size());
+#ifdef DO_DEBUG
+  printf("World Map Drawing %lu entities\n",entities.size());
+#endif
 	for (auto const &entity : entities)
 	{
 		entity.second->draw(window);

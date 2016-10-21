@@ -5,7 +5,7 @@ Server::Server()
 }
 void Server::run()
 {
-	if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error) throw std::runtime_error("dfdfs");
+	if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error) throw std::runtime_error("Server cannot bind to socket");
   newPlayersListener.setBlocking(false);
 	tickPacket.tick_number = 0;
 	tickPacket.num_updates = 0;
@@ -33,7 +33,9 @@ void Server::tick()
       {
         UpdatePacket update;
 				packet >> update;
+#ifdef DO_DEBUG
 				printf("\tReceived Update TYPE=%u ID=%u From\n",update.type,update.id);
+#endif
 				switch (update.type)
 				{
 					case UpdatePacket::UPDATE_ENTITY:
@@ -64,7 +66,9 @@ void Server::tick()
 	//Ready to send tick
 	sf::Packet header_packet;
 	header_packet << tickPacket;
-	printf("Sending Tick #%u Updates=%i Players=%u HEADER_SIZE=%u UPDATES_SIZE=%u\n",tickPacket.tick_number,tickPacket.num_updates,players.size(),header_packet.getDataSize(),updates_packet.getDataSize ());
+#ifdef DO_DEBUG
+	printf("Sending Tick #%u Updates=%i Players=%lu HEADER_SIZE=%lu UPDATES_SIZE=%lu\n",tickPacket.tick_number,tickPacket.num_updates,players.size(),header_packet.getDataSize(),updates_packet.getDataSize ());
+#endif
 	for(std::map< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
 	{
 		(*player).first->setBlocking(true);
@@ -84,7 +88,9 @@ void Server::connectPlayer()
     if (s != sf::Socket::Status::Done) return;
     client->setBlocking(true);
     client->receive(req_packet);
-    printf("Recieving Handshake Request Size = %u\n",req_packet.getDataSize ());
+#ifdef DO_DEBUG
+    printf("Recieving Handshake Request Size = %lu\n",req_packet.getDataSize ());
+#endif
     req_packet >> req;
     //Create new player entity
     Polygon* character = new Polygon(sf::Vector2f(0,0), sf::Vector2f(0,0),50, 3);
@@ -92,7 +98,9 @@ void Server::connectPlayer()
     //Send player response with their character id
     res.id = id;
     res_packet << res;
-    printf("Sending Handshake Response Size = %u\n",res_packet.getDataSize ());
+#ifdef DO_DEBUG
+    printf("Sending Handshake Response Size = %lu\n",res_packet.getDataSize ());
+#endif
     client->send(res_packet);
     UpdatePacket update;
     update.type = UpdatePacket::NEW_POLYGON;
@@ -100,6 +108,8 @@ void Server::connectPlayer()
     updates_packet << update;
     *character >> updates_packet;
     tickPacket.num_updates++;
+#ifdef DO_DEBUG
     std::cout << "Added IP: " << client->getRemoteAddress() << std::endl;
+#endif
     players.insert(std::pair< std::unique_ptr<sf::TcpSocket> ,WorldMap::ID_TYPE>(std::move(client),id) );
 }

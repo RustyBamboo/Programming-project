@@ -1,61 +1,71 @@
 #include "screengame.hpp"
 #include <string>
-ScreenGame::ScreenGame() : player_id (-1)
+ScreenGame::ScreenGame() : player_id (0)
 {
 }
 void ScreenGame::doTick()
 {
-  sf::Packet header_packet;
-  TickPacket tp;
-  serverConnection.receive(header_packet);
-  header_packet >> tp;
-  //~ if (tp.tick_number != last_packet + 1)
-  //~ {
-  //~ std::cout << "Wrong packet num" << std::endl;
-  //~ return;
-  //~ }
-  printf("Tick Header #%u updates=%u size=%u\n", tp.tick_number, tp.num_updates, header_packet.getDataSize());
+	sf::Packet header_packet;
+	TickPacket tp;
+	serverConnection.receive(header_packet);
+	header_packet >> tp;
+#ifdef DO_DEBUG
+	printf("Tick Header #%u updates=%u size=%lu\n",tp.tick_number,tp.num_updates,header_packet.getDataSize());
+#endif
   if (tp.num_updates > 0)
   {
     sf::Packet updates_packet;
     serverConnection.receive(updates_packet);
-    printf("Tick Updates size=%u\n", updates_packet.getDataSize());
+#ifdef DO_DEBUG
+    printf("Tick Updates size=%lu\n",updates_packet.getDataSize());
+#endif
     for (uint i = 0; i < tp.num_updates; i++)
     {
       UpdatePacket update;
       updates_packet >> update;
       switch (update.type)
       {
-      case UpdatePacket::REMOVE_ENTITY:
-      {
-        printf("Update REMOVE_ENTITY #%u ID=%u\n", i, update.id);
-        worldMap.removeEntity(update.id);
-      }
-      break;
-      case UpdatePacket::UPDATE_ENTITY:
-      {
-        printf("Update UPDATE_ENTITY #%u ID=%u\n", i, update.id);
-        Entity* e = worldMap.getEntity(update.id);
-        *e << updates_packet;
-      }
-      break;
-      case UpdatePacket::UPDATE_POLYGON:
-      {
-        printf("Update UPDATE_POLYGON #%u ID=%u\n", i, update.id);
-        Polygon* p = (Polygon*) worldMap.getEntity(update.id);
-        *p << updates_packet;
-      }
-      break;
-      case UpdatePacket::NEW_POLYGON:
-      {
-        printf("Update NEW_POLYGON #%u ID=%u\n", i, update.id);
-        Polygon *p = new Polygon();
-        *p << updates_packet;
-        worldMap.addEntity(update.id, p);
-      }
-      break;
-      default:
-        printf("Update UNKOWN #%u ID=%i\n", i, update.id);
+        case UpdatePacket::REMOVE_ENTITY:
+          {
+#ifdef DO_DEBUG
+            printf("Update REMOVE_ENTITY #%u ID=%u\n",i,update.id);
+#endif
+            worldMap.removeEntity(update.id);
+          }
+          break;
+        case UpdatePacket::UPDATE_ENTITY:
+          {
+#ifdef DO_DEBUG
+            printf("Update UPDATE_ENTITY #%u ID=%u\n",i,update.id);
+#endif
+            Entity* e = worldMap.getEntity(update.id);
+            *e << updates_packet;
+          }
+          break;
+        case UpdatePacket::UPDATE_POLYGON:
+          {
+#ifdef DO_DEBUG
+            printf("Update UPDATE_POLYGON #%u ID=%u\n",i,update.id);
+#endif
+            Polygon* p = (Polygon*) worldMap.getEntity(update.id);
+            *p << updates_packet;
+          }
+          break;
+        case UpdatePacket::NEW_POLYGON:
+          {
+#ifdef DO_DEBUG
+            printf("Update NEW_POLYGON #%u ID=%u\n",i,update.id);
+#endif
+            Polygon *p = new Polygon();
+            *p << updates_packet;
+            worldMap.addEntity(update.id,p);
+          }
+          break;
+        default:
+#ifdef DO_DEBUG
+          printf("Update UNKOWN #%u ID=%i\n",i,update.id);
+#endif
+          break;
       }
       //Do update depending on type
     }
@@ -66,24 +76,28 @@ void ScreenGame::doHandshake()
 {
   if (serverConnection.connect(SERVER_IP, TCP_PORT) == sf::Socket::Done) {
     serverConnection.setBlocking(true);
-    HandshakeRequest req;
-    sf::Packet req_packet;
-    req_packet << req;
-    printf("Sending Handshake Request Size = %u\n", req_packet.getDataSize ());
-    serverConnection.send(req_packet);
-    sf::Packet res_packet;
-    serverConnection.receive(res_packet);
-    printf("Recieving Handshake Response Size = %u\n", res_packet.getDataSize ());
-    HandshakeResponse res;
-    res_packet >> res;
+		HandshakeRequest req;
+		sf::Packet req_packet;
+		req_packet << req;
+#ifdef DO_DEBUG
+    printf("Sending Handshake Request Size = %lu\n",req_packet.getDataSize ());
+#endif
+		serverConnection.send(req_packet);
+		sf::Packet res_packet;
+		serverConnection.receive(res_packet);
+#ifdef DO_DEBUG
+    printf("Recieving Handshake Response Size = %lu\n",res_packet.getDataSize ());
+#endif
+		HandshakeResponse res;
+		res_packet >> res;
     player_id = res.id;
-  } else {
+	} else {
     throw std::runtime_error("Could not connect to Server");
   }
 }
 void ScreenGame::handleUserInput()
 {
-  if (player_id == -1) {
+  if (player_id == 0) {
     std::cout << "Player ID not set" << std::endl;
     return;
   }
@@ -120,9 +134,8 @@ void ScreenGame::handleUserInput()
 }
 int ScreenGame::run(sf::RenderWindow &window)
 {
-  std::cout << "Running" << " " << SERVER_IP << std::endl;
+  std::cout << "Connecting to server: " << SERVER_IP << std::endl;
   doHandshake();
-  std::cout << "finished handshake" << std::endl;
   sf::Event Event;
   while (window.isOpen())
   {

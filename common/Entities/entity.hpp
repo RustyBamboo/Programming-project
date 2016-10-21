@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
+
 //Most basic form of an entity. Contains an object (such as a Polygon or a Ray)
 sf::Packet& operator <<(sf::Packet& packet, const sf::Vector2f & v);
 sf::Packet& operator >>(sf::Packet& packet,sf::Vector2f & v);
