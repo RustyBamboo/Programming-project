@@ -126,7 +126,7 @@ void ScreenGame::handleUserInput()
   } else velocity.y = 0;
 
   //If velocity changed, send out update
-  if (fabs(velocity.x - me_ptr->getVelocity().x) > .01 || fabs(velocity.y - me_ptr->getVelocity().y) > .01 )
+  if (abs(velocity.x - me_ptr->getVelocity().x) > .01 || abs(velocity.y - me_ptr->getVelocity().y) > .01 )
   {
     printf("Changing Velocity ID=%u WAS=(X=%f Y=%f) NOW=(X=%f Y=%f)\n",player_id,me_ptr->getVelocity().x,me_ptr->getVelocity().y,velocity.x,velocity.y);
     sf::Packet packet;
