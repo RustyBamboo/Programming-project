@@ -15,6 +15,16 @@ void Polygon::draw(sf::RenderWindow &window) {
 	window.draw(shape);
 }
 
+void Polygon::setView(sf::RenderWindow &window) {
+    sf::View view;
+    view.setCenter(getCenter());
+    window.setView(view);
+}
+
+sf::Vector2f Polygon::getCenter() {
+    return sf::Vector2f(getPosition().x + shape.getRadius(), getPosition().y + shape.getRadius());
+}
+
 Polygon& Polygon::operator << (sf::Packet& packet)
 {
 

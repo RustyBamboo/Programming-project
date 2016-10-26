@@ -161,9 +161,13 @@ int ScreenGame::run(sf::RenderWindow &window)
         }
       }
     }
+    
+    window.setView(window.getDefaultView());
     window.clear(sf::Color(0, 0, 0, 0));
     handleUserInput();
     doTick();
+
+    worldMap.getEntity(player_id) -> setView(window);
     worldMap.draw(window);
     window.display();
   }

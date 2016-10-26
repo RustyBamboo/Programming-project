@@ -10,6 +10,8 @@ Entity::Entity(sf::Vector2f &pos, sf::Vector2f &vel, EntityType t) :
 Entity::Entity()
 {
 }
+
+
 //Updates the entity, processes the Move function, adds velocity, and updates the Object
 void Entity::tick() {
     position += velocity;
