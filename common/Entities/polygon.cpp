@@ -25,6 +25,14 @@ sf::Vector2f Polygon::getCenter() {
     return sf::Vector2f(getPosition().x + shape.getRadius(), getPosition().y + shape.getRadius());
 }
 
+std::vector<sf::Vector2f> Polygon::getEdgePoints() {
+    std::vector<sf::Vector2f> v;
+    for(unsigned int i = 0; i < shape.getPointCount(); ++i) {
+        v.push_back(getPosition() + shape.getPoint(i));
+    }
+    return v;
+}
+
 Polygon& Polygon::operator << (sf::Packet& packet)
 {
 

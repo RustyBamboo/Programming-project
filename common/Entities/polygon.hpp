@@ -11,6 +11,8 @@ public:
     virtual void setView(sf::RenderWindow &window);
     virtual sf::Vector2f getCenter();
 
+    virtual std::vector<sf::Vector2f> getEdgePoints();
+
 	Polygon& operator << (sf::Packet& packet);
 
 	Polygon& operator >>(sf::Packet& packet);

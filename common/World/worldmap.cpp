@@ -53,3 +53,11 @@ void WorldMap::tick()
 		entity.second->tick();
 	}
 }
+void WorldMap::checkCollisions()
+{
+	for (auto const &entity : entities)
+	{
+		entity.second->isCollided(entity.second);
+	}
+}
+
