@@ -1,6 +1,8 @@
 #ifndef GAMEMATH
 #define GAMEMATH
 #include <iostream>
+#include <cmath>
+
 namespace gmath {
 //I hate math.
 inline float dotProduct(const sf::Vector2f &a, const sf::Vector2f &b) {
