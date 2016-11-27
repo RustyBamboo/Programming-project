@@ -24,6 +24,7 @@ private:
     uint32_t last_packet;
     WorldMap worldMap;
     WorldMap::ID_TYPE player_id;
+    bool created;
     void doTick();
     void doHandshake();
     void handleUserInput();

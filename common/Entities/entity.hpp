@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
+#include <memory>
 #include "../gamemath.hpp"
 
 //Most basic form of an entity. Contains an object (such as a Polygon or a Ray)
@@ -24,10 +25,8 @@ public:
 		void setPosition(const sf::Vector2f &pos);
 		bool isCollided(std::unique_ptr<Entity> const &e); //Need this written
     void tick(); //We need tick functions to be synced (get diff in time)
-    
-		Entity& operator << (sf::Packet& packet);
-
-		Entity& operator >> (sf::Packet& packet);
+                void toPacket(sf::Packet& packet);
+                void fromPacket(sf::Packet& packet); 
 		
 		void setPosition(sf::Vector2f  p);
 		sf::Vector2f  getPosition();

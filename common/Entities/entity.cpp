@@ -32,13 +32,12 @@ sf::Vector2f Entity::getVelocity()
 {
     return velocity;
 }
-
-Entity& Entity::operator << (sf::Packet& packet)
+void Entity::fromPacket(sf::Packet& packet)
 {
     packet >> position;
     packet >> velocity;
 }
-Entity& Entity::operator >> (sf::Packet& packet)
+void Entity::toPacket(sf::Packet& packet)
 {
     packet << position;
     packet << velocity;

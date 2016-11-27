@@ -16,8 +16,7 @@ Entity* WorldMap::getEntity(ID_TYPE id)
 		return search->second.get();
 	}
 	else {
-		std::cout << "Not found\n";
-    return NULL;
+                throw std::runtime_error("Entity not found");
 	}
 }
 void WorldMap::removeEntity(ID_TYPE id)

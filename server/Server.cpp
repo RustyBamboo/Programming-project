@@ -46,21 +46,25 @@ void Server::tick()
                 case UpdatePacket::UPDATE_ENTITY:
                 {
                     Entity* e = worldMap.getEntity(update.id);
-                    *e << packet;
+                    e->fromPacket(packet);
                     updates_packet << update;
-                    *e >> updates_packet;
+                    e->toPacket(updates_packet);
                     tickPacket.num_updates++;
-                    //~ printf("\tUPDATE ENTITY ID=%u VELOCITY X=%f Y=%f\n",update.id,e->getVelocity().x,e->getVelocity().y);
+#ifdef DO_DEBUG
+                    printf("\tUPDATE ENTITY ID=%u VELOCITY X=%f Y=%f\n",update.id,e->getVelocity().x,e->getVelocity().y);
+#endif
                 }
                 break;
                 case UpdatePacket::UPDATE_POLYGON:
                 {
                     Polygon* p = (Polygon*) worldMap.getEntity(update.id);
-                    *p << updates_packet;
+                    p->fromPacket(packet);
                     updates_packet << update;
-                    *p >> updates_packet;
+                    p->toPacket(updates_packet);
                     tickPacket.num_updates++;
+#ifdef DO_DEBUG
                     printf("\tUPDATE Polygon ID=%u VELOCITY X=%f Y=%f\n", update.id, p->getVelocity().x, p->getVelocity().y);
+#endif
                 }
                 break;
                 }
@@ -124,7 +128,7 @@ void Server::connectPlayer()
     update.type = UpdatePacket::NEW_POLYGON;
     update.id = id;
     updates_packet << update;
-    *character >> updates_packet;
+    character->toPacket(updates_packet);
     tickPacket.num_updates++;
 
 #ifdef DO_DEBUG

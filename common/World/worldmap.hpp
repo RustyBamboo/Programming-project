@@ -4,6 +4,7 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 
 class WorldMap {
 public:

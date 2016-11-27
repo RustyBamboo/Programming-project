@@ -1,6 +1,6 @@
 #include "screengame.hpp"
 #include <string>
-ScreenGame::ScreenGame() : player_id (0)
+ScreenGame::ScreenGame() : player_id(0), created(false)
 {
 }
 void ScreenGame::doTick()
@@ -39,7 +39,7 @@ void ScreenGame::doTick()
             printf("Update UPDATE_ENTITY #%u ID=%u\n",i,update.id);
 #endif
             Entity* e = worldMap.getEntity(update.id);
-            *e << updates_packet;
+            e->fromPacket(updates_packet);
           }
           break;
         case UpdatePacket::UPDATE_POLYGON:
@@ -48,7 +48,7 @@ void ScreenGame::doTick()
             printf("Update UPDATE_POLYGON #%u ID=%u\n",i,update.id);
 #endif
             Polygon* p = (Polygon*) worldMap.getEntity(update.id);
-            *p << updates_packet;
+            p->fromPacket(updates_packet);
           }
           break;
         case UpdatePacket::NEW_POLYGON:
@@ -56,8 +56,9 @@ void ScreenGame::doTick()
 #ifdef DO_DEBUG
             printf("Update NEW_POLYGON #%u ID=%u\n",i,update.id);
 #endif
+            if (update.id == player_id) created = true;
             Polygon *p = new Polygon();
-            *p << updates_packet;
+            p->fromPacket(updates_packet);
             worldMap.addEntity(update.id,p);
           }
           break;
@@ -99,15 +100,7 @@ void ScreenGame::doHandshake()
 }
 void ScreenGame::handleUserInput()
 {
-  if (player_id == 0) {
-    std::cout << "Player ID not set" << std::endl;
-    return;
-  }
-  if (worldMap.getEntity(player_id) == NULL) {
-    std::cout << "I don't exsist yet" << std::endl;
-    return;
-  }
-  // ~Polygon* me_ptr = (Polygon*) worldMap.getEntity(player_id); //Create a copy of me
+  if (!created) return;
   Entity* me_ptr = worldMap.getEntity(player_id); //Create a copy of me
   sf::Vector2f velocity = me_ptr->getVelocity();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -135,8 +128,10 @@ void ScreenGame::handleUserInput()
     update.type = UpdatePacket::UPDATE_ENTITY;
     packet << update;
     me_ptr->setVelocity(velocity);
+#ifdef DO_DEBUG
     printf("Me (X=%f Y=%f)\n",me_ptr->getVelocity().x,me_ptr->getVelocity().y);
-    *me_ptr >> packet;
+#endif
+    me_ptr->toPacket(packet);
     serverConnection.send(packet);
   }
 }
@@ -167,7 +162,7 @@ int ScreenGame::run(sf::RenderWindow &window)
     handleUserInput();
     doTick();
 
-    worldMap.getEntity(player_id) -> setView(window);
+    if (created) worldMap.getEntity(player_id) -> setView(window);
     worldMap.draw(window);
     window.display();
   }

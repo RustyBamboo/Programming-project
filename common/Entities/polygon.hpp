@@ -13,8 +13,6 @@ public:
 
     virtual std::vector<sf::Vector2f> getEdgePoints();
 
-	Polygon& operator << (sf::Packet& packet);
-
-	Polygon& operator >>(sf::Packet& packet);
-
+    void toPacket(sf::Packet& packet);
+    void fromPacket(sf::Packet& packet);
 };
