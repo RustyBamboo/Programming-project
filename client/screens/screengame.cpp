@@ -7,7 +7,9 @@ void ScreenGame::doTick()
 {
 	sf::Packet header_packet;
 	TickPacket tp;
-	serverConnection.receive(header_packet);
+	sf::Socket::Status status = serverConnection.receive(header_packet);
+        if (status == sf::Socket::Status::Disconnected) throw std::runtime_error("Server disconnected, closing");
+        if (status == sf::Socket::Status::Error) throw std::runtime_error("Socket error, closing");
 	header_packet >> tp;
 #ifdef DO_DEBUG
 	printf("Tick Header #%u updates=%u size=%lu\n",tp.tick_number,tp.num_updates,header_packet.getDataSize());

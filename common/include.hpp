@@ -21,4 +21,6 @@
 #include "Network/TickPacket.hpp"
 #include "Network/UpdatePacket.hpp"
 
+#include <stdexcept>
+
 #endif
