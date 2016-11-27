@@ -7,7 +7,7 @@ Entity::Entity(sf::Vector2f &pos, sf::Vector2f &vel, EntityType t) :
 {
 
 }
-Entity::Entity()
+Entity::Entity() : type(entity)
 {
 }
 

@@ -14,6 +14,7 @@ private:
 		uint32_t tick_number;
     WorldMap worldMap;
     void connectPlayer();
+    void updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id);
     void tick();
 public:
     Server();

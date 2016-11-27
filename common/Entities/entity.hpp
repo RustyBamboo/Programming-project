@@ -12,7 +12,8 @@ class Entity {
 public:
     enum EntityType {
 			polygon,
-			rectangle
+			rectangle,
+                        entity
 		};
     Entity(sf::Vector2f  &pos, sf::Vector2f &vel, EntityType t);
     Entity();
@@ -32,9 +33,8 @@ public:
 		sf::Vector2f  getPosition();
 		void setVelocity(sf::Vector2f  v);
 		sf::Vector2f  getVelocity();
+                const EntityType type;
 private:
 		sf::Vector2f position;
 		sf::Vector2f velocity;
-protected:
-		EntityType type;
 };

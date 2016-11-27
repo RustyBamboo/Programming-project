@@ -122,7 +122,8 @@ void Server::connectPlayer()
     printf("Sending Handshake Response Size = %lu\n", res_packet.getDataSize ());
 #endif
     client->send(res_packet);
-
+    std::cout << "Size: " << worldMap.entities.size() << std::endl;    
+    updateNewPlayer(*client, id);
     //Tell other players about new player
     UpdatePacket update;
     update.type = UpdatePacket::NEW_POLYGON;
@@ -135,6 +136,38 @@ void Server::connectPlayer()
     std::cout << "Added IP: " << client->getRemoteAddress() << std::endl;
 #endif
     players.insert(std::pair< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>(std::move(client), id) );
+}
+void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
+{
+  sf::Packet header;
+  TickPacket tp;
+  tp.tick_number = tick_number - 1;
+  tp.num_updates = worldMap.entities.size() - 1;
+  header << tp;
+  socket.setBlocking(true);
+  socket.send(header);
+  sf::Packet updates;
+  for (auto p =  worldMap.entities.begin(); p != worldMap.entities.end(); p++)
+  {
+     if (p->first == id) continue;
+     UpdatePacket up;
+     up.id = p->first;
+     switch (p->second->type)
+     {
+       case Entity::EntityType::polygon:
+         {
+          up.type = UpdatePacket::NEW_POLYGON;
+          updates << up;
+          Polygon* poly = (Polygon*) worldMap.getEntity(p->first);
+          poly->toPacket(updates);
+         }
+         break;
+       default:
+         throw std::runtime_error("Type unknown");
+         break;
+     }   
+  }
+  socket.send(updates);
 }
 Server::~Server()
 {
