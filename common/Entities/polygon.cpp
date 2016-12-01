@@ -1,18 +1,18 @@
 #include "polygon.hpp"
 
-Polygon::Polygon(sf::Vector2f pos, sf::Vector2f vel,int size, int edges) :
-	Entity(pos,vel,Entity::EntityType::polygon),
-	shape(size, edges)
+Polygon::Polygon(sf::Vector2f pos, sf::Vector2f vel, int size, int edges) :
+    Entity(pos, vel, Entity::EntityType::polygon),
+    shape(size, edges)
 {
-	
+
 }
 Polygon::Polygon()
 {
-	
+
 }
 void Polygon::draw(sf::RenderWindow &window) {
-  shape.setPosition(getPosition());
-	window.draw(shape);
+    shape.setPosition(getPosition());
+    window.draw(shape);
 }
 
 void Polygon::setView(sf::RenderWindow &window) {
@@ -27,11 +27,16 @@ sf::Vector2f Polygon::getCenter() {
 
 std::vector<sf::Vector2f> Polygon::getEdgePoints() {
     std::vector<sf::Vector2f> v;
-    for(unsigned int i = 0; i < shape.getPointCount(); ++i) {
+    for (unsigned int i = 0; i < shape.getPointCount(); ++i) {
         v.push_back(getPosition() + shape.getPoint(i));
     }
     return v;
 }
+
+sf::FloatRect Polygon::getLocalBounds() {
+    return shape.getLocalBounds();
+}
+
 void Polygon::fromPacket(sf::Packet& packet)
 {
     Entity::fromPacket(packet);
@@ -47,4 +52,4 @@ void Polygon::toPacket(sf::Packet& packet)
     Entity::toPacket(packet);
     packet << shape.getRadius();
     packet << (sf::Uint32) shape.getPointCount();
-}	
+}

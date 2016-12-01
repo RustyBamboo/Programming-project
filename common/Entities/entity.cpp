@@ -61,44 +61,6 @@ sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& v)
 
 
 bool Entity::isCollided(std::unique_ptr<Entity> const &e) { //Seperating Axis Theorem
-    //Hate math.
-    std::vector<sf::Vector2f> thisEdgePoint = getEdgePoints(); //this will be incorrect for now cause server does not update polygons
-    // for(unsigned int i = 0; i < thisEdgePoint.size(); ++i) {
-    //     std::cout << thisEdgePoint[i].x << " " << thisEdgePoint[i].y << std::endl;
-    // }
-    std::vector<sf::Vector2f> eEdgePoint = e->getEdgePoints();
+    return getLocalBounds().intersects(e->getLocalBounds());
 
-    std::vector<sf::Vector2f> eNormals = gmath::getAllNormals(eEdgePoint);
-    std::vector<sf::Vector2f> allNormals = gmath::getAllNormals(thisEdgePoint);
-    allNormals.insert(std::end(allNormals), std::begin(eNormals), std::end(eNormals));
-
-
-    // sf::Vector2f minPointA(10000000, 10000000);
-    // sf::Vector2f maxPointA(-10000000, -10000000);
-
-    // sf::Vector2f minPointB(10000000, 10000000);
-    // sf::Vector2f maxPointB(-10000000, -10000000);
-
-    float minSPointA = 1000000, maxSPointA = -1000000;
-    float minSPointB = 1000000, maxSPointB = -1000000;
-
-
-
-    for (const sf::Vector2f &normal : allNormals) {
-        for (const sf::Vector2f &tEP : thisEdgePoint) {
-            float proj = gmath::scalarProjection(tEP, normal);
-            if (proj > maxSPointA) maxSPointA = proj;
-            if (proj < minSPointA) minSPointA = proj;
-        }
-        for (const sf::Vector2f &tEP : eEdgePoint) {
-            float proj = gmath::scalarProjection(tEP, normal);
-            if (proj > maxSPointB) maxSPointB = proj;
-            if (proj < minSPointB) minSPointB = proj;
-        }
-        if (minSPointB > maxSPointA || minSPointA > maxSPointB) {
-            std::cout << "collision" << std::endl;
-            return true;
-        }
-    }
-    return false;
 }

@@ -49,7 +49,7 @@ void Server::tick()
                     e->toPacket(updates_packet);
                     tickPacket.num_updates++;
 #ifdef DO_DEBUG
-                    printf("\tUPDATE ENTITY ID=%u VELOCITY X=%f Y=%f\n",update.id,e->getVelocity().x,e->getVelocity().y);
+                    printf("\tUPDATE ENTITY ID=%u VELOCITY X=%f Y=%f\n", update.id, e->getVelocity().x, e->getVelocity().y);
 #endif
                 }
                 break;
@@ -122,7 +122,7 @@ void Server::connectPlayer()
     printf("Sending Handshake Response Size = %lu\n", res_packet.getDataSize ());
 #endif
     client->send(res_packet);
-    std::cout << "Size: " << worldMap.entities.size() << std::endl;    
+    std::cout << "Size: " << worldMap.entities.size() << std::endl;
     updateNewPlayer(*client, id);
     //Tell other players about new player
     UpdatePacket update;
@@ -139,36 +139,36 @@ void Server::connectPlayer()
 }
 void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
 {
-  sf::Packet header;
-  TickPacket tp;
-  tp.tick_number = tick_number - 1;
-  auto entities =  worldMap.entities.size();
-  tp.num_updates = entities ? entities > 0 : 0;
-  header << tp;
-  socket.setBlocking(true);
-  socket.send(header);
-  sf::Packet updates;
-  for (auto p =  worldMap.entities.begin(); p != worldMap.entities.end(); p++)
-  {
-     if (p->first == id) continue;
-     UpdatePacket up;
-     up.id = p->first;
-     switch (p->second->type)
-     {
-       case Entity::EntityType::polygon:
-         {
-          up.type = UpdatePacket::NEW_POLYGON;
-          updates << up;
-          Polygon* poly = (Polygon*) worldMap.getEntity(p->first);
-          poly->toPacket(updates);
-         }
-         break;
-       default:
-         throw std::runtime_error("Type unknown");
-         break;
-     }   
-  }
-  socket.send(updates);
+    sf::Packet header;
+    TickPacket tp;
+    tp.tick_number = tick_number - 1;
+    auto entities =  worldMap.entities.size();
+    tp.num_updates = entities ? entities > 0 : 0;
+    header << tp;
+    socket.setBlocking(true);
+    socket.send(header);
+    sf::Packet updates;
+    for (auto p =  worldMap.entities.begin(); p != worldMap.entities.end(); p++)
+    {
+        if (p->first == id) continue;
+        UpdatePacket up;
+        up.id = p->first;
+        switch (p->second->type)
+        {
+        case Entity::EntityType::polygon:
+        {
+            up.type = UpdatePacket::NEW_POLYGON;
+            updates << up;
+            Polygon* poly = (Polygon*) worldMap.getEntity(p->first);
+            poly->toPacket(updates);
+        }
+        break;
+        default:
+            throw std::runtime_error("Type unknown");
+            break;
+        }
+    }
+    socket.send(updates);
 }
 Server::~Server()
 {
