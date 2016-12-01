@@ -123,16 +123,12 @@ void ScreenGame::handleUserInput()
   //If velocity changed, send out update
   if (abs(velocity.x - me_ptr->getVelocity().x) > .01 || abs(velocity.y - me_ptr->getVelocity().y) > .01 )
   {
-    printf("Changing Velocity ID=%u WAS=(X=%f Y=%f) NOW=(X=%f Y=%f)\n",player_id,me_ptr->getVelocity().x,me_ptr->getVelocity().y,velocity.x,velocity.y);
     sf::Packet packet;
     UpdatePacket update;
     update.id = player_id;
     update.type = UpdatePacket::UPDATE_ENTITY;
     packet << update;
     me_ptr->setVelocity(velocity);
-#ifdef DO_DEBUG
-    printf("Me (X=%f Y=%f)\n",me_ptr->getVelocity().x,me_ptr->getVelocity().y);
-#endif
     me_ptr->toPacket(packet);
     serverConnection.send(packet);
   }
@@ -164,7 +160,7 @@ int ScreenGame::run(sf::RenderWindow &window)
     handleUserInput();
     doTick();
 
-    if (created) worldMap.getEntity(player_id) -> setView(window);
+//if (created) worldMap.getEntity(player_id) -> setView(window);
     worldMap.draw(window);
     window.display();
   }

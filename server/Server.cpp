@@ -29,8 +29,6 @@ void Server::tick()
     {
         for (std::map< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
         {
-
-
             (*player).first->setBlocking(false);
             sf::Packet packet;
             sf::Socket::Status status = (*player).first->receive(packet);
@@ -142,7 +140,8 @@ void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
   sf::Packet header;
   TickPacket tp;
   tp.tick_number = tick_number - 1;
-  tp.num_updates = worldMap.entities.size() - 1;
+  auto entities =  worldMap.entities.size();
+  tp.num_updates = entities ? entities > 0 : 0;
   header << tp;
   socket.setBlocking(true);
   socket.send(header);

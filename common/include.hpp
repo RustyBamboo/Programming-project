@@ -1,5 +1,5 @@
 //Basic include file for most files
-#define DO_DEBUG
+//#define DO_DEBUG
 
 #ifndef COMMON_INCLUDE_HPP
 
