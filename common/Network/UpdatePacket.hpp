@@ -4,7 +4,8 @@ struct UpdatePacket
 {
 	uint8_t  type;
 	uint32_t id;
-	
+	UpdatePacket(uint8_t ype, uint32_t id);
+	UpdatePacket();
 	static const uint8_t REMOVE_ENTITY=1;
 	static const uint8_t UPDATE_ENTITY=2;
 	static const uint8_t UPDATE_POLYGON=3;

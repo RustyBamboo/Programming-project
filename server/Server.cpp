@@ -27,7 +27,7 @@ void Server::tick()
     clock.restart();
     while (clock.getElapsedTime().asMilliseconds() < TICK_TIME_MILLIS)
     {
-        for (std::map< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
+        for (std::map< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end();)
         {
             (*player).first->setBlocking(false);
             sf::Packet packet;
@@ -69,13 +69,15 @@ void Server::tick()
                 packet.clear();
                 status = (*player).first->receive(packet);
             }
-            if (status ==  sf::Socket::Status::Disconnected)
+            if (status ==  sf::Socket::Status::Disconnected || status == sf::Socket::Status::Error)
             {
-                //Remove TCP connection,etc
-            } else if (status == sf::Socket::Status::Error)
-            {
-                //Handle error
-            }
+                auto id = (*player).second;
+                worldMap.removeEntity(id);
+                UpdatePacket update(UpdatePacket::REMOVE_ENTITY, id);
+                updates_packet << update;
+                tickPacket.num_updates++;
+                player = players.erase(player);
+            } else player++;
         }
         sf::sleep(sf::milliseconds(10));
     }
