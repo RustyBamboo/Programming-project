@@ -17,6 +17,7 @@
 class ScreenGame : public CScreen
 {
 private:
+    static double ZOOM_FACTOR;
     unsigned short TCP_PORT = 5001;
     static sf::IpAddress SERVER_IP;
     static std::string playerName;
