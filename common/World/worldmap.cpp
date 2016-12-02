@@ -6,13 +6,13 @@ WorldMap::WorldMap()
 }
 void WorldMap::addEntity(ID_TYPE id, Entity* e)
 {
-  	auto search = entities.find(id);
+	auto search = entities.find(id);
 	if (search != entities.end()) {
 		throw std::runtime_error("Entity already added");
 	}
 	else {
-	last_id = id;
-	entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(id, std::unique_ptr<Entity>(e)) );
+		last_id = id;
+		entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(id, std::unique_ptr<Entity>(e)) );
 	}
 }
 Entity* WorldMap::getEntity(ID_TYPE id)
@@ -58,31 +58,53 @@ void WorldMap::tick()
 		entity.second->tick();
 	}
 }
-void WorldMap::checkCollisions()
+int WorldMap::checkCollisions(sf::Packet &packet)
 {
-	// typedef std::map<ID_TYPE, std::unique_ptr<Entity> >::iterator it_type;
-	// for (it_type iteratorA = entities.begin(); iteratorA != entities.end(); iteratorA++) {
-	// 	it_type iteratorB = iteratorA;
-	// 	for (iteratorB++; iteratorB != entities.end(); iteratorB++) {
-	// 		if (iteratorA->second != iteratorB->second) {
-	// 			if (iteratorA->second->isCollided(iteratorB->second)) {
-	// 				std::cout << iteratorA->second->type << " " << iteratorB->second->type << std::endl;
-	// 			}
-	// 		}
-	// 	}
-	// 	// iterator->first = key
-	// 	// iterator->second = value
-	// 	// Repeat if you also want to iterate through the second map.
-	// }
-	for (auto const &entityA : entities)
-	{
-		for (auto const &entityB : entities)
-		{
-			if (entityA.second != entityB.second)
-				if (entityA.second->isCollided(entityB.second)) {
-					//  if(entityA.second->type == Entity::polygon) std::cout << "polygon" << std::endl;
+	int holder = 0;
+
+	typedef std::map<ID_TYPE, std::unique_ptr<Entity> >::iterator it_type;
+	for (it_type iteratorA = entities.begin(); iteratorA != entities.end(); iteratorA++) {
+		it_type iteratorB = iteratorA;
+		for (iteratorB++; iteratorB != entities.end(); iteratorB++) {
+			if (iteratorA->second != iteratorB->second) {
+				if (iteratorA->second->isCollided(iteratorB->second)) {
+					std::cout << iteratorA->second->type << " " << iteratorB->second->type << std::endl;
+					if (iteratorA->second->type == Entity::polygon && iteratorB->second->type == Entity::rectangle) {
+						UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
+						packet << update;
+						Polygon* p = (Polygon*) iteratorA->second.get();
+						p->addEdge();
+						p->toPacket(packet);
+						holder++;
+					}
+					if (iteratorA->second->type == Entity::rectangle && iteratorB->second->type == Entity::polygon) {
+						UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
+						packet << update;
+						Polygon* p = (Polygon*) iteratorA->second.get();
+						p->addEdge();
+						p->toPacket(packet);
+						holder++;
+					}
 				}
+				else {
+					std::cout << "NO COLLISION" << std::endl;
+				}
+			}
 		}
+		return holder;
+		// iterator->first = key
+		// iterator->second = value
+		// Repeat if you also want to iterate through the second map.
 	}
+// for (auto const &entityA : entities)
+// {
+// 	for (auto const &entityB : entities)
+// 	{
+// 		if (entityA.second != entityB.second)
+// 			if (entityA.second->isCollided(entityB.second)) {
+// 				//  if(entityA.second->type == Entity::polygon) std::cout << "polygon" << std::endl;
+// 			}
+// 	}
+// }
 }
 

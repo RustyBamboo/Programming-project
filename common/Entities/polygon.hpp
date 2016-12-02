@@ -14,6 +14,8 @@ public:
     virtual std::vector<sf::Vector2f> getEdgePoints();
     virtual sf::FloatRect getGlobalBounds();
 
+    void addEdge();
+    void deleteEdge();
     void toPacket(sf::Packet& packet);
     void fromPacket(sf::Packet& packet);
 };

@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "../Entities/entity.hpp"
+#include "../include.hpp"
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <memory>
@@ -12,7 +12,7 @@ public:
     WorldMap();
 
     void tick();
-    void checkCollisions();
+    int checkCollisions(sf::Packet &packet);
     void draw(sf::RenderWindow &window);
 
     void addEntity(ID_TYPE id, Entity* e); //Add an enttiy with given ID, returning a NULL pointer to

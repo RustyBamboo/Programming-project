@@ -37,6 +37,15 @@ sf::FloatRect Polygon::getGlobalBounds() {
     return shape.getGlobalBounds();
 }
 
+void Polygon::addEdge() {
+    if (shape.getPointCount() < 26)
+        shape.setPointCount(shape.getPointCount() + 1);
+}
+void Polygon::deleteEdge() {
+    if (shape.getPointCount() > 3)
+        shape.setPointCount(shape.getPointCount() - 1);
+}
+
 void Polygon::fromPacket(sf::Packet& packet)
 {
     Entity::fromPacket(packet);

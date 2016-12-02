@@ -132,16 +132,18 @@ void ScreenGame::handleUserInput()
     velocity.y = 5.0;
   } else velocity.y = 0;
   serverConnection.setBlocking(true);
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+  
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shooterClock.getElapsedTime().asMilliseconds() > 2000)
   {
     sf::Packet packet;
     UpdatePacket update;
     update.id = 0;
     update.type = UpdatePacket::SHOOT;
-    sf::Vector2f vel(5.0,1);
+    sf::Vector2f vel(1.0,1);
     packet << update;
     packet << vel;
     serverConnection.send(packet);
+    shooterClock.restart();
   }
   //If velocity changed, send out update
   if (abs(velocity.x - me_ptr->getVelocity().x) > .01 || abs(velocity.y - me_ptr->getVelocity().y) > .01 )

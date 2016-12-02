@@ -71,7 +71,7 @@ void Server::tick()
                     packet >> velocity;
                     Entity* owner = worldMap.getEntity((*player).second);
                     sf::Vector2f position = owner->getPosition();
-                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(50,50));
+                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(50, 50));
                     auto id = worldMap.newEntity((Entity*) bullet);
                     update.type = UpdatePacket::NEW_RECTANGLE;
                     update.id = id;
@@ -99,7 +99,8 @@ void Server::tick()
         }
         sf::sleep(sf::milliseconds(10));
     }
-
+    int updateCount = worldMap.checkCollisions(updates_packet);
+    tickPacket.num_updates += updateCount;
     //Ready to send tick
     sf::Packet header_packet;
     header_packet << tickPacket;
@@ -112,7 +113,7 @@ void Server::tick()
         (*player).first->send(header_packet);
         if (tickPacket.num_updates > 0) (*player).first->send(updates_packet);
     }
-    worldMap.checkCollisions();
+
     worldMap.tick();
     tick_number++;
 }
@@ -195,5 +196,5 @@ Server::~Server()
     {
         (*player).first->disconnect();
     }
-        newPlayersListener.close();
+    newPlayersListener.close();
 }

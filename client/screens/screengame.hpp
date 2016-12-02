@@ -29,6 +29,7 @@ private:
     void doTick();
     void doHandshake();
     void handleUserInput();
+    sf::Clock shooterClock;
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);
