@@ -70,20 +70,51 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 				if (iteratorA->second->isCollided(iteratorB->second)) {
 					std::cout << iteratorA->second->type << " " << iteratorB->second->type << std::endl;
 					if (iteratorA->second->type == Entity::polygon && iteratorB->second->type == Entity::rectangle) {
-						UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
-						packet << update;
-						Polygon* p = (Polygon*) iteratorA->second.get();
-						p->addEdge();
-						p->toPacket(packet);
-						holder++;
+						auto ownerID = ((Rectangle*) iteratorB->second.get())->getOwner();
+
+						if (iteratorA->first == ownerID) continue;
+
+						{
+							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
+							packet << updatePlayer;
+							Polygon* p = (Polygon*) getEntity(ownerID);
+							p->addEdge();
+							p->toPacket(packet);
+							holder++;
+						}
+
+						{
+							UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
+							packet << update;
+							Polygon* p = (Polygon*) iteratorA->second.get();
+							p->deleteEdge();
+							p->toPacket(packet);
+							holder++;
+						}
+
 					}
 					if (iteratorA->second->type == Entity::rectangle && iteratorB->second->type == Entity::polygon) {
-						UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
-						packet << update;
-						Polygon* p = (Polygon*) iteratorA->second.get();
-						p->addEdge();
-						p->toPacket(packet);
-						holder++;
+						auto ownerID = ((Rectangle*) iteratorA->second.get())->getOwner();
+
+						if (iteratorB->first == ownerID) continue;
+
+						{
+							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
+							packet << updatePlayer;
+							Polygon* p = (Polygon*) getEntity(ownerID);
+							p->addEdge();
+							p->toPacket(packet);
+							holder++;
+						}
+
+						{
+							UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorB->first);
+							packet << update;
+							Polygon* p = (Polygon*) iteratorB->second.get();
+							p->deleteEdge();
+							p->toPacket(packet);
+							holder++;
+						}
 					}
 				}
 				else {
