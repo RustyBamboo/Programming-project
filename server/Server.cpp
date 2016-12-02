@@ -71,7 +71,7 @@ void Server::tick()
                     packet >> velocity;
                     Entity* owner = worldMap.getEntity((*player).second);
                     sf::Vector2f position = owner->getPosition();
-                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(50, 50));
+                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(50, 50), (*player).second);
                     auto id = worldMap.newEntity((Entity*) bullet);
                     update.type = UpdatePacket::NEW_RECTANGLE;
                     update.id = id;

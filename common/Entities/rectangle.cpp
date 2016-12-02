@@ -1,7 +1,7 @@
 #include "rectangle.hpp"
 
-Rectangle::Rectangle(sf::Vector2f &pos, sf::Vector2f &vel, sf::Vector2f size) :
-    Entity(pos, vel, Entity::EntityType::rectangle)
+Rectangle::Rectangle(sf::Vector2f &pos, sf::Vector2f &vel, sf::Vector2f size, uint32_t owner) :
+    Entity(pos, vel, Entity::EntityType::rectangle), owned_by(owner)
 {
     shape.setSize(size);
 }
@@ -34,9 +34,15 @@ void Rectangle::toPacket(sf::Packet& packet)
 {
   Entity::toPacket(packet);
   shape.setPosition(getPosition());
+  packet << owned_by;
   packet << shape.getSize();
   packet << (float) shape.getRotation();
+    //  printf("RECT OWNEDBY=%d\n", owned_by);
   //  printf("Rect PACKET=%u Position=(%f,%f) Size=(%f,%f)\n",packet.getDataSize(), shape.getPosition().x, shape.getPosition().y,shape.getSize().x, shape.getSize().y);
+}
+uint32_t Rectangle::getOwner()
+{
+  return owned_by;
 }
 void Rectangle::fromPacket(sf::Packet& packet)
 {
@@ -44,8 +50,10 @@ void Rectangle::fromPacket(sf::Packet& packet)
   Entity::fromPacket(packet);
   sf::Vector2f size;
   float angle;
+  packet >> owned_by;
   packet >> size;
   packet >> angle;
+  printf("RECT OWNEDBY=%d\n", owned_by);
   //  printf("HMM POSITION(%f,%f) (%f,%f) %f\n", getPosition().x, getPosition().y, size.x, size.y, angle);
   shape.setRotation(angle);
   shape.setSize(size);
