@@ -72,7 +72,7 @@ void Server::tick()
                     Entity* owner = worldMap.getEntity((*player).second);
                     sf::Vector2f position = owner->getPosition();
                     Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(50, 50), (*player).second);
-                    auto id = worldMap.newEntity((Entity*) bullet);
+                    auto id = worldMap.newEntity(bullet);
                     update.type = UpdatePacket::NEW_RECTANGLE;
                     update.id = id;
                     updates_packet << update;
@@ -180,6 +180,13 @@ void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
             updates << up;
             Polygon* poly = (Polygon*) worldMap.getEntity(p->first);
             poly->toPacket(updates);
+        }
+        case Entity::EntityType::rectangle:
+        {
+            up.type = UpdatePacket::NEW_RECTANGLE;
+            updates << up;
+            Rectangle* rect = (Rectangle*) worldMap.getEntity(p->first);
+            rect->toPacket(updates);
         }
         break;
         default:

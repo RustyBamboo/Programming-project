@@ -11,7 +11,6 @@ void Rectangle::draw(sf::RenderWindow &window) {
     shape.setOutlineColor(sf::Color::Red);
     shape.setOutlineThickness(5);
     //  printf("Rect Position=(%f,%f) Size=(%f,%f)\n", shape.getPosition().x, shape.getPosition().y,shape.getSize().x, shape.getSize().y);
-    shape.setPosition(getPosition());
     window.draw(shape);
 }
 
@@ -43,6 +42,11 @@ void Rectangle::toPacket(sf::Packet& packet)
 uint32_t Rectangle::getOwner()
 {
   return owned_by;
+}
+void Rectangle::tick()
+{
+  Entity::tick();
+  shape.setPosition(getPosition());
 }
 void Rectangle::fromPacket(sf::Packet& packet)
 {

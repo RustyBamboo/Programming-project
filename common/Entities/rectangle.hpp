@@ -14,7 +14,7 @@ public:
     virtual sf::Vector2f getCenter();
     virtual std::vector<sf::Vector2f> getEdgePoints();
     virtual sf::FloatRect getGlobalBounds();
-
+    virtual void tick();
     uint32_t getOwner();
 
 

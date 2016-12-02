@@ -11,7 +11,6 @@ Polygon::Polygon() : Entity(Entity::EntityType::polygon)
 
 }
 void Polygon::draw(sf::RenderWindow &window) {
-    shape.setPosition(getPosition());
     window.draw(shape);
 }
 
@@ -56,6 +55,11 @@ void Polygon::fromPacket(sf::Packet& packet)
     packet >> points;
     shape.setRadius(radius);
     shape.setPointCount(points);
+}
+void Polygon::tick()
+{
+    Entity::tick();
+    shape.setPosition(getPosition());
 }
 void Polygon::toPacket(sf::Packet& packet)
 {

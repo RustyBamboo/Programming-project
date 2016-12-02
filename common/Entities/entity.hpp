@@ -27,7 +27,7 @@ public:
 
     void setPosition(const sf::Vector2f &pos);
     bool isCollided(std::unique_ptr<Entity> const &e); //Need this written
-    void tick(); //We need tick functions to be synced (get diff in time)
+    virtual void tick() = 0; //We need tick functions to be synced (get diff in time)
     virtual void toPacket(sf::Packet& packet);
     virtual void fromPacket(sf::Packet& packet);
 
