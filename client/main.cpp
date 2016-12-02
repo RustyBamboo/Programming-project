@@ -8,7 +8,7 @@
 #include "include.hpp"
 #include "screens/screens.hpp"
 #include <SFML/Network.hpp>
-
+#include <SFML/Audio.hpp>
 
 
 
@@ -17,7 +17,7 @@ int main() {
   srand(time(NULL)); //Pick a seed
 
 
-  std::cout<<sf::IpAddress::getPublicAddress();
+  std::cout << sf::IpAddress::getPublicAddress();
 
 
 
@@ -30,6 +30,13 @@ int main() {
 
   ScreenGame s1;
   screens.push_back(&s1);
+ 
+
+  sf::Music music;
+  if (!music.openFromFile("resources/song.wav"))
+    return -1; // error
+  music.setLoop(true);
+  music.play();
 
   //The screen class returns an int, which tells which Screen (mainmenu, game) to run
   while (screen >= 0) {

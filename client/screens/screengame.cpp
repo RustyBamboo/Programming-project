@@ -158,6 +158,10 @@ int ScreenGame::run(sf::RenderWindow &window)
     std::cout << "Connecting to server: " << SERVER_IP << std::endl;
     doHandshake();
     sf::Event Event;
+
+    auto view = window.getDefaultView();
+    view.zoom(ZOOM_FACTOR);
+    window.setView(view);
     while (window.isOpen())
     {
         while (window.pollEvent(Event))
@@ -174,14 +178,13 @@ int ScreenGame::run(sf::RenderWindow &window)
                 }
             }
         }
-        auto view = window.getDefaultView();
-        view.zoom(ZOOM_FACTOR);
-        window.setView(view);
+
         window.clear(sf::Color(0, 0, 0, 0));
+        // if (window.hasFocus()) handleUserInput();
         handleUserInput();
         doTick();
 
-//if (created) worldMap.getEntity(player_id) -> setView(window);
+        if (created) worldMap.getEntity(player_id) -> setView(window, view);
         worldMap.draw(window);
         window.display();
     }

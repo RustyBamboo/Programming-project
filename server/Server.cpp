@@ -72,7 +72,7 @@ void Server::tick()
                     Entity* owner = worldMap.getEntity((*player).second);
                     sf::Vector2f position = owner->getCenter();
                     // std::cout << -std::atan2(velocity.y, velocity.x)*180/3.1415 << std::endl;
-                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(10, 50), -std::atan2(velocity.x, velocity.y) * 180 / 3.1415, (*player).second);
+                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(10, 50), -std::atan2(velocity.x, velocity.y) * 180 / 3.1415, (*player).second, sf::Color::Red);
                     auto id = worldMap.newEntity(bullet);
                     update.type = UpdatePacket::NEW_RECTANGLE;
                     update.id = id;
@@ -133,7 +133,7 @@ void Server::connectPlayer()
 #endif
     req_packet >> req;
     //Create new player entity
-    Polygon* character = new Polygon(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 50, 3);
+    Polygon* character = new Polygon(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 50, 3, sf::Color(rand()%255, rand()%255, rand()%255));
     auto id = worldMap.newEntity((Entity*) character);
     //Send player response with their character id
     res.id = id;

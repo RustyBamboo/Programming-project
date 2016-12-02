@@ -91,6 +91,9 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 							p->toPacket(packet);
 							holder++;
 						}
+						// iteratorB->second->setPosition(sf::Vector2f(10000000, 100000));
+						// iteratorB->second->setVelocity(sf::Vector2f(0, 0));
+
 
 					}
 					if (iteratorA->second->type == Entity::rectangle && iteratorB->second->type == Entity::polygon) {
@@ -115,6 +118,8 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 							p->toPacket(packet);
 							holder++;
 						}
+						// iteratorA->second->setPosition(sf::Vector2f(10000000, 100000));
+						// iteratorA->second->setVelocity(sf::Vector2f(0, 0));
 					}
 				}
 

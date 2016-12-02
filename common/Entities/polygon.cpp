@@ -1,10 +1,10 @@
 #include "polygon.hpp"
 
-Polygon::Polygon(sf::Vector2f pos, sf::Vector2f vel, int size, int edges) :
+Polygon::Polygon(sf::Vector2f pos, sf::Vector2f vel, int size, int edges, sf::Color color) :
     Entity(pos, vel, Entity::EntityType::polygon),
     shape(size, edges)
 {
-
+    shape.setFillColor(color);
 }
 Polygon::Polygon() : Entity(Entity::EntityType::polygon)
 {
@@ -14,8 +14,7 @@ void Polygon::draw(sf::RenderWindow &window) {
     window.draw(shape);
 }
 
-void Polygon::setView(sf::RenderWindow &window) {
-    sf::View view;
+void Polygon::setView(sf::RenderWindow &window, sf::View &view) {
     view.setCenter(getCenter());
     window.setView(view);
 }
@@ -45,16 +44,29 @@ void Polygon::deleteEdge() {
         shape.setPointCount(shape.getPointCount() - 1);
 }
 
+inline sf::Packet& operator <<(sf::Packet& packet, const sf::Color& c)
+{
+    packet << c.r << c.g << c.b << c.a;
+}
+
+inline sf::Packet& operator >>(sf::Packet& packet, sf::Color& c)
+{
+    packet >> c.r >> c.g >> c.b >> c.a;
+}
+
 void Polygon::fromPacket(sf::Packet& packet)
 {
     Entity::fromPacket(packet);
     shape.setPosition(getPosition());
     sf::Uint32 points;
     float radius;
+    sf::Color color;
     packet >> radius;
     packet >> points;
+    packet >> color;
     shape.setRadius(radius);
     shape.setPointCount(points);
+    shape.setFillColor(color);
 }
 void Polygon::tick()
 {
@@ -66,4 +78,6 @@ void Polygon::toPacket(sf::Packet& packet)
     Entity::toPacket(packet);
     packet << shape.getRadius();
     packet << (sf::Uint32) shape.getPointCount();
+    packet << shape.getFillColor();
 }
+
