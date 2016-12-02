@@ -6,7 +6,7 @@ private:
     sf::RectangleShape shape;
     uint32_t owned_by;
 public:
-    Rectangle(sf::Vector2f &pos, sf::Vector2f &vel, sf::Vector2f size, uint32_t owner);
+    Rectangle(sf::Vector2f &pos, sf::Vector2f &vel, sf::Vector2f size, float angle, uint32_t owner);
     Rectangle();
     virtual void draw(sf::RenderWindow &window);
     virtual void setView(sf::RenderWindow &window);

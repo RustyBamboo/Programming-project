@@ -23,4 +23,6 @@
 
 #include <stdexcept>
 
+#include "gamemath.hpp"
+
 #endif

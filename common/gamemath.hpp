@@ -17,17 +17,17 @@ inline sf::Vector2f getNormal(const sf::Vector2f &a, const sf::Vector2f &b) {
 }
 inline std::vector<sf::Vector2f> getAllNormals(const std::vector<sf::Vector2f> &points) {
     std::vector<sf::Vector2f> v;
-    for(unsigned int i =0; i < points.size()-1; ++i) {
-        v.push_back(getNormal(points[i], points[i+1]));
+    for (unsigned int i = 0; i < points.size() - 1; ++i) {
+        v.push_back(getNormal(points[i], points[i + 1]));
     }
-    v.push_back(getNormal(points[0], points[points.size()-1]));
+    v.push_back(getNormal(points[0], points[points.size() - 1]));
     return v;
 }
 inline sf::Vector2f projection(const sf::Vector2f &b, const sf::Vector2f &a) { //b onto a
-    return dotProduct(a,b) * a;
+    return dotProduct(a, b) * a;
 }
 inline float scalarProjection(const sf::Vector2f &b, const sf::Vector2f &a) { //b onto a
-    return dotProduct(a,b);
+    return dotProduct(a, b);
 }
 }
 #endif

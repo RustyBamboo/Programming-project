@@ -70,8 +70,9 @@ void Server::tick()
                     sf::Vector2f velocity;
                     packet >> velocity;
                     Entity* owner = worldMap.getEntity((*player).second);
-                    sf::Vector2f position = owner->getPosition();
-                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(50, 50), (*player).second);
+                    sf::Vector2f position = owner->getCenter();
+                    // std::cout << -std::atan2(velocity.y, velocity.x)*180/3.1415 << std::endl;
+                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(10, 50), -std::atan2(velocity.x, velocity.y) * 180 / 3.1415, (*player).second);
                     auto id = worldMap.newEntity(bullet);
                     update.type = UpdatePacket::NEW_RECTANGLE;
                     update.id = id;

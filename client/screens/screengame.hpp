@@ -12,12 +12,13 @@
 #include <memory>
 #include <stdexcept>
 
+
 #include "../../common/include.hpp"
 
 class ScreenGame : public CScreen
 {
 private:
-    static double ZOOM_FACTOR;
+    static double ZOOM_FACTOR; //How far out the window is zoomed in/out
     unsigned short TCP_PORT = 5001;
     static sf::IpAddress SERVER_IP;
     static std::string playerName;
@@ -25,11 +26,13 @@ private:
     uint32_t last_packet;
     WorldMap worldMap;
     WorldMap::ID_TYPE player_id;
-    bool created;
-    void doTick();
-    void doHandshake();
+    bool created; //is the player actually created
+    void doTick(); //process packets
+    void doHandshake(); //establish communication with server
     void handleUserInput();
-    sf::Clock shooterClock;
+    sf::Clock shooterClock; //timer for reload speed
+    void shootRays(unsigned int speed); //shoots rays perp to all the edges
+    void sendShootPacket(sf::Vector2f vel); //sends the rays with a speed
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);

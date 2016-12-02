@@ -73,7 +73,7 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 						auto ownerID = ((Rectangle*) iteratorB->second.get())->getOwner();
 
 						if (iteratorA->first == ownerID) continue;
-						
+
 						{
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
@@ -117,15 +117,9 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 						}
 					}
 				}
-				// else {
-				// 	std::cout << "NO COLLISION" << std::endl;
-				// }
+
 			}
 		}
-
-		// iterator->first = key
-		// iterator->second = value
-		// Repeat if you also want to iterate through the second map.
 	}
 	return holder;
 
