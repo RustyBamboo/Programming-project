@@ -22,6 +22,6 @@ sf::Vector2f Rectangle::getCenter() {
 
 std::vector<sf::Vector2f> Rectangle::getEdgePoints() {}
 
-sf::FloatRect Rectangle::getLocalBounds() {
-    return shape.getLocalBounds();
+sf::FloatRect Rectangle::getGlobalBounds() {
+    return shape.getGlobalBounds();
 }

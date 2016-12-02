@@ -54,12 +54,28 @@ void WorldMap::tick()
 }
 void WorldMap::checkCollisions()
 {
+	// typedef std::map<ID_TYPE, std::unique_ptr<Entity> >::iterator it_type;
+	// for (it_type iteratorA = entities.begin(); iteratorA != entities.end(); iteratorA++) {
+	// 	it_type iteratorB = iteratorA;
+	// 	for (iteratorB++; iteratorB != entities.end(); iteratorB++) {
+	// 		if (iteratorA->second != iteratorB->second) {
+	// 			if (iteratorA->second->isCollided(iteratorB->second)) {
+	// 				std::cout << iteratorA->second->type << " " << iteratorB->second->type << std::endl;
+	// 			}
+	// 		}
+	// 	}
+	// 	// iterator->first = key
+	// 	// iterator->second = value
+	// 	// Repeat if you also want to iterate through the second map.
+	// }
 	for (auto const &entityA : entities)
 	{
 		for (auto const &entityB : entities)
 		{
 			if (entityA.second != entityB.second)
-				if (entityA.second->isCollided(entityB.second)) std::cout << "Collided" << std::endl;
+				if (entityA.second->isCollided(entityB.second)) {
+					if(entityA.second->type == Entity::polygon) std::cout << "polygon" << std::endl;
+				}
 		}
 	}
 }

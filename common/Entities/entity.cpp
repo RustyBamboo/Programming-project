@@ -61,6 +61,8 @@ sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& v)
 
 
 bool Entity::isCollided(std::unique_ptr<Entity> const &e) { //Seperating Axis Theorem
-    return getLocalBounds().intersects(e->getLocalBounds());
+
+    std::cout << getGlobalBounds().left << std::endl;
+    return getGlobalBounds().intersects(e->getGlobalBounds());
 
 }

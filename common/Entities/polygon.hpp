@@ -12,7 +12,7 @@ public:
 
     virtual sf::Vector2f getCenter();
     virtual std::vector<sf::Vector2f> getEdgePoints();
-    virtual sf::FloatRect getLocalBounds();
+    virtual sf::FloatRect getGlobalBounds();
 
     void toPacket(sf::Packet& packet);
     void fromPacket(sf::Packet& packet);

@@ -22,7 +22,7 @@ public:
 
     virtual sf::Vector2f getCenter() = 0;
     virtual std::vector<sf::Vector2f> getEdgePoints() = 0;
-    virtual sf::FloatRect getLocalBounds() = 0;
+    virtual sf::FloatRect getGlobalBounds() = 0;
 
     void setPosition(const sf::Vector2f &pos);
     bool isCollided(std::unique_ptr<Entity> const &e); //Need this written

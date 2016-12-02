@@ -33,13 +33,15 @@ std::vector<sf::Vector2f> Polygon::getEdgePoints() {
     return v;
 }
 
-sf::FloatRect Polygon::getLocalBounds() {
-    return shape.getLocalBounds();
+sf::FloatRect Polygon::getGlobalBounds() {
+    return shape.getGlobalBounds();
 }
 
 void Polygon::fromPacket(sf::Packet& packet)
 {
     Entity::fromPacket(packet);
+    shape.setPosition(getPosition());
+    std::cout << "pos: " << shape.getPosition().x << std::endl;
     sf::Uint32 points;
     float radius;
     packet >> radius;
