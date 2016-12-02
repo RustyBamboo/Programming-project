@@ -58,7 +58,7 @@ void Rectangle::fromPacket(sf::Packet& packet)
     packet >> owned_by;
     packet >> size;
     packet >> angle;
-    printf("RECT OWNEDBY=%d\n", owned_by);
+    // printf("RECT OWNEDBY=%d\n", owned_by);
     //  printf("HMM POSITION(%f,%f) (%f,%f) %f\n", getPosition().x, getPosition().y, size.x, size.y, angle);
     shape.setRotation(angle);
     shape.setSize(size);

@@ -31,7 +31,7 @@ private:
     void doHandshake(); //establish communication with server
     void handleUserInput();
     sf::Clock shooterClock; //timer for reload speed
-    void shootRays(unsigned int speed); //shoots rays perp to all the edges
+    void shootRays(float speed); //shoots rays perp to all the edges
     void sendShootPacket(sf::Vector2f vel); //sends the rays with a speed
 public:
     ScreenGame();

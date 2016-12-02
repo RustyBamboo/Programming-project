@@ -136,7 +136,7 @@ void ScreenGame::handleUserInput()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shooterClock.getElapsedTime().asMilliseconds() > 2000)
     {
-        shootRays(2); //speed of 2
+        shootRays(3.f); //speed of 2
         shooterClock.restart();
     }
     //If velocity changed, send out update
@@ -154,6 +154,7 @@ void ScreenGame::handleUserInput()
 }
 int ScreenGame::run(sf::RenderWindow &window)
 {
+    // std::cout << playerName << std::endl;
     std::cout << "Connecting to server: " << SERVER_IP << std::endl;
     doHandshake();
     sf::Event Event;
@@ -193,16 +194,16 @@ void ScreenGame::setName(const std::string &_name) {
     playerName = _name;
 }
 
-void ScreenGame::shootRays(unsigned int speed) {
+void ScreenGame::shootRays(float speed) {
     Polygon* me_ptr = (Polygon*) worldMap.getEntity(player_id); //Create a copy of me
     std::vector<sf::Vector2f> points = me_ptr->getEdgePoints();
     for (unsigned int i = 0; i < points.size() - 1; i++) {
         sf::Vector2f findPerp = gmath::normalize(points[i] - points[i + 1]);
-        sendShootPacket(-sf::Vector2f(findPerp.y * speed, -findPerp.x * speed));
+        sendShootPacket(-sf::Vector2f(findPerp.y, -findPerp.x) * speed);
     }
     {
         sf::Vector2f findPerp = gmath::normalize(points[points.size() - 1] - points[0]); //this line can be removed if I figured out how modoluo worked
-        sendShootPacket(-sf::Vector2f(findPerp.y * speed, -findPerp.x * speed));
+        sendShootPacket(-sf::Vector2f(findPerp.y , -findPerp.x) * speed);
     }
 }
 void ScreenGame::sendShootPacket(sf::Vector2f vel) {
