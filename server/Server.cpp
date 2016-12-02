@@ -65,6 +65,24 @@ void Server::tick()
 #endif
                 }
                 break;
+                case UpdatePacket::SHOOT:
+                {
+                    sf::Vector2f velocity;
+                    packet >> velocity;
+                    Entity* owner = worldMap.getEntity((*player).second);
+                    sf::Vector2f position = owner->getPosition();
+                    Rectangle* bullet = new Rectangle(position, velocity, sf::Vector2f(50,50));
+                    auto id = worldMap.newEntity((Entity*) bullet);
+                    update.type = UpdatePacket::NEW_RECTANGLE;
+                    update.id = id;
+                    updates_packet << update;
+                    bullet->toPacket(updates_packet);
+                    tickPacket.num_updates++;
+#ifdef DO_DEBUG
+                    printf("\tUPDATE SHOOT ID=%u OWNER=%u", update.id, (*player).second);
+#endif
+                }
+                break;
                 }
                 packet.clear();
                 status = (*player).first->receive(packet);
@@ -86,7 +104,7 @@ void Server::tick()
     sf::Packet header_packet;
     header_packet << tickPacket;
 #ifdef DO_DEBUG
-    printf("Sending Tick #%u Updates=%i Players=%lu HEADER_SIZE=%lu UPDATES_SIZE=%lu\n", tickPacket.tick_number, tickPacket.num_updates, players.size(), header_packet.getDataSize(), updates_packet.getDataSize ());
+    //printf("Sending Tick #%u Updates=%i Players=%lu HEADER_SIZE=%lu UPDATES_SIZE=%lu\n", tickPacket.tick_number, tickPacket.num_updates, players.size(), header_packet.getDataSize(), updates_packet.getDataSize ());
 #endif
     for (std::map< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
     {
@@ -122,7 +140,7 @@ void Server::connectPlayer()
     printf("Sending Handshake Response Size = %lu\n", res_packet.getDataSize ());
 #endif
     client->send(res_packet);
-    std::cout << "Size: " << worldMap.entities.size() << std::endl;
+    //  std::cout << "Size: " << worldMap.entities.size() << std::endl;
     updateNewPlayer(*client, id);
     //Tell other players about new player
     UpdatePacket update;
@@ -143,7 +161,7 @@ void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
     TickPacket tp;
     tp.tick_number = tick_number - 1;
     auto entities =  worldMap.entities.size();
-    tp.num_updates = entities ? entities > 0 : 0;
+    tp.num_updates = entities - 1  ? entities > 0 : 0;
     header << tp;
     socket.setBlocking(true);
     socket.send(header);
@@ -172,9 +190,10 @@ void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
 }
 Server::~Server()
 {
-    newPlayersListener.close();
+
     for (std::map< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end(); player++)
     {
         (*player).first->disconnect();
     }
+        newPlayersListener.close();
 }

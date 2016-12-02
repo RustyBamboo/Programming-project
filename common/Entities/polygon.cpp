@@ -6,7 +6,7 @@ Polygon::Polygon(sf::Vector2f pos, sf::Vector2f vel, int size, int edges) :
 {
 
 }
-Polygon::Polygon()
+Polygon::Polygon() : Entity(Entity::EntityType::polygon)
 {
 
 }
@@ -41,7 +41,6 @@ void Polygon::fromPacket(sf::Packet& packet)
 {
     Entity::fromPacket(packet);
     shape.setPosition(getPosition());
-    std::cout << "pos: " << shape.getPosition().x << std::endl;
     sf::Uint32 points;
     float radius;
     packet >> radius;

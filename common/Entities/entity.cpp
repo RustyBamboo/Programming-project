@@ -7,10 +7,8 @@ Entity::Entity(sf::Vector2f &pos, sf::Vector2f &vel, EntityType t) :
 {
 
 }
-Entity::Entity() : type(entity)
-{
-}
-
+Entity::Entity(EntityType t): type(t) {}
+Entity::Entity() : type(entity) {}
 
 //Updates the entity, processes the Move function, adds velocity, and updates the Object
 void Entity::tick() {
@@ -36,11 +34,13 @@ void Entity::fromPacket(sf::Packet& packet)
 {
     packet >> position;
     packet >> velocity;
+    //  printf("ENTITY FROM POSITION (%f, %f) VELOCITY (%f, %f)\n", getPosition().x, getPosition().y, getVelocity().x, getVelocity().y);
 }
 void Entity::toPacket(sf::Packet& packet)
 {
     packet << position;
     packet << velocity;
+    //  printf("ENTITY TO POSITION (%f, %f) VELOCITY (%f, %f)\n", getPosition().x, getPosition().y, getVelocity().x, getVelocity().y);
 }
 sf::Packet& operator <<(sf::Packet& packet, const sf::Vector2f& v)
 {
@@ -62,7 +62,7 @@ sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& v)
 
 bool Entity::isCollided(std::unique_ptr<Entity> const &e) { //Seperating Axis Theorem
 
-    std::cout << getGlobalBounds().left << std::endl;
+
     return getGlobalBounds().intersects(e->getGlobalBounds());
 
 }

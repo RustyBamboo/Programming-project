@@ -54,6 +54,16 @@ void ScreenGame::doTick()
             p->fromPacket(updates_packet);
           }
           break;
+        case UpdatePacket::NEW_RECTANGLE:
+          {
+#ifdef DO_DEBUG
+            printf("Update NEW_RECTANGLE #%u ID=%u\n",i,update.id);
+#endif
+            Rectangle *r = new Rectangle();
+            r->fromPacket(updates_packet);
+            worldMap.addEntity(update.id,r);
+          }
+          break;
         case UpdatePacket::NEW_POLYGON:
           {
 #ifdef DO_DEBUG
@@ -66,6 +76,7 @@ void ScreenGame::doTick()
           }
           break;
         default:
+          throw std::runtime_error("Unknown update type");
 #ifdef DO_DEBUG
           printf("Update UNKOWN #%u ID=%i\n",i,update.id);
 #endif
@@ -120,7 +131,18 @@ void ScreenGame::handleUserInput()
   else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
     velocity.y = 5.0;
   } else velocity.y = 0;
-
+  serverConnection.setBlocking(true);
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+  {
+    sf::Packet packet;
+    UpdatePacket update;
+    update.id = 0;
+    update.type = UpdatePacket::SHOOT;
+    sf::Vector2f vel(5.0,1);
+    packet << update;
+    packet << vel;
+    serverConnection.send(packet);
+  }
   //If velocity changed, send out update
   if (abs(velocity.x - me_ptr->getVelocity().x) > .01 || abs(velocity.y - me_ptr->getVelocity().y) > .01 )
   {

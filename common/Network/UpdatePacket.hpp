@@ -10,6 +10,8 @@ struct UpdatePacket
     static const uint8_t UPDATE_ENTITY = 2;
     static const uint8_t UPDATE_POLYGON = 3;
     static const uint8_t NEW_POLYGON = 4;
+    static const uint8_t SHOOT = 5;
+    static const uint8_t NEW_RECTANGLE = 6;
 };
 sf::Packet& operator <<(sf::Packet& packet, const UpdatePacket& x);
 sf::Packet& operator >>(sf::Packet& packet, UpdatePacket& x);

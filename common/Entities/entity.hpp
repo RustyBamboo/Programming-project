@@ -16,6 +16,7 @@ public:
         entity
     };
     Entity(sf::Vector2f  &pos, sf::Vector2f &vel, EntityType t);
+    Entity(EntityType t);
     Entity();
     virtual void draw(sf::RenderWindow &window) = 0;
     virtual void setView(sf::RenderWindow &window) = 0;
@@ -27,8 +28,8 @@ public:
     void setPosition(const sf::Vector2f &pos);
     bool isCollided(std::unique_ptr<Entity> const &e); //Need this written
     void tick(); //We need tick functions to be synced (get diff in time)
-    void toPacket(sf::Packet& packet);
-    void fromPacket(sf::Packet& packet);
+    virtual void toPacket(sf::Packet& packet);
+    virtual void fromPacket(sf::Packet& packet);
 
     void setPosition(sf::Vector2f  p);
     sf::Vector2f  getPosition();

@@ -6,7 +6,7 @@ private:
     sf::RectangleShape shape;
 public:
     Rectangle(sf::Vector2f &pos, sf::Vector2f &vel, sf::Vector2f size);
-
+    Rectangle();
     virtual void draw(sf::RenderWindow &window);
     virtual void setView(sf::RenderWindow &window);
 
@@ -14,4 +14,6 @@ public:
     virtual std::vector<sf::Vector2f> getEdgePoints();
     virtual sf::FloatRect getGlobalBounds();
 
+    void toPacket(sf::Packet& packet) override;
+    void fromPacket(sf::Packet& packet) override;
 };

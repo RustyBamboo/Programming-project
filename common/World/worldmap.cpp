@@ -6,8 +6,14 @@ WorldMap::WorldMap()
 }
 void WorldMap::addEntity(ID_TYPE id, Entity* e)
 {
+  	auto search = entities.find(id);
+	if (search != entities.end()) {
+		throw std::runtime_error("Entity already added");
+	}
+	else {
 	last_id = id;
 	entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(id, std::unique_ptr<Entity>(e)) );
+	}
 }
 Entity* WorldMap::getEntity(ID_TYPE id)
 {
@@ -74,7 +80,7 @@ void WorldMap::checkCollisions()
 		{
 			if (entityA.second != entityB.second)
 				if (entityA.second->isCollided(entityB.second)) {
-					if(entityA.second->type == Entity::polygon) std::cout << "polygon" << std::endl;
+					//  if(entityA.second->type == Entity::polygon) std::cout << "polygon" << std::endl;
 				}
 		}
 	}
