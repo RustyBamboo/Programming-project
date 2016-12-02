@@ -67,13 +67,13 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 		it_type iteratorB = iteratorA;
 		for (iteratorB++; iteratorB != entities.end(); iteratorB++) {
 			if (iteratorA->second != iteratorB->second) {
+
 				if (iteratorA->second->isCollided(iteratorB->second)) {
-					std::cout << iteratorA->second->type << " " << iteratorB->second->type << std::endl;
 					if (iteratorA->second->type == Entity::polygon && iteratorB->second->type == Entity::rectangle) {
 						auto ownerID = ((Rectangle*) iteratorB->second.get())->getOwner();
 
 						if (iteratorA->first == ownerID) continue;
-
+						
 						{
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
@@ -117,16 +117,18 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 						}
 					}
 				}
-				else {
-					std::cout << "NO COLLISION" << std::endl;
-				}
+				// else {
+				// 	std::cout << "NO COLLISION" << std::endl;
+				// }
 			}
 		}
-		return holder;
+
 		// iterator->first = key
 		// iterator->second = value
 		// Repeat if you also want to iterate through the second map.
 	}
+	return holder;
+
 // for (auto const &entityA : entities)
 // {
 // 	for (auto const &entityB : entities)
