@@ -2,7 +2,7 @@
 
 
 ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(115, 700), sf::Vector2f(300, 45), 25),
-    buttonSubmit(sf::Vector2f(115, 750), sf::Vector2f(100, 50), "Submit")
+    buttonSubmit(sf::Vector2f(115, 753), sf::Vector2f(100, 50), "Submit")
 {
     form.addTextBox(textBoxAddr);
     form.setButton(buttonSubmit);
@@ -81,7 +81,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
         form.draw(window);
         window.draw(exitText);
         if(optionPressed == 0) {
-            boundingRect.setPosition(113, 748);
+            boundingRect.setPosition(113, 751);
         }
         if(optionPressed == 1) {
             boundingRect.setPosition(113, 798);

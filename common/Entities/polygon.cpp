@@ -13,7 +13,6 @@ Polygon::Polygon() : Entity(Entity::EntityType::polygon)
 void Polygon::draw(sf::RenderWindow &window) {
     window.draw(shape);
 }
-
 void Polygon::setView(sf::RenderWindow &window, sf::View &view) {
     view.setCenter(getCenter());
     window.setView(view);

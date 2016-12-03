@@ -10,27 +10,17 @@
 #include <SFML/Network.hpp>
 #include <SFML/Audio.hpp>
 #include "gui/sound.hpp"
-
+#include <memory>
 
 
 int main() {
   srand(time(NULL)); //Pick a seed
 
-
   std::cout << sf::IpAddress::getPublicAddress();
 
   gui::Sound::init();
 
-  std::vector<CScreen *> screens;
-  int screen = 0;
   sf::RenderWindow window(sf::VideoMode(WorldMap::width, WorldMap::height), "Game");
-
-  ScreenMainMenu s0;
-  screens.push_back(&s0);
-
-  ScreenGame s1;
-  screens.push_back(&s1);
- 
 
   sf::Music music;
   if (!music.openFromFile("resources/song.wav"))
@@ -40,9 +30,19 @@ int main() {
   music.play();
 
   //The screen class returns an int, which tells which Screen (mainmenu, game) to run
-  while (screen >= 0) {
-    screen = screens[screen]->run(window);
-  }
-
+  std::unique_ptr<CScreen> cur_screen;
+  cur_screen.reset(new ScreenMainMenu());
+  while(true)
+    switch(cur_screen->run(window))
+    {
+      case 1:
+        cur_screen.reset(new ScreenGame());
+        break;
+      case 2:
+        cur_screen.reset(new ScreenMainMenu());
+        break;
+      default:
+        return 0;
+    };
   return 0;
 }

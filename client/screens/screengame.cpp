@@ -1,11 +1,14 @@
 #include "screengame.hpp"
 #include <string>
+
+sf::IpAddress ScreenGame::SERVER_IP = sf::IpAddress("127.0.0.1");
+
 ScreenGame::ScreenGame() : player_id(0), created(false)
 {
     backgroundTexture.loadFromFile("resources/background.png");
     backgroundSprite.setTexture(backgroundTexture);
 }
-void ScreenGame::doTick()
+bool ScreenGame::doTick()
 {
     sf::Packet header_packet;
     TickPacket tp;
@@ -35,6 +38,9 @@ void ScreenGame::doTick()
                 printf("Update REMOVE_ENTITY #%u ID=%u\n", i, update.id);
 #endif
                 worldMap.removeEntity(update.id);
+                if (player_id == update.id) {
+                    return false;
+                }
             }
             break;
             case UpdatePacket::UPDATE_ENTITY:
@@ -95,6 +101,7 @@ void ScreenGame::doTick()
         }
     }
     worldMap.tick();
+    return true;
 }
 void ScreenGame::doHandshake()
 {
@@ -163,7 +170,6 @@ void ScreenGame::handleUserInput()
 }
 int ScreenGame::run(sf::RenderWindow &window)
 {
-    // std::cout << playerName << std::endl;
     std::cout << "Connecting to server: " << SERVER_IP << std::endl;
     doHandshake();
     sf::Event Event;
@@ -191,8 +197,10 @@ int ScreenGame::run(sf::RenderWindow &window)
         window.clear(sf::Color(0, 0, 0, 0));
         // if (window.hasFocus()) handleUserInput();
         handleUserInput();
-        doTick();
+
+        if (!doTick()) return 2;
         window.draw(backgroundSprite);
+
         // if (created) worldMap.getEntity(player_id) -> setView(window, view);
         worldMap.draw(window);
         window.display();
@@ -226,4 +234,8 @@ void ScreenGame::sendShootPacket(sf::Vector2f vel) {
     serverConnection.send(packet);
 }
 
-sf::IpAddress ScreenGame::SERVER_IP = sf::IpAddress("127.0.0.1");
+ScreenGame::~ScreenGame()
+{
+    std::cout << "Closing Game" << std::endl;
+    serverConnection.disconnect();
+}

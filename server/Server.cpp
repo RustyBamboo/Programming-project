@@ -1,7 +1,25 @@
 #include "Server.hpp"
 Server::Server()
 {
-
+  addColor(240,118,88);
+  addColor(7,190,240);
+  addColor(81,182,78);
+  addColor(240,231,89);
+  addColor(209,94,222);
+}
+sf::Color Server::getColor()
+{
+  sf::Color c = colors.top();
+  colors.pop();
+  return c;
+}
+void Server::addColor(sf::Color c)
+{
+  colors.push(c);
+}
+void Server::addColor(sf::Uint8 red, sf::Uint8 green, sf::Uint8 blue)
+{
+  colors.push(sf::Color(red,green,blue));
 }
 void Server::run()
 {
@@ -120,20 +138,26 @@ void Server::tick()
 }
 void Server::connectPlayer()
 {
-    HandshakeRequest req;
-    HandshakeResponse res;
-    sf::Packet req_packet, res_packet;
     std::unique_ptr<sf::TcpSocket> client(new sf::TcpSocket);
     sf::Socket::Status  s = newPlayersListener.accept(*client);
     if (s != sf::Socket::Status::Done) return;
     client->setBlocking(true);
+    if (colors.size() == 0)
+    {
+      std::cout << "Maximum Players Reached, disconnecting new player" << std::endl;
+      client->disconnect();
+      return;
+    }
+    HandshakeRequest req;
+    HandshakeResponse res;
+    sf::Packet req_packet, res_packet;
     client->receive(req_packet);
 #ifdef DO_DEBUG
     printf("Recieving Handshake Request Size = %lu\n", req_packet.getDataSize ());
 #endif
     req_packet >> req;
     //Create new player entity
-    Polygon* character = new Polygon(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 50, 6, sf::Color(rand()%255, rand()%255, rand()%255));
+    Polygon* character = new Polygon(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 50, 6, getColor());
     auto id = worldMap.newEntity((Entity*) character);
     //Send player response with their character id
     res.id = id;
