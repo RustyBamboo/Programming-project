@@ -64,7 +64,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
             }
             if (optionPressed == 0 && form.update(event)) { //If button was clicked...
                 allTheFields = form.process();
-                if (allTheFields[0].size() > 0 && allTheFields[1].size() > 0) {
+                if (allTheFields[0].size() > 0) {
                     ScreenGame::setServerIP(sf::IpAddress(allTheFields[0]));
                     std::cout << "Inputted: " << allTheFields[0] << std::endl;
                     return (1);
