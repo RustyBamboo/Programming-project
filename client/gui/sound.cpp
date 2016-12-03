@@ -3,6 +3,8 @@ namespace gui {
 sf::SoundBuffer Sound::bufferHit;
 sf::SoundBuffer Sound::bufferLevelUp;
 sf::SoundBuffer Sound::bufferShoot;
+sf::Music Sound::musicDeath;
+
 
 sf::Sound Sound::sound;
 
@@ -13,6 +15,9 @@ void Sound::init() {
         throw std::runtime_error("No levelup.wav");
     if (!bufferShoot.loadFromFile("resources/shoot.wav"))
         throw std::runtime_error("No shoot.wav");
+    if (!musicDeath.openFromFile("resources/death.wav"))
+        throw std::runtime_error("No death.wav");
+
     std::cout << "Init sound success" << std::endl;
 }
 void Sound::playHit() {
@@ -26,5 +31,8 @@ void Sound::playLevelUp() {
 void Sound::playShoot() {
     sound.setBuffer(bufferShoot);
     sound.play();
+}
+void Sound::playDeath() {
+    musicDeath.play();
 }
 }

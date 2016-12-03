@@ -2,7 +2,7 @@
 
 
 ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(115, 700), sf::Vector2f(300, 45), 25),
-    buttonSubmit(sf::Vector2f(115, 753), sf::Vector2f(100, 50), "Submit")
+    buttonSubmit(sf::Vector2f(115, 753), sf::Vector2f(100, 50), "join")
 {
     form.addTextBox(textBoxAddr);
     form.setButton(buttonSubmit);
@@ -15,7 +15,7 @@ ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(115, 700), sf::Vecto
     backgroundTexture.loadFromFile("resources/mainmenu.png");
     backgroundSprite.setTexture(backgroundTexture);
 
-    boundingRect.setSize(sf::Vector2f(100, 50));
+    boundingRect.setSize(sf::Vector2f(65, 50));
     boundingRect.setFillColor(sf::Color(0,0,0,0));
     boundingRect.setOutlineColor(sf::Color::White);
     boundingRect.setOutlineThickness(1);
@@ -30,7 +30,7 @@ ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(115, 700), sf::Vecto
 int ScreenMainMenu::run(sf::RenderWindow &window)
 {
     std::vector<std::string> allTheFields;
-    allTheFields.push_back("127.0.0.1");
+    allTheFields.push_back(ScreenGame::getServerIP());
     textBoxAddr.setText(allTheFields.at(0));
     window.setView(window.getDefaultView());
     sf::Event event;

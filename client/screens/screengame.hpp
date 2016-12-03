@@ -39,6 +39,7 @@ public:
     ~ScreenGame();
     virtual int run(sf::RenderWindow &window);
     static void setServerIP (const sf::IpAddress &address);
+    static std::string getServerIP();
 };
 
 #endif

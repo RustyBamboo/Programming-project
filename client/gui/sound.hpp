@@ -10,9 +10,11 @@ private:
     static sf::SoundBuffer bufferShoot;
     static sf::Sound sound;
 public:
+    static sf::Music musicDeath;
     static void init();
     static void playHit();
     static void playLevelUp();
     static void playShoot();
+    static void playDeath();
 };
 }

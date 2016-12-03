@@ -41,6 +41,7 @@ bool ScreenGame::doTick()
 #endif
                 worldMap.removeEntity(update.id);
                 if (player_id == update.id) {
+                    gui::Sound::playDeath();
                     return false;
                 }
             }
@@ -213,6 +214,9 @@ void ScreenGame::setServerIP (const sf::IpAddress &address) {
     SERVER_IP = address;
 }
 
+std::string ScreenGame::getServerIP () {
+    return SERVER_IP.toString();
+}
 
 void ScreenGame::shootRays(float speed) {
     Polygon* me_ptr = (Polygon*) worldMap.getEntity(player_id); //Create a copy of me

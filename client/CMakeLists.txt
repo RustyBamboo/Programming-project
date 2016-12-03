@@ -14,7 +14,7 @@ endif()
 if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 
     # list of files for which we add a copy rule
-    set(data_SHADOW resources/song.wav resources/hit.wav resources/levelup.wav resources/shoot.wav resources/Raleway-Light.ttf resources/mainmenu.png resources/background.png)
+    set(data_SHADOW resources/song.wav resources/gamesong.wav resources/hit.wav resources/levelup.wav resources/shoot.wav resources/death.wav resources/Raleway-Light.ttf resources/mainmenu.png resources/background.png)
 
     foreach(item IN LISTS data_SHADOW)
         message(STATUS ${item})
@@ -32,7 +32,11 @@ add_custom_target(mainmenu ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/ma
 add_custom_target(background ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/background.png")
 
 add_custom_target(song ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/song.wav")
+add_custom_target(gamesong ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/gamesong.wav")
+
 add_custom_target(hit_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/hit.wav")
 add_custom_target(levelup_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/levelup.wav")
 add_custom_target(shoot_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/shoot.wav")
+add_custom_target(death_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/death.wav")
+
 

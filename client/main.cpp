@@ -29,22 +29,36 @@ int main() {
     return -1; // error
   music.setLoop(true);
   music.setVolume(25);
-  music.play();
+
+
+  sf::Music gamemusic;
+  if (!gamemusic.openFromFile("resources/gamesong.wav"))
+    return -1; // error
+  gamemusic.setLoop(true);
+  gamemusic.setVolume(25);
+  // gamemusic.play();
+
 
   //The screen class returns an int, which tells which Screen (mainmenu, game) to run
   std::unique_ptr<CScreen> cur_screen;
+
+  music.play();
   cur_screen.reset(new ScreenMainMenu());
-  while(true)
-    switch(cur_screen->run(window))
+  while (true)
+    switch (cur_screen->run(window))
     {
-      case 1:
-        cur_screen.reset(new ScreenGame());
-        break;
-      case 2:
-        cur_screen.reset(new ScreenMainMenu());
-        break;
-      default:
-        return 0;
+    case 1:
+      music.stop();
+      gamemusic.play();
+      cur_screen.reset(new ScreenGame());
+      break;
+    case 2:
+      gamemusic.stop();
+      music.play();
+      cur_screen.reset(new ScreenMainMenu());
+      break;
+    default:
+      return 0;
     };
   return 0;
 }
