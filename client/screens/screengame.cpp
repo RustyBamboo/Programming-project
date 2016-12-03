@@ -5,7 +5,7 @@ ScreenGame::ScreenGame() : player_id(0), created(false)
 {
 
 }
-void ScreenGame::doTick()
+int ScreenGame::doTick()
 {
     sf::Packet header_packet;
     TickPacket tp;
@@ -35,6 +35,9 @@ void ScreenGame::doTick()
                 printf("Update REMOVE_ENTITY #%u ID=%u\n", i, update.id);
 #endif
                 worldMap.removeEntity(update.id);
+                if (update.id == player_id){
+					return -1;
+				}
             }
             break;
             case UpdatePacket::UPDATE_ENTITY:
@@ -87,6 +90,8 @@ void ScreenGame::doTick()
         }
     }
     worldMap.tick();
+    
+    return 1;
 }
 void ScreenGame::doHandshake()
 {
@@ -182,7 +187,9 @@ int ScreenGame::run(sf::RenderWindow &window)
         window.clear(sf::Color(0, 0, 0, 0));
         // if (window.hasFocus()) handleUserInput();
         handleUserInput();
-        doTick();
+        if(doTick() == -1){
+			return 0;
+		}
 
         if (created) worldMap.getEntity(player_id) -> setView(window, view);
         worldMap.draw(window);
