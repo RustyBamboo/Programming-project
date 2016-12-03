@@ -50,13 +50,8 @@ void ScreenGame::doTick()
 #ifdef DO_DEBUG
                 printf("Update UPDATE_POLYGON #%u ID=%u\n", i, update.id);
 #endif
-                unsigned int prev = ((Polygon*) worldMap.getEntity(player_id)) -> getPointCount();
-
                 Polygon* p = (Polygon*) worldMap.getEntity(update.id);
                 p->fromPacket(updates_packet);
-
-                if (prev != p -> getPointCount()) gui::Sound::playHit();
-
             }
             break;
             case UpdatePacket::NEW_RECTANGLE:
@@ -192,6 +187,24 @@ int ScreenGame::run(sf::RenderWindow &window)
         // if (created) worldMap.getEntity(player_id) -> setView(window, view);
         worldMap.draw(window);
         window.display();
+        
+        view.setSize(1200, 900);
+        // define view
+        sf::View view(sf::FloatRect(0, 0, 1200, 900));
+
+        // activate view
+        window.setView(view);
+
+        // draw to view
+        window.draw(background);
+
+        // retrieve view
+        sf::View currentView = window.getView();
+
+        sf::Texture texture;
+        if (!texture.loadFromFile("Background.png"))
+        {}
+        sf::Sprite background(texture);
     }
 }
 
