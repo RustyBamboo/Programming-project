@@ -9,6 +9,9 @@
 class WorldMap {
 public:
     typedef uint32_t ID_TYPE;
+    typedef std::map<ID_TYPE, std::unique_ptr<Entity> > entities_t;
+    typedef entities_t::iterator it_type;
+
     WorldMap();
 
     void tick();
@@ -19,7 +22,7 @@ public:
     Entity* getEntity(ID_TYPE id); //Returns a pointer to an entity in the map with given ID, use for updating
     void removeEntity(ID_TYPE id); //Erases a pointer
     ID_TYPE newEntity(Entity* e);
-    std::map<ID_TYPE, std::unique_ptr<Entity> > entities;
+    entities_t entities;
 private:
     ID_TYPE last_id;
 };

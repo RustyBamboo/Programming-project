@@ -13,16 +13,16 @@ void ScreenGame::doTick()
     if (status == sf::Socket::Status::Disconnected) throw std::runtime_error("Server disconnected, closing");
     if (status == sf::Socket::Status::Error) throw std::runtime_error("Socket error, closing");
     header_packet >> tp;
-#ifdef DO_DEBUG
-    printf("Tick Header #%u updates=%u size=%lu\n", tp.tick_number, tp.num_updates, header_packet.getDataSize());
-#endif
+//  #ifdef DO_DEBUG
+    //  printf("Tick Header #%u updates=%u size=%lu\n", tp.tick_number, tp.num_updates, header_packet.getDataSize());
+//  #endif
     if (tp.num_updates > 0)
     {
         sf::Packet updates_packet;
         serverConnection.receive(updates_packet);
-#ifdef DO_DEBUG
+//  #ifdef DO_DEBUG
         printf("Tick Updates size=%lu\n", updates_packet.getDataSize());
-#endif
+//  #endif
         for (uint i = 0; i < tp.num_updates; i++)
         {
             UpdatePacket update;
@@ -31,9 +31,9 @@ void ScreenGame::doTick()
             {
             case UpdatePacket::REMOVE_ENTITY:
             {
-#ifdef DO_DEBUG
+//  #ifdef DO_DEBUG
                 printf("Update REMOVE_ENTITY #%u ID=%u\n", i, update.id);
-#endif
+//  #endif
                 worldMap.removeEntity(update.id);
             }
             break;
@@ -57,9 +57,9 @@ void ScreenGame::doTick()
             break;
             case UpdatePacket::NEW_RECTANGLE:
             {
-#ifdef DO_DEBUG
+//  #ifdef DO_DEBUG
                 printf("Update NEW_RECTANGLE #%u ID=%u\n", i, update.id);
-#endif
+//  #endif
                 Rectangle *r = new Rectangle();
                 r->fromPacket(updates_packet);
                 worldMap.addEntity(update.id, r);

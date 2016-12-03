@@ -11,6 +11,7 @@ void WorldMap::addEntity(ID_TYPE id, Entity* e)
 		throw std::runtime_error("Entity already added");
 	}
 	else {
+    printf("ADDING NEW ENTITY ID=%d TYPE=%d\n", id, e->type);
 		last_id = id;
 		entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(id, std::unique_ptr<Entity>(e)) );
 	}
@@ -27,53 +28,46 @@ Entity* WorldMap::getEntity(ID_TYPE id)
 }
 void WorldMap::removeEntity(ID_TYPE id)
 {
-	auto search = entities.find(id);
-	if (search != entities.end()) {
-		entities.erase(search);
-	}
-	else {
-		std::cout << "Not found\n";
-	}
+  printf("Erased %d\n", entities.erase(id));
 }
 WorldMap::ID_TYPE WorldMap::newEntity(Entity* e)
 {
 	last_id++;
+  printf("CREATING NEW ENTITY ID=%d TYPE=%d\n", last_id, e->type);
 	entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(last_id, std::unique_ptr<Entity>(e)) );
 	return last_id;
 }
 void WorldMap::draw(sf::RenderWindow &window)
 {
-#ifdef DO_DEBUG
-	printf("World Map Drawing %lu entities\n", entities.size());
-#endif
-	for (auto const &entity : entities)
+//  #ifdef DO_DEBUG
+	//  printf("World Map Drawing %lu entities\n", entities.size());
+//  #endif
+  for (it_type e = entities.begin(); e != entities.end(); e++)
 	{
-		entity.second->draw(window);
+		e->second->draw(window);
 	}
 }
 void WorldMap::tick()
 {
-	for (auto const &entity : entities)
+  for (it_type e = entities.begin(); e != entities.end(); e++)
 	{
-		entity.second->tick();
+		e->second->tick();
 	}
 }
 int WorldMap::checkCollisions(sf::Packet &packet)
 {
 	int holder = 0;
-
-	typedef std::map<ID_TYPE, std::unique_ptr<Entity> >::iterator it_type;
-	for (it_type iteratorA = entities.begin(); iteratorA != entities.end(); iteratorA++) {
+	outer: for (it_type iteratorA = entities.begin(); iteratorA != entities.end();) {
 		it_type iteratorB = iteratorA;
-		for (iteratorB++; iteratorB != entities.end(); iteratorB++) {
+		for (iteratorB++; iteratorB != entities.end();) {
 			if (iteratorA->second != iteratorB->second) {
-
 				if (iteratorA->second->isCollided(iteratorB->second)) {
 					if (iteratorA->second->type == Entity::polygon && iteratorB->second->type == Entity::rectangle) {
 						auto ownerID = ((Rectangle*) iteratorB->second.get())->getOwner();
-
-						if (iteratorA->first == ownerID) continue;
-
+						if (iteratorA->first == ownerID) {
+              iteratorB++;
+              continue;
+            }
 						{
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
@@ -93,14 +87,21 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 						}
 						// iteratorB->second->setPosition(sf::Vector2f(10000000, 100000));
 						// iteratorB->second->setVelocity(sf::Vector2f(0, 0));
-
+            {
+              iteratorB = entities.erase(iteratorB);
+              printf("DELETING BULLETB ID=%u\n", iteratorB->first);
+              UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorB->first);
+							packet << update;
+							holder++;
+            }
 
 					}
-					if (iteratorA->second->type == Entity::rectangle && iteratorB->second->type == Entity::polygon) {
+					else if (iteratorA->second->type == Entity::rectangle && iteratorB->second->type == Entity::polygon) {
 						auto ownerID = ((Rectangle*) iteratorA->second.get())->getOwner();
-
-						if (iteratorB->first == ownerID) continue;
-
+						if (iteratorB->first == ownerID) {
+              iteratorB++;
+              continue;
+            }
 						{
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
@@ -109,7 +110,6 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 							p->toPacket(packet);
 							holder++;
 						}
-
 						{
 							UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorB->first);
 							packet << update;
@@ -118,25 +118,20 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 							p->toPacket(packet);
 							holder++;
 						}
-						// iteratorA->second->setPosition(sf::Vector2f(10000000, 100000));
-						// iteratorA->second->setVelocity(sf::Vector2f(0, 0));
-					}
-				}
-
-			}
+            {
+              iteratorA = entities.erase(iteratorA);
+              printf("DELETING BULLETA ID=%u\n", iteratorA->first);
+              UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorA->first);
+							packet << update;
+							holder++;
+              goto outer;
+            }
+					} else iteratorB++;
+				} else iteratorB++;
+			} else iteratorB++;
 		}
+    iteratorA++;
 	}
 	return holder;
-
-// for (auto const &entityA : entities)
-// {
-// 	for (auto const &entityB : entities)
-// 	{
-// 		if (entityA.second != entityB.second)
-// 			if (entityA.second->isCollided(entityB.second)) {
-// 				//  if(entityA.second->type == Entity::polygon) std::cout << "polygon" << std::endl;
-// 			}
-// 	}
-// }
 }
 

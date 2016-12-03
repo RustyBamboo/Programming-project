@@ -25,6 +25,8 @@ void Server::tick()
 {
     sf::Clock clock;
     clock.restart();
+    int updateCount = worldMap.checkCollisions(updates_packet);
+    tickPacket.num_updates += updateCount;
     while (clock.getElapsedTime().asMilliseconds() < TICK_TIME_MILLIS)
     {
         for (std::map< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end();)
@@ -100,8 +102,6 @@ void Server::tick()
         }
         sf::sleep(sf::milliseconds(10));
     }
-    int updateCount = worldMap.checkCollisions(updates_packet);
-    tickPacket.num_updates += updateCount;
     //Ready to send tick
     sf::Packet header_packet;
     header_packet << tickPacket;
@@ -161,16 +161,15 @@ void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
 {
     sf::Packet header;
     TickPacket tp;
+    tp.num_updates = 0;
     tp.tick_number = tick_number - 1;
-    auto entities =  worldMap.entities.size();
-    tp.num_updates = entities - 1  ? entities > 0 : 0;
-    header << tp;
     socket.setBlocking(true);
-    socket.send(header);
     sf::Packet updates;
+    printf("New player id %d\n", id);
     for (auto p =  worldMap.entities.begin(); p != worldMap.entities.end(); p++)
     {
         if (p->first == id) continue;
+        printf("Sending New player update %d ID=%d TYPE=%d\n", tp.num_updates, p->first, p->second->type);
         UpdatePacket up;
         up.id = p->first;
         switch (p->second->type)
@@ -181,13 +180,16 @@ void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
             updates << up;
             Polygon* poly = (Polygon*) worldMap.getEntity(p->first);
             poly->toPacket(updates);
+            tp.num_updates++;
         }
+        break;
         case Entity::EntityType::rectangle:
         {
             up.type = UpdatePacket::NEW_RECTANGLE;
             updates << up;
             Rectangle* rect = (Rectangle*) worldMap.getEntity(p->first);
             rect->toPacket(updates);
+            tp.num_updates++;
         }
         break;
         default:
@@ -195,7 +197,13 @@ void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
             break;
         }
     }
-    socket.send(updates);
+    if (tp.num_updates > 0)
+    {
+        printf("Sending New player PACKETS TICK=%u UPDATE=%u\n", tp.tick_number, tp.num_updates);
+        header << tp;
+        socket.send(header);
+        socket.send(updates);
+    }
 }
 Server::~Server()
 {
