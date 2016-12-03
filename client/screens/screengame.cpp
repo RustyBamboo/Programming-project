@@ -1,5 +1,9 @@
 #include "screengame.hpp"
 #include <string>
+
+sf::IpAddress ScreenGame::SERVER_IP = sf::IpAddress("127.0.0.1");
+std::string ScreenGame::playerName =  "";
+
 ScreenGame::ScreenGame() : player_id(0), created(false)
 {
 
@@ -229,6 +233,8 @@ void ScreenGame::sendShootPacket(sf::Vector2f vel) {
     packet << vel;
     serverConnection.send(packet);
 }
-
-sf::IpAddress ScreenGame::SERVER_IP = sf::IpAddress("127.0.0.1");
-std::string ScreenGame::playerName =  "";
+ScreenGame::~ScreenGame()
+{
+  std::cout << "Closing Game" << std::endl;
+  serverConnection.disconnect();
+}

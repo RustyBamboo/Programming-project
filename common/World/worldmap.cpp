@@ -112,13 +112,22 @@ int WorldMap::checkCollisions(sf::Packet &packet)
               {
                   UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorA->first);
                   packet << update;
+                  holder++;
+                  iteratorA = entities.erase(iteratorA);
+                  {
+                    UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorB->first);
+                    packet << update;
+                    holder++;
+                    iteratorB = entities.erase(iteratorB);
+                  }
+                  goto outer;
               } else {
                   p->deleteEdge();
                   UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
                   packet << update;
                   p->toPacket(packet);
+                  holder++;
               }
-							holder++;
 						}
 						// iteratorB->second->setPosition(sf::Vector2f(10000000, 100000));
 						// iteratorB->second->setVelocity(sf::Vector2f(0, 0));
@@ -152,13 +161,15 @@ int WorldMap::checkCollisions(sf::Packet &packet)
               {
                   UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorB->first);
                   packet << update;
+                  holder++;
+                  iteratorB = entities.erase(iteratorB);
               } else {
                   p->deleteEdge();
                   UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorB->first);
                   packet << update;
                   p->toPacket(packet);
+                  holder++;
               }
-							holder++;
 						}
             {
               printf("DELETING BULLETA ID=%u\n", iteratorA->first);

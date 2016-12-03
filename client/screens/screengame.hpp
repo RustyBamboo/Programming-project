@@ -35,6 +35,7 @@ private:
     void sendShootPacket(sf::Vector2f vel); //sends the rays with a speed
 public:
     ScreenGame();
+    ~ScreenGame();
     virtual int run(sf::RenderWindow &window);
     static void setServerIP (const sf::IpAddress &address);
     static void setName (const std::string &_name);
