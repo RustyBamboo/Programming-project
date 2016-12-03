@@ -133,7 +133,7 @@ void Server::connectPlayer()
 #endif
     req_packet >> req;
     //Create new player entity
-    Polygon* character = new Polygon(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 50, 3, sf::Color(rand()%255, rand()%255, rand()%255));
+    Polygon* character = new Polygon(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 50, 4, sf::Color(rand()%255, rand()%255, rand()%255));
     auto id = worldMap.newEntity((Entity*) character);
     //Send player response with their character id
     res.id = id;
