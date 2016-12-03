@@ -152,7 +152,7 @@ void ScreenGame::handleUserInput()
     } else velocity.y = 0;
     serverConnection.setBlocking(true);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shooterClock.getElapsedTime().asMilliseconds() > 2000)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shooterClock.getElapsedTime().asMilliseconds() > 1000)
     {
         float speed;
         speed = 2 + std::pow(2.f, (10.0/(float)me_ptr -> getPointCount()));
