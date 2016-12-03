@@ -5,13 +5,13 @@
 #include <iostream>
 
 #include "cursor.hpp"
+#include "font.hpp"
 namespace gui {
 class TextBox {
 private:
     sf::RectangleShape shape;
     bool isSelected;
     sf::Text text;
-    sf::Font font;
     unsigned int maxlength;
 
     bool selected;

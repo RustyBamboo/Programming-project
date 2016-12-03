@@ -10,11 +10,8 @@ TextBox::TextBox(sf::Vector2f pos, sf::Vector2f size, int max) : cursor(sf::Vect
     text.setPosition(sf::Vector2f(pos.x+5, pos.y));
     text.setColor(sf::Color::White);
     text.setStyle(sf::Text::Bold);
-    if (!font.loadFromFile("resources/Raleway-Light.ttf"))
-    {
-        std::cerr << "Error loading Raleway-Light.ttf" << std::endl;
-    }
-    text.setFont(font);
+
+    text.setFont(gui::Font::font);
     maxlength = max;
 
     selected = false;

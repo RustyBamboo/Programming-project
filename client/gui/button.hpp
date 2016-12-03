@@ -3,13 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "font.hpp"
 
 namespace gui {
 class Button {
 private:
     sf::RectangleShape shape;
     sf::Text text;
-    sf::Font font;
 public:
     bool clicked;
     Button(sf::Vector2f pos, sf::Vector2f size, std::string text);

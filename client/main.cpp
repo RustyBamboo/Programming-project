@@ -10,6 +10,7 @@
 #include <SFML/Network.hpp>
 #include <SFML/Audio.hpp>
 #include "gui/sound.hpp"
+#include "gui/font.hpp"
 #include <memory>
 
 
@@ -19,6 +20,7 @@ int main() {
   std::cout << sf::IpAddress::getPublicAddress();
 
   gui::Sound::init();
+  gui::Font::init();
 
   sf::RenderWindow window(sf::VideoMode(WorldMap::width, WorldMap::height), "Game");
 

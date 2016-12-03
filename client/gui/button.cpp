@@ -7,11 +7,8 @@ Button::Button(sf::Vector2f pos, sf::Vector2f size, std::string t) {
 
     text.setPosition(pos);
     text.setColor(sf::Color::White);
-    if (!font.loadFromFile("resources/Raleway-Light.ttf"))
-    {
-        std::cerr << "Error loading verdanab.ttf" << std::endl;
-    }
-    text.setFont(font);
+   
+    text.setFont(gui::Font::font);
     text.setString(t);
 
     clicked = false;

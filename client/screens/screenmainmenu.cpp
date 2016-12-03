@@ -7,9 +7,8 @@ ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(115, 700), sf::Vecto
     form.addTextBox(textBoxAddr);
     form.setButton(buttonSubmit);
     playing = false;
-    font.loadFromFile("resources/Raleway-Light.ttf");
     exitText.setString("exit");
-    exitText.setFont(font);
+    exitText.setFont(gui::Font::font);
     exitText.setCharacterSize(30);
     exitText.setPosition(sf::Vector2f(115,800));
 

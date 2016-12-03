@@ -12,6 +12,7 @@
 #include "../gui/textbox.hpp"
 #include "../gui/button.hpp"
 #include "../gui/form.hpp"
+#include "../gui/font.hpp"
 #include "screengame.hpp"
 
 
@@ -24,7 +25,7 @@ private:
     gui::TextBox textBoxAddr;
     gui::Button buttonSubmit;
     gui::Form form;
-    sf::Font font;
+    // sf::Font font;
     sf::Text exitText;
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
