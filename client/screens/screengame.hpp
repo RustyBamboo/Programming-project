@@ -27,7 +27,7 @@ private:
     WorldMap worldMap;
     WorldMap::ID_TYPE player_id;
     bool created; //is the player actually created
-    void doTick(); //process packets
+    bool doTick(); //process packets
     void doHandshake(); //establish communication with server
     void handleUserInput();
     sf::Clock shooterClock; //timer for reload speed
