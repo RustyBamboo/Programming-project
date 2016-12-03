@@ -58,19 +58,17 @@ void TextBox::update(sf::Event &event) {
         }
     }
     if (event.type == sf::Event::TextEntered) {
-        if (selected && event.text.unicode < 128) {
+        if (selected && event.text.unicode < 127) {
             if (event.text.unicode == 8) {
                 removeLast();
             }
             else if (text.getString().getSize() < maxlength) {
-                sf::String test = event.text.unicode;
-                addText(test);
+                sf::String text = event.text.unicode;
+                addText(text);
             }
 
         }
     }
-
-
 }
 
 void TextBox::setText(std::string &str) {
