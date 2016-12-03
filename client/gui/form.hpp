@@ -17,6 +17,7 @@ namespace gui {
         bool update(sf::Event &event);
         void addTextBox(gui::TextBox &textbox);
         void setButton(gui::Button &b);
+        void noSelect();
         std::vector<std::string> process();
     };
 }

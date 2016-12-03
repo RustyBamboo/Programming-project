@@ -5,7 +5,7 @@ namespace gui {
 Cursor::Cursor(sf::Vector2f size) {
     shape.setSize(size);
     blinkrate = 1000;
-    shape.setFillColor(sf::Color::Black);
+    shape.setFillColor(sf::Color::White);
     isOn = true;
     show = false;
 }

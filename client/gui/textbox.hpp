@@ -29,6 +29,7 @@ public:
     void clear();
     void setText(std::string &str);
     std::string getString();
+    void noSelect();
 
 };
 }

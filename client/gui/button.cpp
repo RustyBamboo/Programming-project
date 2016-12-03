@@ -6,8 +6,8 @@ Button::Button(sf::Vector2f pos, sf::Vector2f size, std::string t) {
     shape.setSize(size);
 
     text.setPosition(pos);
-    text.setColor(sf::Color::Black);
-    if (!font.loadFromFile("resources/verdanab.ttf"))
+    text.setColor(sf::Color::White);
+    if (!font.loadFromFile("resources/Raleway-Light.ttf"))
     {
         std::cerr << "Error loading verdanab.ttf" << std::endl;
     }
@@ -25,7 +25,7 @@ bool Button::checkPoint(int x, int y) {
 }
 
 void Button::draw(sf::RenderWindow &window) {
-    window.draw(shape);
+    // window.draw(shape);
     window.draw(text);
 }
 void Button::update(sf::Event &event) {

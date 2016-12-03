@@ -14,7 +14,7 @@ endif()
 if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 
     # list of files for which we add a copy rule
-    set(data_SHADOW resources/verdanab.ttf resources/song.wav resources/hit.wav resources/levelup.wav resources/shoot.wav)
+    set(data_SHADOW resources/song.wav resources/hit.wav resources/levelup.wav resources/shoot.wav resources/Raleway-Light.ttf resources/mainmenu.png resources/background.png)
 
     foreach(item IN LISTS data_SHADOW)
         message(STATUS ${item})
@@ -27,7 +27,9 @@ if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 endif()
 
 # files are only copied if a target depends on them
-add_custom_target(font ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/verdanab.ttf")
+add_custom_target(font_Raleway ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/Raleway-Light.ttf")
+add_custom_target(mainmenu ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/mainmenu.png")
+add_custom_target(background ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/background.png")
 
 add_custom_target(song ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/song.wav")
 add_custom_target(hit_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/hit.wav")

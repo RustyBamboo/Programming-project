@@ -22,9 +22,14 @@ private:
     int alpha_div;
     bool playing;
     gui::TextBox textBoxAddr;
-    gui::TextBox textBoxName;
     gui::Button buttonSubmit;
     gui::Form form;
+    sf::Font font;
+    sf::Text exitText;
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
+
+    sf::RectangleShape boundingRect;
 public:
     ScreenMainMenu();
     virtual int run(sf::RenderWindow &window);

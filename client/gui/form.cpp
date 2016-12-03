@@ -37,4 +37,7 @@ std::vector<std::string> Form::process() {
     button->clicked = false;
     return hold;
 }
+void Form::noSelect() {
+    for (auto &box : textboxes) box->noSelect();
+}
 }

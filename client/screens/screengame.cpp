@@ -2,7 +2,8 @@
 #include <string>
 ScreenGame::ScreenGame() : player_id(0), created(false)
 {
-
+    backgroundTexture.loadFromFile("resources/background.png");
+    backgroundSprite.setTexture(backgroundTexture);
 }
 void ScreenGame::doTick()
 {
@@ -55,6 +56,7 @@ void ScreenGame::doTick()
                 Polygon* p = (Polygon*) worldMap.getEntity(update.id);
                 p->fromPacket(updates_packet);
 
+                //play sounds
                 if (player_id == update.id) {
                     if (prev > p -> getPointCount()) gui::Sound::playHit();
                     if (prev < p -> getPointCount()) gui::Sound::playLevelUp();
@@ -190,7 +192,7 @@ int ScreenGame::run(sf::RenderWindow &window)
         // if (window.hasFocus()) handleUserInput();
         handleUserInput();
         doTick();
-
+        window.draw(backgroundSprite);
         // if (created) worldMap.getEntity(player_id) -> setView(window, view);
         worldMap.draw(window);
         window.display();
@@ -200,9 +202,7 @@ int ScreenGame::run(sf::RenderWindow &window)
 void ScreenGame::setServerIP (const sf::IpAddress &address) {
     SERVER_IP = address;
 }
-void ScreenGame::setName(const std::string &_name) {
-    playerName = _name;
-}
+
 
 void ScreenGame::shootRays(float speed) {
     Polygon* me_ptr = (Polygon*) worldMap.getEntity(player_id); //Create a copy of me
@@ -227,4 +227,3 @@ void ScreenGame::sendShootPacket(sf::Vector2f vel) {
 }
 
 sf::IpAddress ScreenGame::SERVER_IP = sf::IpAddress("127.0.0.1");
-std::string ScreenGame::playerName =  "";

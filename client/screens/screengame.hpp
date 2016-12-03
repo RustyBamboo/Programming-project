@@ -21,7 +21,6 @@ class ScreenGame : public CScreen
 private:
     unsigned short TCP_PORT = 5001;
     static sf::IpAddress SERVER_IP;
-    static std::string playerName;
     sf::TcpSocket serverConnection;
     uint32_t last_packet;
     WorldMap worldMap;
@@ -33,11 +32,12 @@ private:
     sf::Clock shooterClock; //timer for reload speed
     void shootRays(float speed); //shoots rays perp to all the edges
     void sendShootPacket(sf::Vector2f vel); //sends the rays with a speed
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
 public:
     ScreenGame();
     virtual int run(sf::RenderWindow &window);
     static void setServerIP (const sf::IpAddress &address);
-    static void setName (const std::string &_name);
 };
 
 #endif
