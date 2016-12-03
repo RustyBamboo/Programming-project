@@ -154,7 +154,10 @@ void ScreenGame::handleUserInput()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shooterClock.getElapsedTime().asMilliseconds() > 2000)
     {
-        shootRays(3.f); //speed of 2
+        float speed;
+        speed = 2 + std::pow(2.f, (3.0/(float)me_ptr -> getPointCount()));
+        shootRays(speed); //speed of 2
+        std::cout << speed << std::endl;
         gui::Sound::playShoot();
         shooterClock.restart();
     }
