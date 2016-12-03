@@ -27,22 +27,36 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
     window.setView(window.getDefaultView());
     sf::Event event;
     bool running = true;
-
+    
+    int optionPressed = 0;
+    
+    
     while (running)
     {
         while (window.pollEvent(event))
         {
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Down)
+                {
+                   int optionPressed = 1;
+                    
+                }
+                if (event.key.code == sf::Keyboard::Up)
+                {
+                    int optionPressed = 0;
+                }
             if (event.type == sf::Event::Closed)
             {
                 return (-1);
             }
-            if (form.update(event)) { //If button was clicked...
+            if (form.update(event) && optionPressed=0) { //If button was clicked...
                 allTheFields = form.process();
 
                 if (allTheFields[0].size() > 0 && allTheFields[1].size() > 0 && allTheFields[1].size() <= 12) {
                     ScreenGame::setServerIP(sf::IpAddress(allTheFields[0]));
                     ScreenGame::setName(allTheFields[1]);
-                    std::cout << "Inputed: " << allTheFields[0] << " " << allTheFields[1] << std::endl;
+                    std::cout << "Inputted: " << allTheFields[0] << " " << allTheFields[1] << std::endl;
                     return (1);
                 }
                 else {
@@ -50,15 +64,14 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
                     textBoxName.setText(allTheFields[1]);
                 }
             }
-            if (event.type == sf::Event::KeyPressed)
-            {
-                if (event.key.code == sf::Keyboard::Escape)
-                {
-                    return (-1);
-                }
-            }
+            
+             if (sf::Keyboard::Enter && optionPressed=1){
+                 return -1;
+             }
+            
         }
-
+       
+ 
         window.clear();
         form.draw(window);
         window.display();
