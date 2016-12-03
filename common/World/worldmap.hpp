@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <stack>
 
 class WorldMap {
 public:
@@ -15,7 +16,7 @@ public:
     WorldMap();
 
     void tick();
-    int checkCollisions(sf::Packet &packet);
+    int checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors);
     int checkOutOfMap(sf::Packet &packet);
     void draw(sf::RenderWindow &window);
 
@@ -26,6 +27,7 @@ public:
     bool isOutOfMap(sf::FloatRect rect);
 
     void addEntity(ID_TYPE id, Entity* e); //Add an enttiy with given ID, returning a NULL pointer to
+    bool hasEntity(ID_TYPE id);
     Entity* getEntity(ID_TYPE id); //Returns a pointer to an entity in the map with given ID, use for updating
     void removeEntity(ID_TYPE id); //Erases a pointer
     ID_TYPE newEntity(Entity* e);

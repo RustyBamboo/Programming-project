@@ -15,6 +15,11 @@ WorldMap::WorldMap()
 {
 	last_id = 0;
 }
+bool WorldMap::hasEntity(ID_TYPE id)
+{
+  auto search = entities.find(id);
+  return search != entities.end();
+}
 void WorldMap::addEntity(ID_TYPE id, Entity* e)
 {
 	auto search = entities.find(id);
@@ -82,7 +87,7 @@ int WorldMap::checkOutOfMap(sf::Packet &packet)
   }
   return holder;
 }
-int WorldMap::checkCollisions(sf::Packet &packet)
+int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
 {
 	int holder = 0;
 	outer: for (it_type iteratorA = entities.begin(); iteratorA != entities.end();) {
@@ -109,6 +114,7 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 							Polygon* p = (Polygon*) iteratorA->second.get();
               if (p->getPointCount() <= 3)
               {
+                  colors.push(p->getColor());
                   UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorA->first);
                   packet << update;
                   holder++;
@@ -157,6 +163,7 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 							Polygon* p = (Polygon*) iteratorB->second.get();
               if (p->getPointCount() <= 3)
               {
+                  colors.push(p->getColor());
                   UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorB->first);
                   packet << update;
                   holder++;

@@ -43,7 +43,7 @@ void Server::tick()
 {
     sf::Clock clock;
     clock.restart();
-    tickPacket.num_updates += worldMap.checkCollisions(updates_packet);
+    tickPacket.num_updates += worldMap.checkCollisions(updates_packet, colors);
     tickPacket.num_updates += worldMap.checkOutOfMap(updates_packet);
     while (clock.getElapsedTime().asMilliseconds() < TICK_TIME_MILLIS)
     {
@@ -111,11 +111,16 @@ void Server::tick()
             if (status ==  sf::Socket::Status::Disconnected || status == sf::Socket::Status::Error)
             {
                 auto id = (*player).second;
-                worldMap.removeEntity(id);
-                UpdatePacket update(UpdatePacket::REMOVE_ENTITY, id);
-                updates_packet << update;
-                tickPacket.num_updates++;
-                player = players.erase(player);
+                if (worldMap.hasEntity(id))
+                {
+                  worldMap.removeEntity(id);
+                  UpdatePacket update(UpdatePacket::REMOVE_ENTITY, id);
+                  updates_packet << update;
+                  tickPacket.num_updates++;
+                  Polygon* p = (Polygon* ) worldMap.getEntity(id);
+                  addColor(p->getColor());
+                  player = players.erase(player);
+                }
             } else player++;
         }
         sf::sleep(sf::milliseconds(10));
