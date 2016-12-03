@@ -1,15 +1,15 @@
 #include "worldmap.hpp"
 
-double WorldMap::ZOOM_FACTOR = 1.0;
+double WorldMap::ZOOM_FACTOR = 2.0;
 int WorldMap::height = 900;
 int WorldMap::width = 1200;
 
 bool WorldMap::isOutOfMap(sf::FloatRect rect)
 {
-  return rect.left+rect.width <0
-      || rect.left -rect.width > width*ZOOM_FACTOR
-      || rect.top+rect.height < 0
-      || rect.top-rect.height > height*ZOOM_FACTOR;
+  return rect.left+rect.width < -(WorldMap::width*WorldMap::ZOOM_FACTOR*0.25)
+      || rect.left -rect.width > WorldMap::width + (WorldMap::width*WorldMap::ZOOM_FACTOR*0.25)
+      || rect.top+rect.height <  -(WorldMap::height*WorldMap::ZOOM_FACTOR*0.25)
+      || rect.top-rect.height > height + (WorldMap::height*WorldMap::ZOOM_FACTOR*0.25);
 }
 WorldMap::WorldMap()
 {

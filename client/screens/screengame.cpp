@@ -7,6 +7,8 @@ ScreenGame::ScreenGame() : player_id(0), created(false)
 {
     backgroundTexture.loadFromFile("resources/background.png");
     backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.scale(WorldMap::ZOOM_FACTOR, WorldMap::ZOOM_FACTOR);
+    backgroundSprite.setPosition(-(WorldMap::width*WorldMap::ZOOM_FACTOR*0.25), -(WorldMap::height*WorldMap::ZOOM_FACTOR*0.25));
 }
 bool ScreenGame::doTick()
 {
