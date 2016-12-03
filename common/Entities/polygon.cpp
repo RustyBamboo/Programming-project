@@ -36,14 +36,16 @@ sf::FloatRect Polygon::getGlobalBounds() {
 }
 
 void Polygon::addEdge() {
-    if (shape.getPointCount() < 26)
+    if (shape.getPointCount() < 20)
         shape.setPointCount(shape.getPointCount() + 1);
 }
 void Polygon::deleteEdge() {
     if (shape.getPointCount() > 3)
         shape.setPointCount(shape.getPointCount() - 1);
 }
-
+uint Polygon::getPointCount() {
+    return shape.getPointCount();
+}
 inline sf::Packet& operator <<(sf::Packet& packet, const sf::Color& c)
 {
     packet << c.r << c.g << c.b << c.a;

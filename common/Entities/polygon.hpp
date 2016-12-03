@@ -15,6 +15,7 @@ public:
     virtual sf::FloatRect getGlobalBounds();
     virtual void tick();
 
+    uint getPointCount();
     void addEdge();
     void deleteEdge();
     void toPacket(sf::Packet& packet);

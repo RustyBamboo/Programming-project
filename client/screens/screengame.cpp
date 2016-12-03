@@ -51,8 +51,13 @@ void ScreenGame::doTick()
 #ifdef DO_DEBUG
                 printf("Update UPDATE_POLYGON #%u ID=%u\n", i, update.id);
 #endif
+                unsigned int prev = ((Polygon*) worldMap.getEntity(player_id)) -> getPointCount();
+
                 Polygon* p = (Polygon*) worldMap.getEntity(update.id);
                 p->fromPacket(updates_packet);
+
+                if (prev != p -> getPointCount()) gui::Sound::playHit();
+
             }
             break;
             case UpdatePacket::NEW_RECTANGLE:
