@@ -3,6 +3,7 @@ namespace gui {
 sf::SoundBuffer Sound::bufferHit;
 sf::SoundBuffer Sound::bufferLevelUp;
 sf::SoundBuffer Sound::bufferShoot;
+sf::SoundBuffer Sound::bufferMenuSelect;
 sf::Music Sound::musicDeath;
 
 
@@ -16,6 +17,8 @@ void Sound::init() {
     if (!bufferShoot.loadFromFile("resources/shoot.wav"))
         throw std::runtime_error("No shoot.wav");
     if (!musicDeath.openFromFile("resources/death.wav"))
+        throw std::runtime_error("No death.wav");
+    if (!bufferMenuSelect.loadFromFile("resources/menuselect.wav"))
         throw std::runtime_error("No death.wav");
 
     std::cout << "Init sound success" << std::endl;
@@ -34,5 +37,9 @@ void Sound::playShoot() {
 }
 void Sound::playDeath() {
     musicDeath.play();
+}
+void Sound::playMenuSelect() {
+    sound.setBuffer(bufferMenuSelect);
+    sound.play();
 }
 }

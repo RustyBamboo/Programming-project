@@ -14,6 +14,7 @@
 #include "../gui/form.hpp"
 #include "../gui/font.hpp"
 #include "screengame.hpp"
+#include "../gui/sound.hpp"
 
 
 class ScreenMainMenu : public CScreen

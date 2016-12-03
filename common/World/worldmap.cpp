@@ -6,10 +6,10 @@ int WorldMap::width = 1200;
 
 bool WorldMap::isOutOfMap(sf::FloatRect rect)
 {
-  return rect.left+rect.width < -(WorldMap::width*WorldMap::ZOOM_FACTOR*0.25)
-      || rect.left -rect.width > WorldMap::width + (WorldMap::width*WorldMap::ZOOM_FACTOR*0.25)
-      || rect.top+rect.height <  -(WorldMap::height*WorldMap::ZOOM_FACTOR*0.25)
-      || rect.top-rect.height > height + (WorldMap::height*WorldMap::ZOOM_FACTOR*0.25);
+	return rect.left + rect.width < -(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25)
+	       || rect.left - rect.width > WorldMap::width + (WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25)
+	       || rect.top + rect.height <  -(WorldMap::height * WorldMap::ZOOM_FACTOR * 0.25)
+	       || rect.top - rect.height > height + (WorldMap::height * WorldMap::ZOOM_FACTOR * 0.25);
 }
 WorldMap::WorldMap()
 {
@@ -17,8 +17,8 @@ WorldMap::WorldMap()
 }
 bool WorldMap::hasEntity(ID_TYPE id)
 {
-  auto search = entities.find(id);
-  return search != entities.end();
+	auto search = entities.find(id);
+	return search != entities.end();
 }
 void WorldMap::addEntity(ID_TYPE id, Entity* e)
 {
@@ -27,7 +27,7 @@ void WorldMap::addEntity(ID_TYPE id, Entity* e)
 		throw std::runtime_error("Entity already added");
 	}
 	else {
-    //  printf("ADDING NEW ENTITY ID=%d TYPE=%d\n", id, e->type);
+		//  printf("ADDING NEW ENTITY ID=%d TYPE=%d\n", id, e->type);
 		last_id = id;
 		entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(id, std::unique_ptr<Entity>(e)) );
 	}
@@ -44,13 +44,13 @@ Entity* WorldMap::getEntity(ID_TYPE id)
 }
 void WorldMap::removeEntity(ID_TYPE id)
 {
-  //  printf("Erased %d\n", entities.erase(id));
-  entities.erase(id);
+	//  printf("Erased %d\n", entities.erase(id));
+	entities.erase(id);
 }
 WorldMap::ID_TYPE WorldMap::newEntity(Entity* e)
 {
 	last_id++;
-  //  printf("CREATING NEW ENTITY ID=%d TYPE=%d\n", last_id, e->type);
+	//  printf("CREATING NEW ENTITY ID=%d TYPE=%d\n", last_id, e->type);
 	entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(last_id, std::unique_ptr<Entity>(e)) );
 	return last_id;
 }
@@ -59,38 +59,38 @@ void WorldMap::draw(sf::RenderWindow &window)
 //  #ifdef DO_DEBUG
 	//  printf("World Map Drawing %lu entities\n", entities.size());
 //  #endif
-  for (it_type e = entities.begin(); e != entities.end(); e++)
+	for (it_type e = entities.begin(); e != entities.end(); e++)
 	{
 		e->second->draw(window);
 	}
 }
 void WorldMap::tick()
 {
-  for (it_type e = entities.begin(); e != entities.end(); e++)
+	for (it_type e = entities.begin(); e != entities.end(); e++)
 	{
 		e->second->tick();
 	}
 }
 int WorldMap::checkOutOfMap(sf::Packet &packet)
 {
-  int holder = 0;
-  for (it_type e = entities.begin(); e != entities.end();)
-  {
-    if (e->second->type == Entity::rectangle && isOutOfMap(e->second->getGlobalBounds()))
-    {
-      //  printf("DELETING OUT OF BOUNDS BULLET %u\n", e->first);
-      UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  e->first);
-      packet << update;
-      holder++;
-      e = entities.erase(e);
-    } else e++;
-  }
-  return holder;
+	int holder = 0;
+	for (it_type e = entities.begin(); e != entities.end();)
+	{
+		if (e->second->type == Entity::rectangle && isOutOfMap(e->second->getGlobalBounds()))
+		{
+			//  printf("DELETING OUT OF BOUNDS BULLET %u\n", e->first);
+			UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  e->first);
+			packet << update;
+			holder++;
+			e = entities.erase(e);
+		} else e++;
+	}
+	return holder;
 }
 int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
 {
 	int holder = 0;
-	outer: for (it_type iteratorA = entities.begin(); iteratorA != entities.end();) {
+outer: for (it_type iteratorA = entities.begin(); iteratorA != entities.end();) {
 		it_type iteratorB = iteratorA;
 		for (iteratorB++; iteratorB != entities.end();) {
 			if (iteratorA->second != iteratorB->second) {
@@ -98,10 +98,10 @@ int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
 					if (iteratorA->second->type == Entity::polygon && iteratorB->second->type == Entity::rectangle) {
 						auto ownerID = ((Rectangle*) iteratorB->second.get())->getOwner();
 						if (iteratorA->first == ownerID) {
-              iteratorB++;
-              continue;
-            }
-            if (hasEntity(ownerID)) {
+							iteratorB++;
+							continue;
+						}
+						if (hasEntity(ownerID)) {
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
 							Polygon* p = (Polygon*) getEntity(ownerID);
@@ -112,45 +112,45 @@ int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
 
 						{
 							Polygon* p = (Polygon*) iteratorA->second.get();
-              if (p->getPointCount() <= 3)
-              {
-                  colors.push(p->getColor());
-                  UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorA->first);
-                  packet << update;
-                  holder++;
-                  iteratorA = entities.erase(iteratorA);
-                  {
-                    UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorB->first);
-                    packet << update;
-                    holder++;
-                    iteratorB = entities.erase(iteratorB);
-                  }
-                  goto outer;
-              } else {
-                  p->deleteEdge();
-                  UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
-                  packet << update;
-                  p->toPacket(packet);
-                  holder++;
-              }
+							if (p->getPointCount() <= 3)
+							{
+								colors.push(p->getColor());
+								UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorA->first);
+								packet << update;
+								holder++;
+								iteratorA = entities.erase(iteratorA);
+								{
+									UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorB->first);
+									packet << update;
+									holder++;
+									iteratorB = entities.erase(iteratorB);
+								}
+								goto outer;
+							} else {
+								p->deleteEdge();
+								UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorA->first);
+								packet << update;
+								p->toPacket(packet);
+								holder++;
+							}
 						}
 						// iteratorB->second->setPosition(sf::Vector2f(10000000, 100000));
 						// iteratorB->second->setVelocity(sf::Vector2f(0, 0));
-            {
-              //  printf("DELETING BULLETB ID=%u\n", iteratorB->first);
-              UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorB->first);
+						{
+							//  printf("DELETING BULLETB ID=%u\n", iteratorB->first);
+							UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorB->first);
 							packet << update;
 							holder++;
-              iteratorB = entities.erase(iteratorB);
-            }
+							iteratorB = entities.erase(iteratorB);
+						}
 
 					}
 					else if (iteratorA->second->type == Entity::rectangle && iteratorB->second->type == Entity::polygon) {
 						auto ownerID = ((Rectangle*) iteratorA->second.get())->getOwner();
 						if (iteratorB->first == ownerID) {
-              iteratorB++;
-              continue;
-            }
+							iteratorB++;
+							continue;
+						}
 						if (hasEntity(ownerID)) {
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
@@ -161,33 +161,33 @@ int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
 						}
 						{
 							Polygon* p = (Polygon*) iteratorB->second.get();
-              if (p->getPointCount() <= 3)
-              {
-                  colors.push(p->getColor());
-                  UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorB->first);
-                  packet << update;
-                  holder++;
-                  iteratorB = entities.erase(iteratorB);
-              } else {
-                  p->deleteEdge();
-                  UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorB->first);
-                  packet << update;
-                  p->toPacket(packet);
-                  holder++;
-              }
+							if (p->getPointCount() <= 3)
+							{
+								colors.push(p->getColor());
+								UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorB->first);
+								packet << update;
+								holder++;
+								iteratorB = entities.erase(iteratorB);
+							} else {
+								p->deleteEdge();
+								UpdatePacket update(UpdatePacket::UPDATE_POLYGON, iteratorB->first);
+								packet << update;
+								p->toPacket(packet);
+								holder++;
+							}
 						}
-            {
-              UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorA->first);
+						{
+							UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorA->first);
 							packet << update;
 							holder++;
-              iteratorA = entities.erase(iteratorA);
-              goto outer;
-            }
+							iteratorA = entities.erase(iteratorA);
+							goto outer;
+						}
 					} else iteratorB++;
 				} else iteratorB++;
 			} else iteratorB++;
 		}
-    iteratorA++;
+		iteratorA++;
 	}
 	return holder;
 }

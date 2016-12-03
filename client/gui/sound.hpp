@@ -8,6 +8,7 @@ private:
     static sf::SoundBuffer bufferHit;
     static sf::SoundBuffer bufferLevelUp;
     static sf::SoundBuffer bufferShoot;
+    static sf::SoundBuffer bufferMenuSelect;
     static sf::Sound sound;
 public:
     static sf::Music musicDeath;
@@ -16,5 +17,6 @@ public:
     static void playLevelUp();
     static void playShoot();
     static void playDeath();
+    static void playMenuSelect();
 };
 }

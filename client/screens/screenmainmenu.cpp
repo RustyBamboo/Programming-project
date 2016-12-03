@@ -10,13 +10,13 @@ ScreenMainMenu::ScreenMainMenu() : textBoxAddr(sf::Vector2f(115, 700), sf::Vecto
     exitText.setString("exit");
     exitText.setFont(gui::Font::font);
     exitText.setCharacterSize(30);
-    exitText.setPosition(sf::Vector2f(115,800));
+    exitText.setPosition(sf::Vector2f(115, 800));
 
     backgroundTexture.loadFromFile("resources/mainmenu.png");
     backgroundSprite.setTexture(backgroundTexture);
 
     boundingRect.setSize(sf::Vector2f(65, 50));
-    boundingRect.setFillColor(sf::Color(0,0,0,0));
+    boundingRect.setFillColor(sf::Color(0, 0, 0, 0));
     boundingRect.setOutlineColor(sf::Color::White);
     boundingRect.setOutlineThickness(1);
 }
@@ -48,14 +48,17 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
 
             if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == sf::Keyboard::Down)
+                if (event.key.code == sf::Keyboard::Down && optionPressed !=1)
                 {
                     optionPressed = 1;
                     form.noSelect();
+                    gui::Sound::playMenuSelect();
                 }
-                if (event.key.code == sf::Keyboard::Up)
+                if (event.key.code == sf::Keyboard::Up && optionPressed != 0)
                 {
                     optionPressed = 0;
+                    gui::Sound::playMenuSelect();
+
                 }
                 if (optionPressed == 1 && event.key.code == sf::Keyboard::Return)
                 {
@@ -79,10 +82,10 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
         window.draw(backgroundSprite);
         form.draw(window);
         window.draw(exitText);
-        if(optionPressed == 0) {
+        if (optionPressed == 0) {
             boundingRect.setPosition(113, 751);
         }
-        if(optionPressed == 1) {
+        if (optionPressed == 1) {
             boundingRect.setPosition(113, 798);
         }
         window.draw(boundingRect);
