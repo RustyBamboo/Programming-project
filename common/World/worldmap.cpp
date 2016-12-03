@@ -1,5 +1,16 @@
 #include "worldmap.hpp"
 
+double WorldMap::ZOOM_FACTOR = 1.0;
+int WorldMap::height = 900;
+int WorldMap::width = 1200;
+
+bool WorldMap::isOutOfMap(sf::FloatRect rect)
+{
+  return rect.left+rect.width <0
+      || rect.left -rect.width > width*ZOOM_FACTOR
+      || rect.top+rect.height < 0
+      || rect.top-rect.height > height*ZOOM_FACTOR;
+}
 WorldMap::WorldMap()
 {
 	last_id = 0;
@@ -11,7 +22,7 @@ void WorldMap::addEntity(ID_TYPE id, Entity* e)
 		throw std::runtime_error("Entity already added");
 	}
 	else {
-    printf("ADDING NEW ENTITY ID=%d TYPE=%d\n", id, e->type);
+    //  printf("ADDING NEW ENTITY ID=%d TYPE=%d\n", id, e->type);
 		last_id = id;
 		entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(id, std::unique_ptr<Entity>(e)) );
 	}
@@ -28,12 +39,13 @@ Entity* WorldMap::getEntity(ID_TYPE id)
 }
 void WorldMap::removeEntity(ID_TYPE id)
 {
-  printf("Erased %d\n", entities.erase(id));
+  //  printf("Erased %d\n", entities.erase(id));
+  entities.erase(id);
 }
 WorldMap::ID_TYPE WorldMap::newEntity(Entity* e)
 {
 	last_id++;
-  printf("CREATING NEW ENTITY ID=%d TYPE=%d\n", last_id, e->type);
+  //  printf("CREATING NEW ENTITY ID=%d TYPE=%d\n", last_id, e->type);
 	entities.insert(std::pair<ID_TYPE, std::unique_ptr<Entity> >(last_id, std::unique_ptr<Entity>(e)) );
 	return last_id;
 }
@@ -53,6 +65,22 @@ void WorldMap::tick()
 	{
 		e->second->tick();
 	}
+}
+int WorldMap::checkOutOfMap(sf::Packet &packet)
+{
+  int holder = 0;
+  for (it_type e = entities.begin(); e != entities.end();)
+  {
+    if (e->second->type == Entity::rectangle && isOutOfMap(e->second->getGlobalBounds()))
+    {
+      //  printf("DELETING OUT OF BOUNDS BULLET %u\n", e->first);
+      UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  e->first);
+      packet << update;
+      holder++;
+      e = entities.erase(e);
+    } else e++;
+  }
+  return holder;
 }
 int WorldMap::checkCollisions(sf::Packet &packet)
 {

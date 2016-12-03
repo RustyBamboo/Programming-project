@@ -1,6 +1,5 @@
 #include "screengame.hpp"
 #include <string>
-double ScreenGame::ZOOM_FACTOR = 2.0;
 ScreenGame::ScreenGame() : player_id(0), created(false)
 {
 
@@ -166,7 +165,7 @@ int ScreenGame::run(sf::RenderWindow &window)
     sf::Event Event;
 
     auto view = window.getDefaultView();
-    view.zoom(ZOOM_FACTOR);
+    view.zoom(WorldMap::ZOOM_FACTOR);
     window.setView(view);
     while (window.isOpen())
     {

@@ -23,7 +23,7 @@ int main() {
 
   std::vector<CScreen *> screens;
   int screen = 0;
-  sf::RenderWindow window(sf::VideoMode(800, 600), "Game");
+  sf::RenderWindow window(sf::VideoMode(WorldMap::width, WorldMap::height), "Game");
 
   ScreenMainMenu s0;
   screens.push_back(&s0);

@@ -16,7 +16,14 @@ public:
 
     void tick();
     int checkCollisions(sf::Packet &packet);
+    int checkOutOfMap(sf::Packet &packet);
     void draw(sf::RenderWindow &window);
+
+    static double ZOOM_FACTOR;
+    static int width;
+    static int height;
+
+    bool isOutOfMap(sf::FloatRect rect);
 
     void addEntity(ID_TYPE id, Entity* e); //Add an enttiy with given ID, returning a NULL pointer to
     Entity* getEntity(ID_TYPE id); //Returns a pointer to an entity in the map with given ID, use for updating

@@ -19,7 +19,6 @@
 class ScreenGame : public CScreen
 {
 private:
-    static double ZOOM_FACTOR; //How far out the window is zoomed in/out
     unsigned short TCP_PORT = 5001;
     static sf::IpAddress SERVER_IP;
     static std::string playerName;

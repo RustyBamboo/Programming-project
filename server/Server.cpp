@@ -25,8 +25,8 @@ void Server::tick()
 {
     sf::Clock clock;
     clock.restart();
-    int updateCount = worldMap.checkCollisions(updates_packet);
-    tickPacket.num_updates += updateCount;
+    tickPacket.num_updates += worldMap.checkCollisions(updates_packet);
+    tickPacket.num_updates += worldMap.checkOutOfMap(updates_packet);
     while (clock.getElapsedTime().asMilliseconds() < TICK_TIME_MILLIS)
     {
         for (std::map< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>::iterator player = players.begin(); player != players.end();)
