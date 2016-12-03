@@ -14,6 +14,7 @@
 
 
 #include "../../common/include.hpp"
+#include "../gui/sound.hpp"
 
 class ScreenGame : public CScreen
 {

@@ -137,6 +137,7 @@ void ScreenGame::handleUserInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shooterClock.getElapsedTime().asMilliseconds() > 2000)
     {
         shootRays(3.f); //speed of 2
+        gui::Sound::playShoot();
         shooterClock.restart();
     }
     //If velocity changed, send out update
@@ -184,7 +185,7 @@ int ScreenGame::run(sf::RenderWindow &window)
         handleUserInput();
         doTick();
 
-        if (created) worldMap.getEntity(player_id) -> setView(window, view);
+        // if (created) worldMap.getEntity(player_id) -> setView(window, view);
         worldMap.draw(window);
         window.display();
     }

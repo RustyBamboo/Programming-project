@@ -9,7 +9,7 @@
 #include "screens/screens.hpp"
 #include <SFML/Network.hpp>
 #include <SFML/Audio.hpp>
-
+#include "gui/sound.hpp"
 
 
 
@@ -19,7 +19,7 @@ int main() {
 
   std::cout << sf::IpAddress::getPublicAddress();
 
-
+  gui::Sound::init();
 
   std::vector<CScreen *> screens;
   int screen = 0;
@@ -36,6 +36,7 @@ int main() {
   if (!music.openFromFile("resources/song.wav"))
     return -1; // error
   music.setLoop(true);
+  music.setVolume(25);
   music.play();
 
   //The screen class returns an int, which tells which Screen (mainmenu, game) to run

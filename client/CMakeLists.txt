@@ -3,7 +3,7 @@ set(CMAKE_CXX_COMPILER /usr/bin/g++)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 set(EXECUTABLE_NAME "game")
-add_executable(${EXECUTABLE_NAME} main.cpp screens/screenmainmenu.cpp screens/screengame.cpp gui/cursor.cpp gui/textbox.cpp gui/button.cpp gui/form.cpp ${COMMON_CPP})
+add_executable(${EXECUTABLE_NAME} main.cpp screens/screenmainmenu.cpp screens/screengame.cpp gui/cursor.cpp gui/textbox.cpp gui/button.cpp gui/form.cpp gui/sound.cpp ${COMMON_CPP})
 
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR})
@@ -14,7 +14,7 @@ endif()
 if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 
     # list of files for which we add a copy rule
-    set(data_SHADOW resources/verdanab.ttf resources/song.wav)
+    set(data_SHADOW resources/verdanab.ttf resources/song.wav resources/hit.wav resources/levelup.wav resources/shoot.wav)
 
     foreach(item IN LISTS data_SHADOW)
         message(STATUS ${item})
@@ -28,5 +28,9 @@ endif()
 
 # files are only copied if a target depends on them
 add_custom_target(font ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/verdanab.ttf")
+
 add_custom_target(song ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/song.wav")
+add_custom_target(hit_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/hit.wav")
+add_custom_target(levelup_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/levelup.wav")
+add_custom_target(shoot_sound ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/resources/shoot.wav")
 
