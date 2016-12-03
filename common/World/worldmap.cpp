@@ -101,7 +101,7 @@ int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
               iteratorB++;
               continue;
             }
-						{
+            if (hasEntity(ownerID)) {
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
 							Polygon* p = (Polygon*) getEntity(ownerID);
@@ -151,7 +151,7 @@ int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
               iteratorB++;
               continue;
             }
-						{
+						if (hasEntity(ownerID)) {
 							UpdatePacket updatePlayer(UpdatePacket::UPDATE_POLYGON, ownerID);
 							packet << updatePlayer;
 							Polygon* p = (Polygon*) getEntity(ownerID);
