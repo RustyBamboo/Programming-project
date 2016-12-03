@@ -16,6 +16,7 @@ public:
     virtual void tick();
 
     uint getPointCount();
+    sf::Color getColor();
     void addEdge();
     void deleteEdge();
     void toPacket(sf::Packet& packet);

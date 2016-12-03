@@ -18,7 +18,10 @@ void Polygon::setView(sf::RenderWindow &window, sf::View &view) {
     view.setCenter(getCenter());
     window.setView(view);
 }
-
+sf::Color Polygon::getColor()
+{
+  return shape.getFillColor();
+}
 sf::Vector2f Polygon::getCenter() {
     return sf::Vector2f(getPosition().x + shape.getRadius(), getPosition().y + shape.getRadius());
 }
