@@ -107,7 +107,6 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 
 						{
 							Polygon* p = (Polygon*) iteratorA->second.get();
-              printf("Deleting new pointcloud %u\n", p->getPointCount());
               if (p->getPointCount() <= 3)
               {
                   UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorA->first);
@@ -156,7 +155,6 @@ int WorldMap::checkCollisions(sf::Packet &packet)
 						}
 						{
 							Polygon* p = (Polygon*) iteratorB->second.get();
-              printf("Deleting new pointcloud %u\n", p->getPointCount());
               if (p->getPointCount() <= 3)
               {
                   UpdatePacket update(UpdatePacket::REMOVE_ENTITY, iteratorB->first);
@@ -172,7 +170,6 @@ int WorldMap::checkCollisions(sf::Packet &packet)
               }
 						}
             {
-              printf("DELETING BULLETA ID=%u\n", iteratorA->first);
               UpdatePacket update(UpdatePacket::REMOVE_ENTITY,  iteratorA->first);
 							packet << update;
 							holder++;
