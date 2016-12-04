@@ -1,25 +1,26 @@
 #include "Server.hpp"
 Server::Server()
 {
-  addColor(240,118,88);
-  addColor(7,190,240);
-  addColor(81,182,78);
-  addColor(240,231,89);
-  addColor(209,94,222);
+    srand(time(NULL));
+    addColor(240, 118, 88);
+    addColor(7, 190, 240);
+    addColor(81, 182, 78);
+    addColor(240, 231, 89);
+    addColor(209, 94, 222);
 }
 sf::Color Server::getColor()
 {
-  sf::Color c = colors.top();
-  colors.pop();
-  return c;
+    sf::Color c = colors.top();
+    colors.pop();
+    return c;
 }
 void Server::addColor(sf::Color c)
 {
-  colors.push(c);
+    colors.push(c);
 }
 void Server::addColor(sf::Uint8 red, sf::Uint8 green, sf::Uint8 blue)
 {
-  colors.push(sf::Color(red,green,blue));
+    colors.push(sf::Color(red, green, blue));
 }
 void Server::run()
 {
@@ -113,13 +114,13 @@ void Server::tick()
                 auto id = (*player).second;
                 if (worldMap.hasEntity(id))
                 {
-                  worldMap.removeEntity(id);
-                  UpdatePacket update(UpdatePacket::REMOVE_ENTITY, id);
-                  updates_packet << update;
-                  tickPacket.num_updates++;
-                  Polygon* p = (Polygon* ) worldMap.getEntity(id);
-                  addColor(p->getColor());
-                  player = players.erase(player);
+                    worldMap.removeEntity(id);
+                    UpdatePacket update(UpdatePacket::REMOVE_ENTITY, id);
+                    updates_packet << update;
+                    tickPacket.num_updates++;
+                    Polygon* p = (Polygon* ) worldMap.getEntity(id);
+                    addColor(p->getColor());
+                    player = players.erase(player);
                 }
             } else player++;
         }
@@ -149,9 +150,9 @@ void Server::connectPlayer()
     client->setBlocking(true);
     if (colors.size() == 0)
     {
-      std::cout << "Maximum Players Reached, disconnecting new player" << std::endl;
-      client->disconnect();
-      return;
+        std::cout << "Maximum Players Reached, disconnecting new player" << std::endl;
+        client->disconnect();
+        return;
     }
     HandshakeRequest req;
     HandshakeResponse res;
@@ -161,8 +162,15 @@ void Server::connectPlayer()
     printf("Recieving Handshake Request Size = %lu\n", req_packet.getDataSize ());
 #endif
     req_packet >> req;
+
     //Create new player entity
-    Polygon* character = new Polygon(sf::Vector2f(0, 0), sf::Vector2f(0, 0), 50, 6, getColor());
+    // int minX = -(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25);
+    int minX = -100;
+    // int minY = -(WorldMap::height * WorldMap::ZOOM_FACTOR * 0.25);
+    int minY = -100;
+    int randX = minX + (std::rand() % (WorldMap::width + (int)(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25) - 200 - minX + 1 ) );
+    int randY = minY + (std::rand() %  (WorldMap::width + (int)(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25) - 200 - minY + 1));
+    Polygon* character = new Polygon(sf::Vector2f(randX, randY), sf::Vector2f(0, 0), 50, 6, getColor());
     auto id = worldMap.newEntity((Entity*) character);
     //Send player response with their character id
     res.id = id;
@@ -186,6 +194,8 @@ void Server::connectPlayer()
 #endif
     players.insert(std::pair< std::unique_ptr<sf::TcpSocket> , WorldMap::ID_TYPE>(std::move(client), id) );
 }
+
+//Generate new entities for server and send to client
 void Server::updateNewPlayer(sf::TcpSocket& socket, WorldMap::ID_TYPE id)
 {
     sf::Packet header;
