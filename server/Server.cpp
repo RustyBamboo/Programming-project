@@ -117,12 +117,13 @@ void Server::tick()
                 auto id = (*player).second;
                 if (worldMap.hasEntity(id))
                 {
+                    Polygon* p = (Polygon* ) worldMap.getEntity(id);
+                    addColor(p->getColor());
                     worldMap.removeEntity(id);
                     UpdatePacket update(UpdatePacket::REMOVE_ENTITY, id);
                     updates_packet << update;
                     tickPacket.num_updates++;
-                    Polygon* p = (Polygon* ) worldMap.getEntity(id);
-                    addColor(p->getColor());
+  
                     player = players.erase(player);
                 }
             } else player++;
