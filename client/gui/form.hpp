@@ -6,6 +6,7 @@
 #include "textbox.hpp"
 #include "button.hpp"
 
+//Stores all texboxs and a submit button and processes input
 namespace gui {
     class Form {
     private:

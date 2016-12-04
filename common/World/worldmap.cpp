@@ -4,6 +4,7 @@ double WorldMap::ZOOM_FACTOR = 2.0;
 int WorldMap::height = 900;
 int WorldMap::width = 1200;
 
+//Check if rectangle is out of bounds
 bool WorldMap::isOutOfMap(sf::FloatRect rect)
 {
 	return rect.left + rect.width < -(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25)
@@ -90,12 +91,14 @@ int WorldMap::checkOutOfMap(sf::Packet &packet)
 int WorldMap::checkCollisions(sf::Packet &packet, std::stack<sf::Color>& colors)
 {
 	int holder = 0;
+	//this iterates through all permutation of entities
 outer: for (it_type iteratorA = entities.begin(); iteratorA != entities.end();) {
 		it_type iteratorB = iteratorA;
 		for (iteratorB++; iteratorB != entities.end();) {
-			if (iteratorA->second != iteratorB->second) {
-				if (iteratorA->second->isCollided(iteratorB->second)) {
+			if (iteratorA->second != iteratorB->second) { //make sure collision is not the same entity
+				if (iteratorA->second->isCollided(iteratorB->second)) { //Check collision
 					if (iteratorA->second->type == Entity::polygon && iteratorB->second->type == Entity::rectangle) {
+						//figure out which iterator is which
 						auto ownerID = ((Rectangle*) iteratorB->second.get())->getOwner();
 						if (iteratorA->first == ownerID) {
 							iteratorB++;
@@ -145,6 +148,7 @@ outer: for (it_type iteratorA = entities.begin(); iteratorA != entities.end();) 
 						}
 
 					}
+					//repeat for other case of entity hitting polygon
 					else if (iteratorA->second->type == Entity::rectangle && iteratorB->second->type == Entity::polygon) {
 						auto ownerID = ((Rectangle*) iteratorA->second.get())->getOwner();
 						if (iteratorB->first == ownerID) {

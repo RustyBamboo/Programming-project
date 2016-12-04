@@ -10,6 +10,7 @@ ScreenGame::ScreenGame() : player_id(0), created(false)
     backgroundSprite.scale(WorldMap::ZOOM_FACTOR, WorldMap::ZOOM_FACTOR);
     backgroundSprite.setPosition(-(WorldMap::width*WorldMap::ZOOM_FACTOR*0.25), -(WorldMap::height*WorldMap::ZOOM_FACTOR*0.25));
 }
+//Functions processes incoming packets and updates the window
 bool ScreenGame::doTick()
 {
     sf::Packet header_packet;
@@ -106,6 +107,8 @@ bool ScreenGame::doTick()
     worldMap.tick();
     return true;
 }
+
+//establishes communication with server and client get the ID
 void ScreenGame::doHandshake()
 {
     if (serverConnection.connect(SERVER_IP, TCP_PORT) == sf::Socket::Done) {
@@ -131,6 +134,8 @@ void ScreenGame::doHandshake()
         throw std::runtime_error("Could not connect to Server");
     }
 }
+
+//Handles the user input
 void ScreenGame::handleUserInput()
 {
     if (!created) return;
@@ -174,6 +179,7 @@ void ScreenGame::handleUserInput()
         serverConnection.send(packet);
     }
 }
+
 int ScreenGame::run(sf::RenderWindow &window)
 {
     std::cout << "Connecting to server: " << SERVER_IP << std::endl;
@@ -221,7 +227,9 @@ std::string ScreenGame::getServerIP () {
     return SERVER_IP.toString();
 }
 
+//calculates orthnormal vectors to the edges and process shoot
 void ScreenGame::shootRays(float speed) {
+
     Polygon* me_ptr = (Polygon*) worldMap.getEntity(player_id); //Create a copy of me
     std::vector<sf::Vector2f> points = me_ptr->getEdgePoints();
     for (unsigned int i = 0; i < points.size() - 1; i++) {
@@ -233,6 +241,7 @@ void ScreenGame::shootRays(float speed) {
         sendShootPacket(-sf::Vector2f(findPerp.y , -findPerp.x) * speed);
     }
 }
+
 void ScreenGame::sendShootPacket(sf::Vector2f vel) {
     sf::Packet packet;
     UpdatePacket update;

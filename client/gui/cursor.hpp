@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+//Class for the blinking cursor
 namespace gui {
     class Cursor {
     private:

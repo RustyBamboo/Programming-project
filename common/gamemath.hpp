@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 
+//Contains basic vector math
 namespace gmath {
 //I hate math.
 inline float dotProduct(const sf::Vector2f &a, const sf::Vector2f &b) {

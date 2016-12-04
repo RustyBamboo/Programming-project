@@ -1,6 +1,7 @@
 #pragma once
 #include "entity.hpp"
 
+//Extends entity class for polygons
 class Polygon : public Entity {
 private:
     sf::CircleShape shape;

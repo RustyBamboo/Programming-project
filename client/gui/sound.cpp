@@ -1,4 +1,5 @@
 #include "sound.hpp"
+
 namespace gui {
 sf::SoundBuffer Sound::bufferHit;
 sf::SoundBuffer Sound::bufferLevelUp;

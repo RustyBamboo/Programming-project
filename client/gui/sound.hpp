@@ -2,6 +2,8 @@
 
 #include "../../common/include.hpp"
 #include <SFML/Audio.hpp>
+
+//Stores a buffer of all sounds used
 namespace gui {
 class Sound {
 private:

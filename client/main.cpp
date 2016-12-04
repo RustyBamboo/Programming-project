@@ -15,50 +15,50 @@
 
 
 int main() {
-  srand(time(NULL)); //Pick a seed
+    srand(time(NULL)); //Pick a seed
 
-  std::cout << sf::IpAddress::getPublicAddress();
+    std::cout << sf::IpAddress::getPublicAddress();
 
-  gui::Sound::init();
-  gui::Font::init();
+    gui::Sound::init(); //Load all sound buffers
+    gui::Font::init();  //Load the font buffer
 
-  sf::RenderWindow window(sf::VideoMode(WorldMap::width, WorldMap::height), "Game");
+    sf::RenderWindow window(sf::VideoMode(WorldMap::width, WorldMap::height), "Galaxy Blasters"); //Loads window
 
-  sf::Music music;
-  if (!music.openFromFile("resources/song.wav"))
-    return -1; // error
-  music.setLoop(true);
-  music.setVolume(25);
-
-
-  sf::Music gamemusic;
-  if (!gamemusic.openFromFile("resources/gamesong.wav"))
-    return -1; // error
-  gamemusic.setLoop(true);
-  gamemusic.setVolume(25);
-  // gamemusic.play();
+    //Load background and mainmenu music
+    sf::Music music;
+    if (!music.openFromFile("resources/song.wav"))
+        return -1; // error
+    music.setLoop(true);
+    music.setVolume(25);
 
 
-  //The screen class returns an int, which tells which Screen (mainmenu, game) to run
-  std::unique_ptr<CScreen> cur_screen;
+    sf::Music gamemusic;
+    if (!gamemusic.openFromFile("resources/gamesong.wav"))
+        return -1; // error
+    gamemusic.setLoop(true);
+    gamemusic.setVolume(25);
+    // gamemusic.play();
 
-  music.play();
-  cur_screen.reset(new ScreenMainMenu());
-  while (true)
-    switch (cur_screen->run(window))
-    {
-    case 1:
-      music.stop();
-      gamemusic.play();
-      cur_screen.reset(new ScreenGame());
-      break;
-    case 2:
-      gamemusic.stop();
-      music.play();
-      cur_screen.reset(new ScreenMainMenu());
-      break;
-    default:
-      return 0;
-    };
-  return 0;
+    //The screen class returns an int, which tells which Screen (mainmenu, game) to run
+    std::unique_ptr<CScreen> cur_screen;
+    //Screen state manager
+    music.play();
+    cur_screen.reset(new ScreenMainMenu());
+    while (true)
+        switch (cur_screen->run(window))
+        {
+        case 1:
+            music.stop();
+            gamemusic.play();
+            cur_screen.reset(new ScreenGame());
+            break;
+        case 2:
+            gamemusic.stop();
+            music.play();
+            cur_screen.reset(new ScreenMainMenu());
+            break;
+        default:
+            return 0;
+        };
+    return 0;
 }

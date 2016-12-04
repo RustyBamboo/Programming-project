@@ -6,6 +6,8 @@
 
 #include "cursor.hpp"
 #include "font.hpp"
+
+//Draws a textbox and processes input, displays cursor
 namespace gui {
 class TextBox {
 private:

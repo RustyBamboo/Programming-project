@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
+//Loads a font into memory buffer
 namespace gui {
     class Font {
     public:

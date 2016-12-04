@@ -5,12 +5,12 @@
 #include <memory>
 #include "../gamemath.hpp"
 
-//Most basic form of an entity. Contains an object (such as a Polygon or a Ray)
+//Most basic form of an entity. Extends to an object (such as a Polygon or a Ray)
 sf::Packet& operator <<(sf::Packet& packet, const sf::Vector2f & v);
 sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f & v);
 class Entity {
 public:
-    enum EntityType {
+    enum EntityType { //used to check what type the extended entity is
         polygon,
         rectangle,
         entity
@@ -26,8 +26,8 @@ public:
     virtual sf::FloatRect getGlobalBounds() = 0;
 
     // void setPosition(const sf::Vector2f &pos);
-    bool isCollided(std::unique_ptr<Entity> const &e); //Need this written
-    virtual void tick() = 0; //We need tick functions to be synced (get diff in time)
+    bool isCollided(std::unique_ptr<Entity> const &e);
+    virtual void tick() = 0; //Updates the intrinsics
     virtual void toPacket(sf::Packet& packet);
     virtual void fromPacket(sf::Packet& packet);
 

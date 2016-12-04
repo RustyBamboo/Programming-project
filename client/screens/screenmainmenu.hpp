@@ -16,7 +16,7 @@
 #include "screengame.hpp"
 #include "../gui/sound.hpp"
 
-
+//manages the main menu screen
 class ScreenMainMenu : public CScreen
 {
 private:
@@ -26,7 +26,7 @@ private:
     gui::TextBox textBoxAddr;
     gui::Button buttonSubmit;
     gui::Form form;
-    // sf::Font font;
+
     sf::Text exitText;
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
