@@ -119,11 +119,9 @@ void Server::tick()
                 {
                     Polygon* p = (Polygon* ) worldMap.getEntity(id);
                     addColor(p->getColor());
-                    worldMap.removeEntity(id);
                     UpdatePacket update(UpdatePacket::REMOVE_ENTITY, id);
                     updates_packet << update;
                     tickPacket.num_updates++;
-  
                     player = players.erase(player);
                 }
             } else player++;
