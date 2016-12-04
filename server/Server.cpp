@@ -64,6 +64,7 @@ void Server::tick()
                 {
                 case UpdatePacket::UPDATE_ENTITY:
                 {
+                    if (!worldMap.hasEntity(update.id)) continue;
                     Entity* e = worldMap.getEntity(update.id);
                     e->fromPacket(packet);
                     updates_packet << update;
@@ -76,6 +77,7 @@ void Server::tick()
                 break;
                 case UpdatePacket::UPDATE_POLYGON:
                 {
+                    if (!worldMap.hasEntity(update.id)) continue;
                     Polygon* p = (Polygon*) worldMap.getEntity(update.id);
                     p->fromPacket(packet);
                     updates_packet << update;
@@ -88,6 +90,7 @@ void Server::tick()
                 break;
                 case UpdatePacket::SHOOT:
                 {
+                    if (!worldMap.hasEntity((*player).second)) continue;
                     sf::Vector2f velocity;
                     packet >> velocity;
                     Polygon* owner = (Polygon*) worldMap.getEntity((*player).second);
@@ -165,11 +168,10 @@ void Server::connectPlayer()
 
     //Create new player entity
     // int minX = -(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25);
-    int minX = -100;
-    // int minY = -(WorldMap::height * WorldMap::ZOOM_FACTOR * 0.25);
-    int minY = -100;
-    int randX = minX + (std::rand() % (WorldMap::width + (int)(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25) - 200 - minX + 1 ) );
-    int randY = minY + (std::rand() %  (WorldMap::width + (int)(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25) - 200 - minY + 1));
+    int minX = -(WorldMap::width * WorldMap::ZOOM_FACTOR * 0.25);
+    int minY = -(WorldMap::height * WorldMap::ZOOM_FACTOR * 0.25);
+    int randX = minX + (std::rand() % int((WorldMap::width + (WorldMap::width * WorldMap::ZOOM_FACTOR * 0.5) )) );
+    int randY = minY + (std::rand() %  int((WorldMap::height + (WorldMap::height * WorldMap::ZOOM_FACTOR * 0.5)) ));
     Polygon* character = new Polygon(sf::Vector2f(randX, randY), sf::Vector2f(0, 0), 50, 6, getColor());
     auto id = worldMap.newEntity((Entity*) character);
     //Send player response with their character id
