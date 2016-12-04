@@ -123,7 +123,7 @@ void Server::tick()
                     updates_packet << update;
                     tickPacket.num_updates++;
                     player = players.erase(player);
-                }
+                } else player++;
             } else player++;
         }
         sf::sleep(sf::milliseconds(10));
