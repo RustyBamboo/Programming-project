@@ -1,4 +1,5 @@
 #include "Server.hpp"
+//adds rgb colors to stack 
 Server::Server()
 {
     srand(time(NULL));
@@ -8,26 +9,32 @@ Server::Server()
     addColor(240, 231, 89);
     addColor(209, 94, 222);
 }
+//gets colors to add to the server for when players add to the game
 sf::Color Server::getColor()
 {
     sf::Color c = colors.top();
     colors.pop();
     return c;
 }
+//adds colors to the stack
 void Server::addColor(sf::Color c)
 {
     colors.push(c);
 }
+//adds red, green, and blue to the stack
 void Server::addColor(sf::Uint8 red, sf::Uint8 green, sf::Uint8 blue)
 {
     colors.push(sf::Color(red, green, blue));
 }
+//run the server
 void Server::run()
 {
+    //throw an error if trouble connecting to the server
     if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error)
     {
         if (newPlayersListener.listen(TCP_PORT) == sf::TcpListener::Error) throw std::runtime_error("Server cannot bind to socket");
     }
+    //if server connects, update the ticks
     newPlayersListener.setBlocking(false);
     tickPacket.tick_number = 0;
     tickPacket.num_updates = 0;
@@ -40,6 +47,7 @@ void Server::run()
         tick();
     }
 }
+//function to update the ticks for the server
 void Server::tick()
 {
     sf::Clock clock;
@@ -145,6 +153,7 @@ void Server::tick()
     worldMap.tick();
     tick_number++;
 }
+//connect each player to the server
 void Server::connectPlayer()
 {
     std::unique_ptr<sf::TcpSocket> client(new sf::TcpSocket);
