@@ -1,3 +1,24 @@
+# Building and install
+
+## On Ubuntu
+1) Install the dependency (SFML) ```sudo apt-get install git build-essential libsfml-dev```
+2) Clone the repository ```git clone https://github.com/RustyBamboo/Programming-project```
+3) Move to the game directory ```cd Programming-project```
+4) Run cmake to generate make files ```cmake .```
+5) Run make to build the game ```make```
+
+# Running server
+1) cd to game directory
+2) move to build/server ```cd build/server```
+3) run the server executable ```./server```
+
+# Running the game
+1) First, run a server (see above) or get the IP address of a server to connect to
+2) move to build/client ```cd build/client```
+3) run the game ```./game```
+4) Enter the IP address into the text field
+5) Press enter to begin playing
+
 # Programming-project
 COP3503 Programming Project
 
