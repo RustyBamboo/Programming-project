@@ -5,7 +5,7 @@
 #include <iostream>
 #include "font.hpp"
 
-//Button class the checks if user clicke on it
+//Button class the checks if user clicks on it
 namespace gui {
 class Button {
 private:

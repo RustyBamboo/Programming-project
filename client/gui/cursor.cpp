@@ -1,7 +1,7 @@
 #include "cursor.hpp"
 
 namespace gui {
-
+//setting up the cursor
 Cursor::Cursor(sf::Vector2f size) {
     shape.setSize(size);
     blinkrate = 1000;
@@ -33,6 +33,7 @@ void Cursor::draw(sf::RenderWindow &window) {
             window.draw(shape);
     }
 }
+//show and hide methods
 void Cursor::showCursor() {
     show = true;
 }
