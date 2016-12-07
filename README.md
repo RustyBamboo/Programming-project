@@ -1,7 +1,7 @@
 # Building and install
 
 ## On Ubuntu
-1) Install the dependency (SFML) ```sudo apt-get install git build-essential libsfml-dev```
+1) Install the dependency (SFML) ```sudo apt-get install git build-essential libsfml-dev cmake```
 
 2) Clone the repository ```git clone https://github.com/RustyBamboo/Programming-project```
 

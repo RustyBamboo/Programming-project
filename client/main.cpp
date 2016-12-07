@@ -22,7 +22,7 @@ int main() {
     gui::Sound::init(); //Load all sound buffers
     gui::Font::init();  //Load the font buffer
 
-    sf::RenderWindow window(sf::VideoMode(WorldMap::width, WorldMap::height), "Galaxy Blasters"); //Loads window
+    sf::RenderWindow window(sf::VideoMode(WorldMap::width, WorldMap::height), "Galaxy Blasters", sf::Style::Titlebar); //Loads window
 
     //Load background and mainmenu music
     sf::Music music;
