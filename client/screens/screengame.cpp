@@ -195,13 +195,13 @@ int ScreenGame::run(sf::RenderWindow &window)
         {
             if (Event.type == sf::Event::Closed)
             {
-                return (-1);
+                return 2;
             }
             else if (Event.type == sf::Event::KeyPressed)
             {
                 switch (Event.key.code) {
                 case sf::Keyboard::Escape:
-                    return (-1); //Goes to Pause Menu
+                    return 2; //Goes to Pause Menu
                 }
             }
         }

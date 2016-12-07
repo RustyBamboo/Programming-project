@@ -35,6 +35,7 @@ private:
 public:
     ScreenMainMenu();
     virtual int run(sf::RenderWindow &window);
+    virtual ~ScreenMainMenu();
 };
 
 #endif

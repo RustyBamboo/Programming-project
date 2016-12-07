@@ -7,6 +7,7 @@ class CScreen
 {
 public :
     virtual int run (sf::RenderWindow &window) = 0;
+    virtual ~CScreen(){};
 };
 
 #endif

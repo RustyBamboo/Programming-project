@@ -94,3 +94,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
 
     return (-1);
 }
+ScreenMainMenu::~ScreenMainMenu()
+{
+
+}
