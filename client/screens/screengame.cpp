@@ -182,7 +182,7 @@ void ScreenGame::handleUserInput()
 
 int ScreenGame::run(sf::RenderWindow &window)
 {
-    std::cout << "Connecting to server: " << SERVER_IP << std::endl;
+    //std::cout << "Connecting to server: " << SERVER_IP << std::endl;
     doHandshake();
     sf::Event Event;
 

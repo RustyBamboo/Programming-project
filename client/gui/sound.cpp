@@ -22,7 +22,7 @@ void Sound::init() {
     if (!bufferMenuSelect.loadFromFile("resources/menuselect.wav"))
         throw std::runtime_error("No death.wav");
 
-    std::cout << "Init sound success" << std::endl;
+    //std::cout << "Init sound success" << std::endl;
 }
 void Sound::playHit() {
     sound.setBuffer(bufferHit);

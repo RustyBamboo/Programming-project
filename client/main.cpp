@@ -17,7 +17,7 @@
 int main() {
     srand(time(NULL)); //Pick a seed
 
-    std::cout << sf::IpAddress::getPublicAddress();
+    //std::cout << sf::IpAddress::getPublicAddress();
 
     gui::Sound::init(); //Load all sound buffers
     gui::Font::init();  //Load the font buffer

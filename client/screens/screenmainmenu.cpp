@@ -69,7 +69,7 @@ int ScreenMainMenu::run(sf::RenderWindow &window)
                 allTheFields = form.process();
                 if (allTheFields[0].size() > 0) {
                     ScreenGame::setServerIP(sf::IpAddress(allTheFields[0]));
-                    std::cout << "Inputted: " << allTheFields[0] << std::endl;
+                    //std::cout << "Inputted: " << allTheFields[0] << std::endl;
                     return (1);
                 }
                 else {
